@@ -66,8 +66,10 @@ namespace Engage.Dnn.Jackrabbit
             {
                 this.View.Model.HideView = !ModulePermissionController.CanManageModule(this.ModuleInfo);
                 this.View.Model.Scripts = this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel);
-                this.View.Model.PathPrefixes = new[] { string.Empty, "SkinPath", "SharedScripts", }.AsEnumerable();
-                this.View.Model.Providers = new[] { "DnnPageHeaderProvider", "DnnBodyProvider", "DnnFormBottomProvider", };
+                this.View.Model.DefaultPathPrefix = string.Empty;
+                this.View.Model.DefaultScriptPath = "~/";
+                this.View.Model.DefaultProvider = "DnnFormBottomProvider";
+                this.View.Model.DefaultPriority = (int)FileOrder.Js.DefaultPriority;
             }
             catch (Exception ex)
             {

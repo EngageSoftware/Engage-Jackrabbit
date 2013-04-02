@@ -44,12 +44,12 @@ namespace Engage.Dnn.Jackrabbit
                 base.OnPreRender(e);
             
                 this.AutoDataBind = false;
+
+                this.SetupColumns();
+
                 this.DataBind();
 
-                foreach (var script in this.Model.Scripts)
-                {
-                    ClientResourceManager.RegisterScript(this.Page, script.FullScriptPath, script.Priority, script.Provider);
-                }
+                this.RegisterScripts();
             }
             catch (Exception exc)
             {
@@ -60,7 +60,7 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Handles the <see cref="RadGrid.NeedDataSource" /> event of the scripts grid.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="GridNeedDataSourceEventArgs"/> instance containing the event data.</param>
-        protected void Grid_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
+        protected void ScriptsGrid_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Handles the <see cref="RadGrid.InsertCommand" /> event of the scripts grid.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="GridCommandEventArgs"/> instance containing the event data.</param>
-        protected void Grid_InsertCommand(object sender, GridCommandEventArgs e)
+        protected void ScriptsGrid_InsertCommand(object sender, GridCommandEventArgs e)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Handles the <see cref="RadGrid.UpdateCommand" /> event of the scripts grid.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="GridCommandEventArgs"/> instance containing the event data.</param>
-        protected void Grid_UpdateCommand(object sender, GridCommandEventArgs e)
+        protected void ScriptsGrid_UpdateCommand(object sender, GridCommandEventArgs e)
         {
             try
             {
@@ -118,6 +118,24 @@ namespace Engage.Dnn.Jackrabbit
             catch (Exception exc)
             {
                 Exceptions.ProcessModuleLoadException(this, exc);
+            }
+        }
+
+        /// <summary>Sets up properties on the grid's columns that can't be setup declaratively.</summary>
+        private void SetupColumns()
+        {
+            ((DnnGridBoundColumn)this.ScriptsGrid.Columns.FindByDataField("PathPrefixName")).DefaultInsertValue = this.Model.DefaultPathPrefix;
+            ((DnnGridBoundColumn)this.ScriptsGrid.Columns.FindByDataField("ScriptPath")).DefaultInsertValue = this.Model.DefaultScriptPath;
+            ((DnnGridBoundColumn)this.ScriptsGrid.Columns.FindByDataField("Provider")).DefaultInsertValue = this.Model.DefaultProvider;
+            ((DnnGridNumericColumn)this.ScriptsGrid.Columns.FindByDataField("Priority")).DefaultInsertValue = this.Model.DefaultPriority.ToString(CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>Registers the scripts.</summary>
+        private void RegisterScripts()
+        {
+            foreach (var script in this.Model.Scripts)
+            {
+                ClientResourceManager.RegisterScript(this.Page, script.FullScriptPath, script.Priority, script.Provider);
             }
         }
     }

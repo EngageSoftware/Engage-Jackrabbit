@@ -23,11 +23,17 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Gets or sets the scripts being included by this module.</summary>
         public IEnumerable<ScriptViewModel> Scripts { get; set; }
 
-        /// <summary>Gets or sets the available path prefixes.</summary>
-        public IEnumerable<string> PathPrefixes { get; set; }
+        /// <summary>Gets or sets the default path prefix.</summary>
+        public string DefaultPathPrefix { get; set; }
 
-        /// <summary>Gets or sets the available providers.</summary>
-        public IEnumerable<string> Providers { get; set; }
+        /// <summary>Gets or sets the default script path.</summary>
+        public string DefaultScriptPath { get; set; }
+
+        /// <summary>Gets or sets the default provider.</summary>
+        public string DefaultProvider { get; set; }
+
+        /// <summary>Gets or sets the default priority.</summary>
+        public int DefaultPriority { get; set; }
 
         /// <summary>Represents a script included by this module</summary>
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "I'm cool with nested classes in view models")]

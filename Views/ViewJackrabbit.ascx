@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="dnn" Assembly="DotNetNuke.Web" Namespace="DotNetNuke.Web.UI.WebControls" %>
 
 <asp:PlaceHolder runat="server" Visible="<%#!Model.HideView %>">
-    <dnn:DnnGrid runat="server" AutoGenerateColumns="False" OnNeedDataSource="Grid_NeedDataSource" OnInsertCommand="Grid_InsertCommand" OnUpdateCommand="Grid_UpdateCommand">
+    <dnn:DnnGrid ID="ScriptsGrid" runat="server" AutoGenerateColumns="False" OnNeedDataSource="ScriptsGrid_NeedDataSource" OnInsertCommand="ScriptsGrid_InsertCommand" OnUpdateCommand="ScriptsGrid_UpdateCommand">
         <MasterTableView CommandItemDisplay="Top" DataKeyNames="Id">
             <Columns>
                 <dnn:DnnGridEditColumn ButtonType="PushButton" />
