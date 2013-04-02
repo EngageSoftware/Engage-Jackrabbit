@@ -17,6 +17,7 @@ namespace Engage.Dnn.Jackrabbit
     using System.Web.UI;
 
     using DotNetNuke.Services.Exceptions;
+    using DotNetNuke.Web.Client.ClientResourceManagement;
     using DotNetNuke.Web.Mvp;
     using DotNetNuke.Web.UI.WebControls;
 
@@ -44,6 +45,11 @@ namespace Engage.Dnn.Jackrabbit
             
                 this.AutoDataBind = false;
                 this.DataBind();
+
+                foreach (var script in this.Model.Scripts)
+                {
+                    ClientResourceManager.RegisterScript(this.Page, script.FullScriptPath, script.Priority, script.Provider);
+                }
             }
             catch (Exception exc)
             {

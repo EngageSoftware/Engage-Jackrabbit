@@ -14,6 +14,8 @@ namespace Engage.Dnn.Jackrabbit
     using System;
     using System.Linq;
 
+    using ClientDependency.Core.Controls;
+
     using DotNetNuke.Security.Permissions;
     using DotNetNuke.Web.Client;
     using DotNetNuke.Web.Mvp;
@@ -25,6 +27,9 @@ namespace Engage.Dnn.Jackrabbit
     {
         /// <summary>The data repository</summary>
         private readonly IRepository repository;
+
+        /// <summary>Backing field for <see cref="DependencyLoader" /></summary>
+        private readonly Lazy<ClientDependencyLoader> dependencyLoader;
 
         /// <summary>Initializes a new instance of the <see cref="ViewJackrabbitPresenter"/> class.</summary>
         /// <param name="view">The view.</param>
@@ -40,9 +45,16 @@ namespace Engage.Dnn.Jackrabbit
             : base(view)
         {
             this.repository = repository;
+            this.dependencyLoader = new Lazy<ClientDependencyLoader>(() => ClientDependencyLoader.GetInstance(this.HttpContext));
             this.View.Initialize += this.View_Initialize;
             this.View.AddScript += this.View_AddScript;
             this.View.UpdateScript += this.View_UpdateScript;
+        }
+
+        /// <summary>Gets the client dependency loader</summary>
+        private ClientDependencyLoader DependencyLoader 
+        {
+            get { return this.dependencyLoader.Value; }
         }
 
         /// <summary>Handles the <see cref="IModuleViewBase.Initialize"/> event of the <see cref="Presenter{TView}.View"/>.</summary>
@@ -53,7 +65,7 @@ namespace Engage.Dnn.Jackrabbit
             try
             {
                 this.View.Model.HideView = !ModulePermissionController.CanManageModule(this.ModuleInfo);
-                this.View.Model.Scripts = this.repository.GetScripts(this.ModuleId).Select(s => new ViewJackrabbitViewModel.ScriptViewModel(s.Id, s.PathPrefixName, s.ScriptPath, s.Provider, s.Priority ?? (int)FileOrder.Js.DefaultPriority));
+                this.View.Model.Scripts = this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel);
                 this.View.Model.PathPrefixes = new[] { string.Empty, "SkinPath", "SharedScripts", }.AsEnumerable();
                 this.View.Model.Providers = new[] { "DnnPageHeaderProvider", "DnnBodyProvider", "DnnFormBottomProvider", };
             }
@@ -91,6 +103,27 @@ namespace Engage.Dnn.Jackrabbit
             {
                 this.ProcessModuleLoadException(ex);
             }
+        }
+
+        /// <summary>Creates the script view model.</summary>
+        /// <param name="script">The script.</param>
+        /// <returns>A new <see cref="ViewJackrabbitViewModel.ScriptViewModel" /> instance.</returns>
+        private ViewJackrabbitViewModel.ScriptViewModel CreateScriptViewModel(JackrabbitScript script)
+        {
+            var fullScriptPath = script.ScriptPath;
+            var prefixPath = string.IsNullOrEmpty(script.PathPrefixName) ? null : this.DependencyLoader.Paths.Find(p => p.Name == script.PathPrefixName);
+            if (prefixPath != null)
+            {
+                fullScriptPath = prefixPath.Path + script.ScriptPath;
+            }
+
+            return new ViewJackrabbitViewModel.ScriptViewModel(
+                script.Id,
+                script.PathPrefixName,
+                script.ScriptPath,
+                fullScriptPath,
+                script.Provider,
+                script.Priority ?? (int)FileOrder.Js.DefaultPriority);
         }
     }
 }

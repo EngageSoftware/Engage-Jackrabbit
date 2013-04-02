@@ -37,13 +37,15 @@ namespace Engage.Dnn.Jackrabbit
             /// <param name="id">The ID of the script.</param>
             /// <param name="pathPrefixName">Name of the path prefix.</param>
             /// <param name="scriptPath">The script path.</param>
+            /// <param name="fullScriptPath">The script path combined with the prefix.</param>
             /// <param name="provider">The provider.</param>
             /// <param name="priority">The priority.</param>
-            public ScriptViewModel(int id, string pathPrefixName, string scriptPath, string provider, int priority)
+            public ScriptViewModel(int id, string pathPrefixName, string scriptPath, string fullScriptPath, string provider, int priority)
             {
                 this.Id = id;
                 this.PathPrefixName = pathPrefixName;
                 this.ScriptPath = scriptPath;
+                this.FullScriptPath = fullScriptPath;
                 this.Provider = provider;
                 this.Priority = priority;
             }
@@ -56,6 +58,9 @@ namespace Engage.Dnn.Jackrabbit
 
             /// <summary>Gets the script path.</summary>
             public string ScriptPath { get; private set; }
+
+            /// <summary>Gets the script path combined with the prefix.</summary>
+            public string FullScriptPath { get; private set; }
 
             /// <summary>Gets the provider.</summary>
             public string Provider { get; private set; }
