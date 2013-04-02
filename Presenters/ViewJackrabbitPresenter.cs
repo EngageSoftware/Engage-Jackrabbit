@@ -128,7 +128,7 @@ namespace Engage.Dnn.Jackrabbit
         /// <returns>A sequence of <see cref="ViewJackrabbitViewModel.ScriptViewModel"/> instances.</returns>
         private IEnumerable<ViewJackrabbitViewModel.ScriptViewModel> GetScripts()
         {
-            return this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel);
+            return this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel).OrderBy(s => s.Priority);
         }
 
         /// <summary>Creates the script view model.</summary>
