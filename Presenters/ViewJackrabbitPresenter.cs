@@ -12,6 +12,7 @@
 namespace Engage.Dnn.Jackrabbit
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using ClientDependency.Core.Controls;
@@ -49,6 +50,7 @@ namespace Engage.Dnn.Jackrabbit
             this.View.Initialize += this.View_Initialize;
             this.View.AddScript += this.View_AddScript;
             this.View.UpdateScript += this.View_UpdateScript;
+            this.View.DeleteScript += this.View_DeleteScript;
         }
 
         /// <summary>Gets the client dependency loader</summary>
@@ -105,6 +107,28 @@ namespace Engage.Dnn.Jackrabbit
             {
                 this.ProcessModuleLoadException(ex);
             }
+        }
+
+        /// <summary>Handles the <see cref="IViewJackrabbitView.DeleteScript"/> event of the <see cref="Presenter{TView}.View"/>.</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DeleteScriptEventArgs"/> instance containing the event data.</param>
+        private void View_DeleteScript(object sender, DeleteScriptEventArgs e)
+        {
+            try
+            {
+                this.repository.DeleteScript(e.Id);
+            }
+            catch (Exception ex)
+            {
+                this.ProcessModuleLoadException(ex);
+            }
+        }
+
+        /// <summary>Gets the scripts.</summary>
+        /// <returns>A sequence of <see cref="ViewJackrabbitViewModel.ScriptViewModel"/> instances.</returns>
+        private IEnumerable<ViewJackrabbitViewModel.ScriptViewModel> GetScripts()
+        {
+            return this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel);
         }
 
         /// <summary>Creates the script view model.</summary>

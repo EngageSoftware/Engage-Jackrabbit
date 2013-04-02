@@ -35,6 +35,9 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Occurs when a script is updated.</summary>
         public event EventHandler<UpdateScriptEventArgs> UpdateScript = (_, __) => { }; 
 
+        /// <summary>Occurs when a script is deleted.</summary>
+        public event EventHandler<DeleteScriptEventArgs> DeleteScript = (_, __) => { }; 
+
         /// <summary>Raises the <see cref="Control.PreRender" /> event.</summary>
         /// <param name="e">The <see cref="EventArgs" /> object that contains the event data.</param>
         protected override void OnPreRender(EventArgs e)
@@ -118,6 +121,23 @@ namespace Engage.Dnn.Jackrabbit
             catch (Exception exc)
             {
                 Exceptions.ProcessModuleLoadException(this, exc);
+            }
+        }
+
+        /// <summary>Handles the <see cref="RadGrid.DeleteCommand" /> event of the scripts grid.</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="GridCommandEventArgs"/> instance containing the event data.</param>
+        protected void ScriptsGrid_DeleteCommand(object sender, GridCommandEventArgs e)
+        {
+            try
+            {
+                var item = (GridEditableItem)e.Item;
+                this.DeleteScript(this, new DeleteScriptEventArgs((int)item.GetDataKeyValue("Id")));
+            }
+            catch (Exception exc)
+            {
+                Exceptions.ProcessModuleLoadException(this, exc);
+                throw;
             }
         }
 

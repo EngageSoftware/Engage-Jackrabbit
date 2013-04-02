@@ -29,5 +29,9 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Updates the script.</summary>
         /// <param name="script">The script.</param>
         void UpdateScript(JackrabbitScript script);
+
+        /// <summary>Deletes the script.</summary>
+        /// <param name="scriptId">The script's ID.</param>
+        void DeleteScript(int scriptId);
     }
 }

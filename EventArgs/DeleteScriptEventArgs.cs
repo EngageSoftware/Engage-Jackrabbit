@@ -1,4 +1,4 @@
-﻿// <copyright file="IViewJackrabbitView.cs" company="Engage Software">
+﻿// <copyright file="DeleteScriptEventArgs.cs" company="Engage Software">
 // Engage: Jackrabbit
 // Copyright (c) 2004-2013
 // by Engage Software ( http://www.engagesoftware.com )
@@ -13,18 +13,17 @@ namespace Engage.Dnn.Jackrabbit
 {
     using System;
 
-    using DotNetNuke.Web.Mvp;
-
-    /// <summary>The contract of the main view</summary>
-    public interface IViewJackrabbitView : IModuleView<ViewJackrabbitViewModel>
+    /// <summary>Contains information about a command to delete a script</summary>
+    public class DeleteScriptEventArgs : EventArgs
     {
-        /// <summary>Occurs when a script is added.</summary>
-        event EventHandler<AddScriptEventArgs> AddScript;
+        /// <summary>Initializes a new instance of the <see cref="DeleteScriptEventArgs"/> class.</summary>
+        /// <param name="id">The ID of the script.</param>
+        public DeleteScriptEventArgs(int id)
+        {
+            this.Id = id;
+        }
 
-        /// <summary>Occurs when a script is updated.</summary>
-        event EventHandler<UpdateScriptEventArgs> UpdateScript;
-
-        /// <summary>Occurs when a script is deleted.</summary>
-        event EventHandler<DeleteScriptEventArgs> DeleteScript;
+        /// <summary>Gets the script's ID.</summary>
+        public int Id { get; private set; }
     }
 }

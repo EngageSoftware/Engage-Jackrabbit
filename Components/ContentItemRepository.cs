@@ -85,6 +85,13 @@ namespace Engage.Dnn.Jackrabbit
             this.contentController.UpdateContentItem(contentItem);
         }
 
+        /// <summary>Deletes the script.</summary>
+        /// <param name="scriptId">The script's ID.</param>
+        public void DeleteScript(int scriptId)
+        {
+            this.contentController.DeleteContentItem(scriptId);
+        }
+
         /// <summary>Fills the <paramref name="contentItem"/> with the properties from the <paramref name="script"/>.</summary>
         /// <param name="script">The script.</param>
         /// <param name="contentItem">The content item.</param>

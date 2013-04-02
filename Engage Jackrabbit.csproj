@@ -120,6 +120,7 @@
     <Compile Include="Presenters\SettingsPresenter.cs" />
     <Compile Include="Presenters\ViewJackrabbitPresenter.cs" />
     <Compile Include="EventArgs\AddScriptEventArgs.cs" />
+    <Compile Include="EventArgs\DeleteScriptEventArgs.cs" />
     <Compile Include="Views\ISettingsView.cs" />
     <Compile Include="Views\IViewJackrabbitView.cs" />
     <Compile Include="Views\Settings.ascx.cs">
