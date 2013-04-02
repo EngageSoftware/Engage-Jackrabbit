@@ -85,10 +85,10 @@ namespace Engage.Dnn.Jackrabbit
                 this.AddScript(
                     this,
                     new AddScriptEventArgs(
-                        (string)values["PathPrefixName"],
-                        (string)values["ScriptPath"],
-                        (string)values["Provider"],
-                        int.Parse(values["Priority"].ToString(), CultureInfo.InvariantCulture)));
+                        ((string)values["PathPrefixName"] ?? string.Empty).Trim(),
+                        ((string)values["ScriptPath"] ?? string.Empty).Trim(),
+                        ((string)values["Provider"] ?? string.Empty).Trim(),
+                        int.Parse(values["Priority"].ToString().Trim(), CultureInfo.InvariantCulture)));
             }
             catch (Exception exc)
             {
@@ -110,10 +110,10 @@ namespace Engage.Dnn.Jackrabbit
                     this,
                     new UpdateScriptEventArgs(
                         (int)item.GetDataKeyValue("Id"),
-                        (string)values["PathPrefixName"],
-                        (string)values["ScriptPath"],
-                        (string)values["Provider"],
-                        int.Parse(values["Priority"].ToString(), CultureInfo.InvariantCulture)));
+                        ((string)values["PathPrefixName"] ?? string.Empty).Trim(),
+                        ((string)values["ScriptPath"] ?? string.Empty).Trim(),
+                        ((string)values["Provider"] ?? string.Empty).Trim(),
+                        int.Parse(values["Priority"].ToString().Trim(), CultureInfo.InvariantCulture)));
             }
             catch (Exception exc)
             {
