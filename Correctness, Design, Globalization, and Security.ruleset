@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Correctness, Design, Globalization, and Security" ToolsVersion="10.0">
+  <Include Path="basiccorrectnessrules.ruleset" Action="Default" />
+  <Include Path="basicdesignguidelinerules.ruleset" Action="Default" />
+  <Include Path="globalizationrules.ruleset" Action="Default" />
+  <Include Path="minimumrecommendedrules.ruleset" Action="Default" />
+  <Include Path="securityrules.ruleset" Action="Default" />
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1031" Action="None" />
+    <Rule Id="CA1054" Action="None" />
+    <Rule Id="CA1055" Action="None" />
+    <Rule Id="CA1056" Action="None" />
+    <Rule Id="CA1400" Action="None" />
+    <Rule Id="CA1401" Action="None" />
+    <Rule Id="CA1403" Action="None" />
+    <Rule Id="CA1404" Action="None" />
+    <Rule Id="CA1405" Action="None" />
+    <Rule Id="CA1410" Action="None" />
+    <Rule Id="CA1415" Action="None" />
+    <Rule Id="CA1900" Action="None" />
+    <Rule Id="CA1901" Action="None" />
+    <Rule Id="CA1903" Action="None" />
+  </Rules>
+</RuleSet>

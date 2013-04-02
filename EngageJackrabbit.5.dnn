@@ -1,0 +1,65 @@
+﻿<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <package name="Engage: Jackrabbit" type="Module" version="1.0.0">
+      <friendlyName>Engage: Jackrabbit</friendlyName>
+      <description></description>
+      <!--iconFile>/DesktopModules/Engage/Jackrabbit/images/Jackrabbit-icon32.png</iconFile-->
+      <owner>
+        <name>Engage Software</name>
+        <organization>Engage Software</organization>
+        <url>http://www.engagesoftware.com/</url>
+        <email>support@engagemodules.com</email>
+      </owner>
+      <license src="Licenses/EULA-Free.htm"/>
+      <releaseNotes src="ReleaseNotes_01.00.00.htm" />
+      <dependencies>
+        <dependency type="CoreVersion">5.0.0</dependency>
+      </dependencies>
+      <components>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules/Engage/Jackrabbit</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
+        </component>
+        <component type="Module">
+          <desktopModule>
+            <moduleName>Engage: Jackrabbit</moduleName>
+            <foldername>Engage/Jackrabbit</foldername>
+            <businessControllerClass>Engage.Dnn.Jackrabbit.FeaturesController</businessControllerClass>
+            <moduleDefinitions>
+              <moduleDefinition>
+                <friendlyName>Engage: Jackrabbit</friendlyName>
+                <defaultCacheTime>0</defaultCacheTime>
+                <moduleControls>
+                  <moduleControl>
+                    <controlKey/>
+                    <controlSrc>DesktopModules/Engage/Jackrabbit/Views/ViewJackrabbit.ascx</controlSrc>
+                    <supportsPartialRendering>True</supportsPartialRendering>
+                    <controlType>View</controlType>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Settings</controlKey>
+                    <controlSrc>DesktopModules/Engage/Jackrabbit/Views/Settings.ascx</controlSrc>
+                    <controlTitle>Engage: Jackrabbit Settings</controlTitle>
+                    <controlType>Edit</controlType>
+                  </moduleControl>
+                </moduleControls>
+              </moduleDefinition>
+            </moduleDefinitions>
+          </desktopModule>
+        </component>
+        <component type="Assembly">
+          <assemblies>
+            <assembly>
+              <name>Engage.Jackrabbit.dll</name>
+              <version latestVersion="latestVersion">1.0.0</version>
+            </assembly>
+          </assemblies>
+        </component>
+      </components>
+    </package>
+  </packages>
+</dotnetnuke>

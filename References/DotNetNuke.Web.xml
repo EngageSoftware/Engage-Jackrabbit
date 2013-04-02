@@ -1,0 +1,618 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNetNuke.Web</name>
+    </assembly>
+    <members>
+        <member name="T:DotNetNuke.Web.Common.Internal.DotNetNukeHttpApplication">
+            <summary>
+            DotNetNuke Http Application. It will handle Start, End, BeginRequest, Error event for whole application.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.Services.DnnController.PortalSettings">
+            <summary>
+            PortalSettings for the current portal
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.Services.DnnController.UserInfo">
+            <summary>
+            UserInfo for the current user
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.Services.DnnController.ActiveModule">
+            <summary>
+            ModuleInfo for the current module
+            <remarks>Will be null unless a valid pair of module and tab ids were provided in the request</remarks>
+            </summary>
+        </member>
+        <member name="T:DotNetNuke.Web.InternalServices.MessagingServiceController.SearchResult">
+            <summary>
+            This class stores a single search result needed by jQuery Tokeninput
+            </summary>
+        </member>
+        <member name="M:DotNetNuke.Web.Mvp.SettingsViewBase.OnSettingsLoaded">
+            <summary>
+            The OnSettingsLoaded method is called when the Settings have been Loaded 
+            </summary>
+        </member>
+        <member name="M:DotNetNuke.Web.Mvp.SettingsViewBase.OnSavingSettings">
+            <summary>
+            OnSavingSettings method is called just before the Settings are saved
+            </summary>
+        </member>
+        <member name="M:DotNetNuke.Web.Services.AuthenticatorBase.TryToAuthenticate(System.Web.HttpContextBase,System.Int32)">
+            <summary>
+            Attempts to authenticate the current request
+            </summary>
+            <param name="context">Context of the currect request</param>
+            <param name="portalId">PortalID to authenticate in</param>
+        </member>
+        <member name="T:DotNetNuke.Web.Services.AuthorizeAttributeBase">
+            <summary>
+            A base class for authorize attributes
+            <remarks>
+            This is based on the ASP.Net MVC AuthorizeAttribute, with an enhancemtn to pass AuthorizationContext to AuthorizeCore.
+            The code to deal with the cache and set the result should be common to all AuthorizationFilters</remarks>
+            </summary>
+        </member>
+        <member name="T:DotNetNuke.Web.Services.IOverrideDefaultAuthLevel">
+            <summary>
+            Implementing this interface on an Auth filter will allow the filter to override the default
+            Host level auth provided by DnnController
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.Services.DnnAuthorizeAttribute.RequiresHost">
+            <summary>
+            Indicates that Host level credentials are required
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.Services.DnnAuthorizeAttribute.AllowAnonymous">
+            <summary>
+            Allows authorization of anonymous users
+            <remarks>
+            AllowAnonymous is used to allow anonymous access to specific methods in a controller that has a higher DefaultAuthLevel
+            This setting will be ignored if any of User, StaticRoles or Host level access are also specified
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:DotNetNuke.Web.Services.IMapRoute.MapRoute(System.String,System.String,System.Object,System.Object,System.String[])">
+            <summary>
+            Sets up the route(s) for DotNetNuke services
+            </summary>
+            <param name="moduleFolderName">The name of the folder under DesktopModules in which your module resides</param>
+            <param name="url">The parameterized portion of the route</param>
+            <param name="defaults">Default values for the route parameters</param>
+            <param name="constraints">The constraints</param>
+            <param name="namespaces">The namespace(s) in which to locate the controllers for this route</param>
+            <returns>A list of all routes that were registered.</returns>
+        </member>
+        <member name="M:DotNetNuke.Web.Services.IMapRoute.MapRoute(System.String,System.String,System.Object,System.String[])">
+            <summary>
+            Sets up the route(s) for DotNetNuke services
+            </summary>
+            <param name="moduleFolderName">The name of the folder under DesktopModules in which your module resides</param>
+            <param name="url">The parameterized portion of the route</param>
+            <param name="defaults">Default values for the route parameters</param>
+            <param name="namespaces">The namespace(s) in which to locate the controllers for this route</param>
+            <returns>A list of all routes that were registered.</returns>
+        </member>
+        <member name="M:DotNetNuke.Web.Services.IMapRoute.MapRoute(System.String,System.String,System.String[])">
+            <summary>
+            Sets up the route(s) for DotNetNuke services
+            </summary>
+            <param name="moduleFolderName">The name of the folder under DesktopModules in which your module resides</param>
+            <param name="url">The parameterized portion of the route</param>
+            <param name="namespaces">The namespace(s) in which to locate the controllers for this route</param>
+            <returns>A list of all routes that were registered.</returns>
+        </member>
+        <member name="T:DotNetNuke.Web.UI.WebControls.DnnMemberListControl">
+            <summary>
+            This control is used for displaying a template based list of users based upon various filter and sorting capabilities.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.HeaderTemplate">
+            <summary>
+            Gets or sets the template for displaying the header section of a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.RowHeaderTemplate">
+            <summary>
+            Gets or sets the template for the row header.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.ItemTemplate">
+            <summary>
+            Gets or sets the template for displaying an item in a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.RowFooterTemplate">
+            <summary>
+            Gets or sets the template for the row footer.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.AlternatingRowHeaderTemplate">
+            <summary>
+            Gets or sets the template for displaying the alternating row headers in a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.AlternatingItemTemplate">
+            <summary>
+            Gets or sets the template for displaying the alternating items in a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.AlternatingRowFooterTemplate">
+            <summary>
+            Gets or sets the template for displaying the alternating row footers in a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.FooterTemplate">
+            <summary>
+            Gets or sets the template for displaying the footer section of a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.PageIndex">
+            <summary>
+            Gets or sets the index of the currently displayed page.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.PageSize">
+            <summary>
+            Gets or sets the number of records to display on a page in a DnnMemberListControl object.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.RowSize">
+            <summary>
+            Gets or sets the number of items displayed on each row.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.SortBy">
+            <summary>
+            Sets the property value to sort by.
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.SortAscending">
+            <summary>
+            Gets or sets the sort direction
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnMemberListControl.Filters">
+            <summary>
+            Gets or sets the collection of filters to apply when getting the list of members.
+            </summary>
+            <remarks>
+            Posible keys are: RoleId, RelationshipTypeId, UserId, Profile:PropertyName, FirstName, LastName, DisplayName, Username, Email.
+            </remarks>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.Extensions.ListControlExtensions.FindByTextWithIgnoreCase(System.Web.UI.WebControls.ListItemCollection,System.String)">
+            <summary>
+            Use this method instead of ListItemCollection.FindByText to find the specific item with case-insensitive.
+            </summary>
+            <param name="listItems">the items.</param>
+            <param name="text">the item with this text want to find.</param>
+            <returns>the specific item or null if didn't match the text with any item.</returns>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.Extensions.ListControlExtensions.FindByValueWithIgnoreCase(System.Web.UI.WebControls.ListItemCollection,System.String)">
+            <summary>
+            Use this method instead of ListItemCollection.FindBValue to find the specific item with case-insensitive.
+            </summary>
+            <param name="listItems">the items.</param>
+            <param name="value">the item with this value want to find.</param>
+            <returns>the specific item or null if didn't match the value with any item.</returns>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFileEditControl.CreateChildControls">
+            -----------------------------------------------------------------------------
+            <summary>
+              Creates the control contained within this control
+            </summary>
+            <history>
+              [cnurse]	07/31/2006 created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFileEditControl.OnPreRender(System.EventArgs)">
+            -----------------------------------------------------------------------------
+            <summary>
+              Runs before the control is rendered.
+            </summary>
+            <history>
+              [cnurse]	07/31/2006 created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFileEditControl.RenderEditMode(System.Web.UI.HtmlTextWriter)">
+            -----------------------------------------------------------------------------
+            <summary>
+              Renders the control in edit mode
+            </summary>
+            <param name = "writer">An HtmlTextWriter to render the control to</param>
+            <history>
+              [cnurse]	04/20/2006	created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFileEditControl.LoadPostData(System.String,System.Collections.Specialized.NameValueCollection)">
+            -----------------------------------------------------------------------------
+            <summary>
+              Loads the Post Back Data and determines whether the value has change
+            </summary>
+            <remarks>
+              In this case because the <see cref="F:DotNetNuke.Web.UI.WebControls.DnnFileEditControl._fileControl"/> is a contained control, we do not need 
+              to process the PostBackData (it has been handled by the File Control).  We just use
+              this method as the Framework calls it for us.
+            </remarks>
+            <param name="postDataKey">A key to the PostBack Data to load</param>
+            <param name="postCollection">A name value collection of postback data</param>
+            <history>
+              [cnurse]	08/01/2006	created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFileEditControl.FileFilter">
+            -----------------------------------------------------------------------------
+            <summary>
+              Gets or sets the current file extension filter.
+            </summary>
+            <history>
+              [anurse]	08/11/2006 documented
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFileEditControl.FilePath">
+            -----------------------------------------------------------------------------
+            <summary>
+              Gets or sets the current file path.
+            </summary>
+            <history>
+              [cnurse]	07/02/2007 created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="T:DotNetNuke.Web.UI.WebControls.DnnFilePicker">
+            <summary>
+              The FilePicker Class provides a File Picker Control for DotNetNuke
+            </summary>
+            <history>
+              [cnurse]	07/31/2006
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.AddButton(System.Web.UI.WebControls.LinkButton@)">
+            <summary>
+              AddButton adds a button to the Command Row
+            </summary>
+            <param name = "button">The button to add to the Row</param>
+            <history>
+              [cnurse]	07/31/2006 created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.AddButtonArea">
+            <summary>
+              AddCommandRow adds the Command Row
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.AddFileAndUploadArea">
+            <summary>
+              AddFileRow adds the Files Row
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.AddFolderArea">
+            <summary>
+              AddFolderRow adds the Folders Row
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.GeneratePreviewImage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.AddMessageRow">
+            <summary>
+              AddMessageRow adds the Message Row
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.LoadFolders">
+            <summary>
+              LoadFolders fetches the list of folders from the Database
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.SetFilePath">
+            <summary>
+              SetFilePath sets the FilePath property
+            </summary>
+            <remarks>
+              This overload uses the selected item in the Folder combo
+            </remarks>
+            <history>
+              [cnurse]	08/01/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.SetFilePath(System.String)">
+            <summary>
+              SetFilePath sets the FilePath property
+            </summary>
+            <remarks>
+              This overload allows the caller to specify a file
+            </remarks>
+            <param name = "fileName">The filename to use in setting the property</param>
+            <history>
+              [cnurse]	08/01/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.ShowButton(System.Web.UI.WebControls.LinkButton,System.String)">
+            <summary>
+              ShowButton configures and displays a button
+            </summary>
+            <param name = "button">The button to configure</param>
+            <param name = "command">The command name (amd key) of the button</param>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.ShowImage">
+            <summary>
+              ShowImage displays the Preview Image
+            </summary>
+            <history>
+              [cnurse]	08/01/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.CreateChildControls">
+            <summary>
+              CreateChildControls overrides the Base class's method to correctly build the
+              control based on the configuration
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnFilePicker.OnPreRender(System.EventArgs)">
+            <summary>
+              OnPreRender runs just before the control is rendered
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.IsHost">
+            <summary>
+              Gets whether the control is on a Host or Portal Tab
+            </summary>
+            <value>A Boolean</value>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.Mode">
+            <summary>
+              Gets or sets the current mode of the control
+            </summary>
+            <remarks>
+              Defaults to FileControlMode.Normal
+            </remarks>
+            <value>A FileControlMode enum</value>
+            <history>
+              [cnurse]	7/13/2005  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.ParentFolder">
+            <summary>
+              Gets the root folder for the control
+            </summary>
+            <value>A String</value>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.PortalId">
+            <summary>
+              Gets or sets the file PortalId to use
+            </summary>
+            <remarks>
+              Defaults to PortalSettings.PortalId
+            </remarks>
+            <value>An Integer</value>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>        
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.PortalSettings">
+            <summary>
+              Gets the current Portal Settings
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.CommandCssClass">
+            <summary>
+              Gets or sets the class to be used for the Labels
+            </summary>
+            <remarks>
+              Defaults to 'CommandButton'
+            </remarks>
+            <value>A String</value>
+            <history>
+              [cnurse]	7/13/2005  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FileFilter">
+            <summary>
+              Gets or sets the file Filter to use
+            </summary>
+            <remarks>
+              Defaults to ''
+            </remarks>
+            <value>a comma seperated list of file extenstions no wildcards or periods e.g. "jpg,png,gif"</value>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FileID">
+            <summary>
+              Gets or sets the FileID for the control
+            </summary>
+            <value>An Integer</value>
+            <history>
+              [cnurse]	7/13/2005  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FilePath">
+            <summary>
+              Gets or sets the FilePath for the control
+            </summary>
+            <value>A String</value>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.UsePersonalFolder">
+            <summary>
+              Gets or sets whether to Include Personal Folder
+            </summary>
+            <remarks>
+              Defaults to false
+            </remarks>
+            <value>A Boolean</value>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.LabelCssClass">
+            <summary>
+              Gets or sets the class to be used for the Labels
+            </summary>
+            <value>A String</value>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.Required">
+            <summary>
+              Gets or sets whether the combos have a "Not Specified" option
+            </summary>
+            <remarks>
+              Defaults to True (ie no "Not Specified")
+            </remarks>
+            <value>A Boolean</value>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.ShowDatabase">
+            <summary>
+              Gets or sets whether to Show Database Folders
+            </summary>
+            <remarks>
+              Defaults to false
+            </remarks>
+            <value>A Boolean</value>
+            <history>
+              [cnurse]	7/31/2005  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.ShowSecure">
+            <summary>
+              Gets or sets whether to Show Secure Folders
+            </summary>
+            <remarks>
+              Defaults to false
+            </remarks>
+            <value>A Boolean</value>
+            <history>
+              [cnurse]	7/31/2005  created
+            </history>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnFilePicker.ShowUpLoad">
+            <summary>
+              Gets or sets whether to Show the Upload Button
+            </summary>
+            <remarks>
+              Defaults to True
+            </remarks>
+            <value>A Boolean</value>
+            <history>
+              [cnurse]	7/31/2005  created
+            </history>
+        </member>
+        <member name="T:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FileControlMode">
+            <summary>
+              Represents a possible mode for the File Control
+            </summary>
+        </member>
+        <member name="F:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FileControlMode.Normal">
+            <summary>
+              The File Control is in its Normal mode
+            </summary>
+        </member>
+        <member name="F:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FileControlMode.UpLoadFile">
+            <summary>
+              The File Control is in the Upload File mode
+            </summary>
+        </member>
+        <member name="F:DotNetNuke.Web.UI.WebControls.DnnFilePicker.FileControlMode.Preview">
+            <summary>
+              The File Control is in the Preview mode
+            </summary>
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnLanguageComboBox.AutoPostBack">
+            -----------------------------------------------------------------------------
+            <summary>
+              Determines whether the List Auto Posts Back
+            </summary>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnLanguageLabel.CreateChildControls">
+            -----------------------------------------------------------------------------
+            <summary>
+              CreateChildControls overrides the Base class's method to correctly build the
+              control based on the configuration
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="M:DotNetNuke.Web.UI.WebControls.DnnLanguageLabel.OnPreRender(System.EventArgs)">
+            -----------------------------------------------------------------------------
+            <summary>
+              OnPreRender runs just before the control is rendered
+            </summary>
+            <history>
+              [cnurse]	07/31/2006  created
+            </history>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnGridButtonColumn.IconKey">
+            -----------------------------------------------------------------------------
+            <summary>
+            The Icon Key to obtain ImageURL
+            </summary>
+            <value>A String</value>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnGridButtonColumn.IconSize">
+            -----------------------------------------------------------------------------
+            <summary>
+            The Icon Siz to obtain ImageURL
+            </summary>
+            <value>A String</value>
+            -----------------------------------------------------------------------------
+        </member>
+        <member name="P:DotNetNuke.Web.UI.WebControls.DnnGridButtonColumn.IconStyle">
+            -----------------------------------------------------------------------------
+            <summary>
+            The Icon Style to obtain ImageURL
+            </summary>
+            <value>A String</value>
+            -----------------------------------------------------------------------------
+        </member>
+    </members>
+</doc>
