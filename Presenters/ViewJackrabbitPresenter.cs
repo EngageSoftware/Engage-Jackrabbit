@@ -67,7 +67,7 @@ namespace Engage.Dnn.Jackrabbit
             try
             {
                 this.View.Model.HideView = !ModulePermissionController.CanManageModule(this.ModuleInfo);
-                this.View.Model.Scripts = this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel);
+                this.View.Model.Scripts = this.GetScripts();
                 this.View.Model.DefaultPathPrefix = string.Empty;
                 this.View.Model.DefaultScriptPath = "~/";
                 this.View.Model.DefaultProvider = "DnnFormBottomProvider";
@@ -87,6 +87,7 @@ namespace Engage.Dnn.Jackrabbit
             try
             {
                 this.repository.AddScript(this.ModuleId, new JackrabbitScript(e.PathPrefixName, e.ScriptPath, e.Provider, e.Priority));
+                this.View.Model.Scripts = this.GetScripts();
             }
             catch (Exception ex)
             {
@@ -102,6 +103,7 @@ namespace Engage.Dnn.Jackrabbit
             try
             {
                 this.repository.UpdateScript(new JackrabbitScript(e.Id, e.PathPrefixName, e.ScriptPath, e.Provider, e.Priority));
+                this.View.Model.Scripts = this.GetScripts();
             }
             catch (Exception ex)
             {
@@ -117,6 +119,7 @@ namespace Engage.Dnn.Jackrabbit
             try
             {
                 this.repository.DeleteScript(e.Id);
+                this.View.Model.Scripts = this.GetScripts();
             }
             catch (Exception ex)
             {
