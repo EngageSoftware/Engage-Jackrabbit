@@ -73,14 +73,6 @@
       <HintPath>References\DotNetNuke.Web.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Engage.Dnn.Framework, Version=3.1.6.26594, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\Framework\Engage.Dnn.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Engage.Framework, Version=3.1.4.26592, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\Framework\Engage.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -121,6 +113,24 @@
     <Compile Include="Presenters\ViewJackrabbitPresenter.cs" />
     <Compile Include="EventArgs\AddScriptEventArgs.cs" />
     <Compile Include="EventArgs\DeleteScriptEventArgs.cs" />
+    <Compile Include="Utility\Annotations\BaseTypeRequiredAttribute.cs" />
+    <Compile Include="Utility\Annotations\CanBeNullAttribute.cs" />
+    <Compile Include="Utility\Annotations\CannotApplyEqualityOperatorAttribute.cs" />
+    <Compile Include="Utility\Annotations\ContractAnnotationAttribute.cs" />
+    <Compile Include="Utility\Annotations\ImplicitUseKindFlags.cs" />
+    <Compile Include="Utility\Annotations\ImplicitUseTargetFlags.cs" />
+    <Compile Include="Utility\Annotations\InstantHandleAttribute.cs" />
+    <Compile Include="Utility\Annotations\InvokerParameterNameAttribute.cs" />
+    <Compile Include="Utility\Annotations\LocalizationRequiredAttribute.cs" />
+    <Compile Include="Utility\Annotations\MeansImplicitUseAttribute.cs" />
+    <Compile Include="Utility\Annotations\NotifyPropertyChangedInvocatorAttribute.cs" />
+    <Compile Include="Utility\Annotations\NotNullAttribute.cs" />
+    <Compile Include="Utility\Annotations\PathReferenceAttribute.cs" />
+    <Compile Include="Utility\Annotations\PublicAPIAttribute.cs" />
+    <Compile Include="Utility\Annotations\PureAttribute.cs" />
+    <Compile Include="Utility\Annotations\RazorSectionAttribute.cs" />
+    <Compile Include="Utility\Annotations\StringFormatMethodAttribute.cs" />
+    <Compile Include="Utility\Annotations\UsedImplicitlyAttribute.cs" />
     <Compile Include="Views\ISettingsView.cs" />
     <Compile Include="Views\IViewJackrabbitView.cs" />
     <Compile Include="Views\Settings.ascx.cs">
@@ -145,9 +155,12 @@
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
     <Content Include="Licenses\EULA-Free.txt" />
+    <Content Include="References\ClientDependency.Core.dll" />
+    <Content Include="References\DotNetNuke.Web.Client.dll" />
     <Content Include="References\DotNetNuke.Web.dll" />
     <Content Include="References\DotNetNuke.Web.xml" />
     <Content Include="References\DotNetNuke.xml" />
+    <Content Include="References\Telerik.Web.UI.dll" />
     <Content Include="References\WebFormsMvp.dll" />
     <Content Include="Licenses\EULA-Free.htm" />
     <Content Include="Views\Settings.ascx" />
