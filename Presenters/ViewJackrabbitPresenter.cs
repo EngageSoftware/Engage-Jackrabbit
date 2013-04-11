@@ -66,7 +66,8 @@ namespace Engage.Dnn.Jackrabbit
         {
             try
             {
-                this.View.Model.HideView = !ModulePermissionController.CanManageModule(this.ModuleInfo);
+                this.View.Model.HideContainer = !ModulePermissionController.CanManageModule(this.ModuleInfo);
+                this.View.Model.HideView = !this.IsEditable;
                 this.View.Model.Scripts = this.GetScripts();
                 this.View.Model.DefaultPathPrefix = string.Empty;
                 this.View.Model.DefaultScriptPath = "~/";

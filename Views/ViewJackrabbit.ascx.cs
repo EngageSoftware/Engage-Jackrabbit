@@ -17,6 +17,7 @@ namespace Engage.Dnn.Jackrabbit
     using System.Web.UI;
 
     using DotNetNuke.Services.Exceptions;
+    using DotNetNuke.UI.Containers;
     using DotNetNuke.Web.Client.ClientResourceManagement;
     using DotNetNuke.Web.Mvp;
     using DotNetNuke.Web.UI.WebControls;
@@ -48,9 +49,15 @@ namespace Engage.Dnn.Jackrabbit
             
                 this.AutoDataBind = false;
 
-                this.SetupColumns();
-
-                this.DataBind();
+                if (this.Model.HideContainer)
+                {
+                    this.HideContainer();
+                }
+                else
+                {
+                    this.SetupColumns();
+                    this.DataBind();
+                }
 
                 this.RegisterScripts();
             }
@@ -156,6 +163,21 @@ namespace Engage.Dnn.Jackrabbit
             foreach (var script in this.Model.Scripts)
             {
                 ClientResourceManager.RegisterScript(this.Page, script.FullScriptPath, script.Priority, script.Provider);
+            }
+        }
+
+        /// <summary>Hides the module's container.</summary>
+        private void HideContainer()
+        {
+            var container = this.Parent;
+            while (!(container is Container) && container.Parent != null)
+            {
+                container = container.Parent;
+            }
+
+            if (container.Parent != null)
+            {
+                container.Visible = false;
             }
         }
     }
