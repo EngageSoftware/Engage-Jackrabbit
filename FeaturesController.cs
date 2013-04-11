@@ -13,7 +13,7 @@ namespace Engage.Dnn.Jackrabbit
 {
     using System.Diagnostics.CodeAnalysis;
 
-    using Engage.Annotations;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Contains basic information about the module and exposes which DNN integration points the module implements
