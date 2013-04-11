@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+    <Content Include="jackrabbit-icon.png" />
     <Content Include="Licenses\EULA-Free.txt" />
     <Content Include="References\ClientDependency.Core.dll" />
     <Content Include="References\DotNetNuke.Web.Client.dll" />
