@@ -17,7 +17,10 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>The view model for the Jackrabbit, to be displayed by <see cref="IViewJackrabbitView"/></summary>
     public class ViewJackrabbitViewModel
     {
-        /// <summary>Gets or sets a value indicating whether the view of the module should display or not.</summary>
+        /// <summary>Gets or sets a value indicating whether module's container should be hidden (i.e. if the module should not have any display).</summary>
+        public bool HideContainer { get; set; }
+
+        /// <summary>Gets or sets a value indicating whether the view of the module should display or not (but the container might still display, to let editors know it's there).</summary>
         public bool HideView { get; set; }
 
         /// <summary>Gets or sets the scripts being included by this module.</summary>

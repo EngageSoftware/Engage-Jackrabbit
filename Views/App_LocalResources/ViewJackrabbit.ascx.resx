@@ -129,4 +129,7 @@
   <data name="Script Path.Header" xml:space="preserve">
     <value>Script Path</value>
   </data>
+  <data name="View Mode.Text" xml:space="preserve">
+    <value>To edit your Jackrabbit scripts, please enter Edit Mode.</value>
+  </data>
 </root>
