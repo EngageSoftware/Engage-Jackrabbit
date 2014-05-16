@@ -286,6 +286,7 @@
     <include name="MSBuild/*.targets"/>
     <include name="CustomDictionary.xml"/>
     <exclude name="**/obj/**"/>
+    <exclude name="**/bin/**"/>
     <exclude name="Release.txt" />
   </patternset>
 </project>
