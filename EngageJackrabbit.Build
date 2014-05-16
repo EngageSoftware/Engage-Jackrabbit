@@ -261,6 +261,8 @@
     <exclude name="**/obj/**"/>
     <exclude name="${referencesDirectory}/**"/>
     <exclude name="packages/**" />
+    <exclude name="**/bin/**"/>
+    <exclude name="CustomDictionary.xml"/>
   </patternset>
   <patternset id="source.fileset">
     <include name="**/*.js"/>
@@ -282,7 +284,9 @@
     <include name="??.??.??.txt" />
     <include name="MSBuild/*.dll"/>
     <include name="MSBuild/*.targets"/>
+    <include name="CustomDictionary.xml"/>
     <exclude name="**/obj/**"/>
+    <exclude name="**/bin/**"/>
     <exclude name="Release.txt" />
   </patternset>
 </project>
