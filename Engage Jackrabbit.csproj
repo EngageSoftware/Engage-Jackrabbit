@@ -31,7 +31,6 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
-    <CodeAnalysisRuleSet>..\..\..\..\..\..\..\Users\bdukes\Dropbox\Presentations\Designing a Mobile-Enabling API\Example Projects\ServicesFrameworkExampleImplementation\Correctness, Design, Globalization, and Security.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
