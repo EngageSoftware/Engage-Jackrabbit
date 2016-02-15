@@ -39,6 +39,23 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Occurs when a script is deleted.</summary>
         public event EventHandler<DeleteScriptEventArgs> DeleteScript = (_, __) => { };
 
+        /// <summary>Raises the <see cref="Control.Load" /> event.</summary>
+        /// <param name="e">The <see cref="EventArgs" /> object that contains the event data.</param>
+        protected override void OnLoad(EventArgs e)
+        {
+            try
+            {
+                base.OnLoad(e);
+
+                // NOTE: loading scripts before PreRender fixes a bug where sometimes scripts don't load on postback
+                this.RegisterScripts();
+            }
+            catch (Exception exc)
+            {
+                Exceptions.ProcessModuleLoadException(this, exc);
+            }
+        }
+
         /// <summary>Raises the <see cref="Control.PreRender" /> event.</summary>
         /// <param name="e">The <see cref="EventArgs" /> object that contains the event data.</param>
         protected override void OnPreRender(EventArgs e)
@@ -59,6 +76,8 @@ namespace Engage.Dnn.Jackrabbit
                     this.DataBind();
                 }
 
+                // NOTE: loading scripts during PreRender (in addition to Load) allows modifications to scripts
+                // (other than deletes) to take effect immediately
                 this.RegisterScripts();
             }
             catch (Exception exc)
