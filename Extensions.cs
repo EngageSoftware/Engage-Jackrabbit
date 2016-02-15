@@ -1,12 +1,12 @@
 ﻿// <copyright file="Extensions.cs" company="Engage Software">
 // Engage: Jackrabbit
-// Copyright (c) 2004-2013
+// Copyright (c) 2004-2016
 // by Engage Software ( http://www.engagesoftware.com )
 // </copyright>
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 namespace Engage.Dnn.Jackrabbit
 {
@@ -16,7 +16,7 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>Utility extension methods</summary>
     public static class Extensions
     {
-        /// <summary> Parses the value as an <see cref="int"/>, returning <c>null</c> if the parsing is not successful.  
+        /// <summary> Parses the value as an <see cref="int"/>, returning <c>null</c> if the parsing is not successful.
         /// Uses <see cref="CultureInfo.InvariantCulture"/> and <see cref="NumberStyles.Integer"/>.</summary>
         /// <param name="this">The value to parse.</param>
         /// <returns>An <see cref="int" /> value, or <c>null</c>.</returns>
