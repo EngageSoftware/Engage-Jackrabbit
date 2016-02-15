@@ -174,7 +174,7 @@
     <Content Include="Views\ViewJackrabbit.ascx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ReleaseNotes_01.00.00.htm" />
+    <Content Include="ReleaseNotes_01.00.01.htm" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -189,7 +189,7 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets" Condition="Exists('$(ProgramFiles)\MSBuild\StyleCop\v4.7\StyleCop.Targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
