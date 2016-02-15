@@ -94,6 +94,7 @@
       <fileset>
         <patternset refid="projectAssemblies"/>
         <include name="${referencesDirectory}/**/*.dll"/>
+        <exclude name="${referencesDirectory}/ClientDependency.Core.dll"/>
         <exclude name="${referencesDirectory}/DotNetNuke.dll"/>
         <exclude name="${referencesDirectory}/DotNetNuke.*.dll"/>
         <exclude name="${referencesDirectory}/Microsoft.ApplicationBlocks.Data.dll"/>
@@ -232,7 +233,7 @@
       <![CDATA[
               [Function("version-info")]
               public static string FormatVersionInfo(FileVersionInfo fileVersionInfo) {
-                  
+
                   return string.Format(CultureInfo.InvariantCulture, "{0:00}.{1:00}.{2:00}", fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart);
               }
             ]]>
