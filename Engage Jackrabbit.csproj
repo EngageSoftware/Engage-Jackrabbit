@@ -82,23 +82,38 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\System.Net.Http.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\System.Net.Http.Formatting.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\System.Net.Http.WebRequest.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\System.Web.Http.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Telerik.Web.UI, Version=2012.3.1205.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\bin\Telerik.Web.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="WebFormsMvp, Version=0.9.7.4, Culture=neutral, PublicKeyToken=537f18701145dff0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\WebFormsMvp.dll</HintPath>
@@ -106,6 +121,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ScriptController.cs" />
+    <Compile Include="API\ServiceRouteMapper.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FeaturesController.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
@@ -115,8 +132,7 @@
     <Compile Include="Components\IRepository.cs" />
     <Compile Include="Presenters\SettingsPresenter.cs" />
     <Compile Include="Presenters\ViewJackrabbitPresenter.cs" />
-    <Compile Include="EventArgs\AddScriptEventArgs.cs" />
-    <Compile Include="EventArgs\DeleteScriptEventArgs.cs" />
+    <Compile Include="API\PostScriptRequest.cs" />
     <Compile Include="Views\ISettingsView.cs" />
     <Compile Include="Views\IViewJackrabbitView.cs" />
     <Compile Include="Views\Settings.ascx.cs">
@@ -129,7 +145,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventArgs\UpdatingSettingsEventArgs.cs" />
-    <Compile Include="EventArgs\UpdateScriptEventArgs.cs" />
+    <Compile Include="API\PutScriptRequest.cs" />
     <Compile Include="Views\ViewJackrabbit.ascx.cs">
       <DependentUpon>ViewJackrabbit.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -147,7 +163,10 @@
     <Content Include="References\DotNetNuke.Web.dll" />
     <Content Include="References\DotNetNuke.Web.xml" />
     <Content Include="References\DotNetNuke.xml" />
-    <Content Include="References\Telerik.Web.UI.dll" />
+    <Content Include="References\System.Net.Http.dll" />
+    <Content Include="References\System.Net.Http.Formatting.dll" />
+    <Content Include="References\System.Net.Http.WebRequest.dll" />
+    <Content Include="References\System.Web.Http.dll" />
     <Content Include="References\WebFormsMvp.dll" />
     <Content Include="Licenses\EULA-Free.htm" />
     <Content Include="Views\Settings.ascx" />
@@ -163,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes_01.00.01.htm" />
+    <Content Include="API\App_LocalResources\SharedResources.resx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\App_LocalResources\Settings.ascx.resx" />

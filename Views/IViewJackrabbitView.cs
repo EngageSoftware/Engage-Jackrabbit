@@ -18,13 +18,5 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>The contract of the main view</summary>
     public interface IViewJackrabbitView : IModuleView<ViewJackrabbitViewModel>
     {
-        /// <summary>Occurs when a script is added.</summary>
-        event EventHandler<AddScriptEventArgs> AddScript;
-
-        /// <summary>Occurs when a script is updated.</summary>
-        event EventHandler<UpdateScriptEventArgs> UpdateScript;
-
-        /// <summary>Occurs when a script is deleted.</summary>
-        event EventHandler<DeleteScriptEventArgs> DeleteScript;
     }
 }

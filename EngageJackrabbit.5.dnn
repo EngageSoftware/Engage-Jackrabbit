@@ -37,7 +37,7 @@
                   <moduleControl>
                     <controlKey/>
                     <controlSrc>DesktopModules/Engage/Jackrabbit/Views/ViewJackrabbit.ascx</controlSrc>
-                    <supportsPartialRendering>True</supportsPartialRendering>
+                    <supportsPartialRendering>False</supportsPartialRendering>
                     <controlType>View</controlType>
                   </moduleControl>
                   <moduleControl>

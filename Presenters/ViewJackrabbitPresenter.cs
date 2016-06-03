@@ -48,9 +48,6 @@ namespace Engage.Dnn.Jackrabbit
             this.repository = repository;
             this.dependencyLoader = new Lazy<ClientDependencyLoader>(() => ClientDependencyLoader.GetInstance(this.HttpContext));
             this.View.Initialize += this.View_Initialize;
-            this.View.AddScript += this.View_AddScript;
-            this.View.UpdateScript += this.View_UpdateScript;
-            this.View.DeleteScript += this.View_DeleteScript;
         }
 
         /// <summary>Gets the client dependency loader</summary>
@@ -73,54 +70,6 @@ namespace Engage.Dnn.Jackrabbit
                 this.View.Model.DefaultScriptPath = "~/";
                 this.View.Model.DefaultProvider = "DnnFormBottomProvider";
                 this.View.Model.DefaultPriority = (int)FileOrder.Js.DefaultPriority;
-            }
-            catch (Exception ex)
-            {
-                this.ProcessModuleLoadException(ex);
-            }
-        }
-
-        /// <summary>Handles the <see cref="IViewJackrabbitView.AddScript"/> event of the <see cref="Presenter{TView}.View"/>.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="AddScriptEventArgs"/> instance containing the event data.</param>
-        private void View_AddScript(object sender, AddScriptEventArgs e)
-        {
-            try
-            {
-                this.repository.AddScript(this.ModuleId, new JackrabbitScript(e.PathPrefixName, e.ScriptPath, e.Provider, e.Priority));
-                this.View.Model.Scripts = this.GetScripts();
-            }
-            catch (Exception ex)
-            {
-                this.ProcessModuleLoadException(ex);
-            }
-        }
-
-        /// <summary>Handles the <see cref="IViewJackrabbitView.UpdateScript"/> event of the <see cref="Presenter{TView}.View"/>.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="UpdateScriptEventArgs"/> instance containing the event data.</param>
-        private void View_UpdateScript(object sender, UpdateScriptEventArgs e)
-        {
-            try
-            {
-                this.repository.UpdateScript(new JackrabbitScript(e.Id, e.PathPrefixName, e.ScriptPath, e.Provider, e.Priority));
-                this.View.Model.Scripts = this.GetScripts();
-            }
-            catch (Exception ex)
-            {
-                this.ProcessModuleLoadException(ex);
-            }
-        }
-
-        /// <summary>Handles the <see cref="IViewJackrabbitView.DeleteScript"/> event of the <see cref="Presenter{TView}.View"/>.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DeleteScriptEventArgs"/> instance containing the event data.</param>
-        private void View_DeleteScript(object sender, DeleteScriptEventArgs e)
-        {
-            try
-            {
-                this.repository.DeleteScript(e.Id);
-                this.View.Model.Scripts = this.GetScripts();
             }
             catch (Exception ex)
             {
