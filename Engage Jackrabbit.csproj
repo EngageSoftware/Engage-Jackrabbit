@@ -73,6 +73,10 @@
       <HintPath>References\DotNetNuke.Web.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -113,24 +117,6 @@
     <Compile Include="Presenters\ViewJackrabbitPresenter.cs" />
     <Compile Include="EventArgs\AddScriptEventArgs.cs" />
     <Compile Include="EventArgs\DeleteScriptEventArgs.cs" />
-    <Compile Include="Utility\Annotations\BaseTypeRequiredAttribute.cs" />
-    <Compile Include="Utility\Annotations\CanBeNullAttribute.cs" />
-    <Compile Include="Utility\Annotations\CannotApplyEqualityOperatorAttribute.cs" />
-    <Compile Include="Utility\Annotations\ContractAnnotationAttribute.cs" />
-    <Compile Include="Utility\Annotations\ImplicitUseKindFlags.cs" />
-    <Compile Include="Utility\Annotations\ImplicitUseTargetFlags.cs" />
-    <Compile Include="Utility\Annotations\InstantHandleAttribute.cs" />
-    <Compile Include="Utility\Annotations\InvokerParameterNameAttribute.cs" />
-    <Compile Include="Utility\Annotations\LocalizationRequiredAttribute.cs" />
-    <Compile Include="Utility\Annotations\MeansImplicitUseAttribute.cs" />
-    <Compile Include="Utility\Annotations\NotifyPropertyChangedInvocatorAttribute.cs" />
-    <Compile Include="Utility\Annotations\NotNullAttribute.cs" />
-    <Compile Include="Utility\Annotations\PathReferenceAttribute.cs" />
-    <Compile Include="Utility\Annotations\PublicAPIAttribute.cs" />
-    <Compile Include="Utility\Annotations\PureAttribute.cs" />
-    <Compile Include="Utility\Annotations\RazorSectionAttribute.cs" />
-    <Compile Include="Utility\Annotations\StringFormatMethodAttribute.cs" />
-    <Compile Include="Utility\Annotations\UsedImplicitlyAttribute.cs" />
     <Compile Include="Views\ISettingsView.cs" />
     <Compile Include="Views\IViewJackrabbitView.cs" />
     <Compile Include="Views\Settings.ascx.cs">
@@ -173,6 +159,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\ViewJackrabbit.ascx" />
+    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes_01.00.01.htm" />
