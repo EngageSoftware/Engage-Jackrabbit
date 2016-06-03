@@ -181,7 +181,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ReleaseNotes_01.00.01.htm" />
+    <Content Include="ReleaseNotes_02.00.00.htm" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="API\App_LocalResources\SharedResources.resx" />
   </ItemGroup>
   <ItemGroup>
