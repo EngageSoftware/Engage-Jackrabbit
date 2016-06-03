@@ -31,6 +31,7 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>Engage Jackrabbit.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,7 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>Correctness, Design, Globalization, and Security.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Engage Jackrabbit.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Trial|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,7 +51,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>Correctness, Design, Globalization, and Security.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Engage Jackrabbit.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClientDependency.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -165,6 +166,7 @@
     <Content Include="Licenses\EULA-Free.htm" />
     <Content Include="Views\Settings.ascx" />
     <Content Include="References\DotNetNuke.dll" />
+    <Content Include="Engage Jackrabbit.ruleset" />
     <None Include="EngageJackrabbit.5.dnn" />
     <None Include="EngageJackrabbit.Build" />
     <None Include="Correctness, Design, Globalization, and Security.ruleset">
@@ -175,7 +177,6 @@
   <ItemGroup>
     <Content Include="ReleaseNotes_01.00.01.htm" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\App_LocalResources\Settings.ascx.resx" />
     <Content Include="Views\App_LocalResources\ViewJackrabbit.ascx.resx" />
