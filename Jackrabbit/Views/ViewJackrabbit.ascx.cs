@@ -17,6 +17,7 @@ namespace Engage.Dnn.Jackrabbit
 
     using DotNetNuke.Services.Exceptions;
     using DotNetNuke.UI.Containers;
+    using DotNetNuke.Web.Client;
     using DotNetNuke.Web.Client.ClientResourceManagement;
     using DotNetNuke.Web.Mvp;
 
@@ -36,6 +37,11 @@ namespace Engage.Dnn.Jackrabbit
 
                 // NOTE: loading scripts before PreRender fixes a bug where sometimes scripts don't load on postback
                 this.RegisterScripts();
+
+                if (!this.Model.HideView)
+                {
+                    this.RegisterEditScript();
+                }
             }
             catch (Exception exc)
             {
@@ -61,15 +67,17 @@ namespace Engage.Dnn.Jackrabbit
                 {
                     this.DataBind();
                 }
-
-                // NOTE: loading scripts during PreRender (in addition to Load) allows modifications to scripts
-                // (other than deletes) to take effect immediately
-                this.RegisterScripts();
             }
             catch (Exception exc)
             {
                 Exceptions.ProcessModuleLoadException(this, exc);
             }
+        }
+
+        /// <summary>Registers the edit script.</summary>
+        private void RegisterEditScript()
+        {
+            ClientResourceManager.RegisterScript(this.Page, "~/DesktopModules/Engage/Jackrabbit/elm.min.js", FileOrder.Js.DefaultPriority, "DnnFormBottomProvider");
         }
 
         /// <summary>Registers the scripts.</summary>

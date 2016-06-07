@@ -22,7 +22,7 @@
   <property name="zipLevel" value="9"/>
   <property name="zipLevel" value="1" if="${testBuild}"/>
   <property name="referencesDirectory" value="References"/>
-  <property name="packageDirectory" value="package"/>
+  <property name="packageDirectory" value="..\dist"/>
   <property name="packageName" value="Resources.zip"/>
 
   <target name="package" description="Creates packages for this module, one for each value in the licenses and versions properties">
@@ -249,6 +249,7 @@
     <include name="**/*.cshtml" />
     <include name="**/*.vbhtml" />
     <include name="**/*.css" />
+    <include name="**/*.min.js" />
     <include name="**/*.jpg" />
     <include name="**/*.gif" />
     <include name="**/*.png" />

@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+    "files": [
+      "gulpfile.js",
+      "gulp/*.js"
+    ]
+}

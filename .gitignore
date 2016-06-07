@@ -1,5 +1,38 @@
-obj/
-package/
+typings/
+elm-stuff/
+node_modules/
+npm-debug.log
+
 .vs/
+.vscode/
+project.json.lock
+*.sublime-workspace
 *.user
-packages/
+*.suo
+*.GhostDoc.xml
+StyleCop.Cache
+obj/
+**/*.Tests/bin/
+Cache/
+*.min.js
+*.map
+
+*.zip.manifest
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignore because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+
+nuget.exe
+/gulpfile.user.js
+
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+dist/

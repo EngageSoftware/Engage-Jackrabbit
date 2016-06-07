@@ -1,0 +1,27 @@
+{
+    "rules": {
+        "color-no-invalid-hex": true,
+        "no-browser-hacks": true,
+        "no-descending-specificity": null,
+        "no-unsupported-browser-features": [ true, {
+            "severity": "warning",
+            "browsers": "last 2 versions, Firefox ESR, IE >= 9"
+        } ],
+        "number-leading-zero": "always",
+        "number-no-trailing-zeros": true,
+        "number-zero-length-no-unit": true,
+        "string-no-newline": true,
+        "time-no-imperceptible": true,
+        "value-no-vendor-prefix": true,
+        "property-no-vendor-prefix": true,
+        "selector-no-vendor-prefix": true,
+        "media-feature-name-no-vendor-prefix": true,
+        "at-rule-no-vendor-prefix": true,
+        "declaration-colon-space-before": "never",
+        "declaration-colon-space-after": "always",
+        "max-empty-lines": 1,
+        "indentation": null,
+        "no-missing-eof-newline": true,
+        "max-nesting-depth": 3
+    }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "@engage-jackrabbit/website",
+  "description": "Project for Engage: Jackrabbit's DNN Platform website",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "engage-dnn-javascript-libraries": "git://github.com/engagesoftware/DNN-JavaScript-Libraries.git"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.3.6",
+    "babel-preset-es2015": "^6.9.0",
+    "browser-sync": "^2.12.8",
+    "del": "^2.2.0",
+    "elm": "^0.17.0",
+    "eslint": "^2.10.2",
+    "fs-extra": "^0.30.0",
+    "glob": "^7.0.3",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-bless": "^3.1.0",
+    "gulp-cli": "^1.2.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-debug": "^2.1.2",
+    "gulp-elm": "^0.4.4",
+    "gulp-eslint": "^2.0.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-if": "^2.0.1",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-jscs": "^3.0.2",
+    "gulp-less": "^3.1.0",
+    "gulp-msbuild": "^0.3.2",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-postcss": "^6.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-shell": "^0.5.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "ignore": "^3.1.2",
+    "jscs": "^3.0.3",
+    "lodash": "^4.12.0",
+    "merge-stream": "^1.0.0",
+    "minimist": "^1.2.0",
+    "postcss-less": "^0.12.0",
+    "postcss-reporter": "^1.3.3",
+    "request": "^2.72.0",
+    "run-sequence": "^1.2.0",
+    "stylelint": "^6.4.1",
+    "temp": "^0.8.3",
+    "typings": "^1.0.4",
+    "vinyl-paths": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "package": "gulp package",
+    "start": "gulp watch",
+    "test": "gulp test"
+  },
+  "author": "Engage Software"
+}
