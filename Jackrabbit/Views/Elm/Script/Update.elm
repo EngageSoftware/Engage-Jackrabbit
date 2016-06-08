@@ -12,6 +12,34 @@ update msg model =
         EditScript ->
             { model | editing = True } ! []
 
+        UpdatePrefix prefix ->
+            let
+                script = model.script
+                newScript = { script | pathPrefixName = prefix }
+            in
+                { model | script = newScript } ! []
+
+        UpdatePath path ->
+            let
+                script = model.script
+                newScript = { script | scriptPath = path }
+            in
+                { model | script = newScript } ! []
+
+        UpdateProvider provider ->
+            let
+                script = model.script
+                newScript = { script | provider = provider }
+            in
+                { model | script = newScript } ! []
+
+        UpdatePriority priority ->
+            let
+                script = model.script
+                newScript = { script | priority = priority }
+            in
+                { model | script = newScript } ! []
+
         SaveChanges ->
             model ! [ saveChanges model ]
 

@@ -5,8 +5,8 @@ import Views.Elm.Script.Model exposing (ScriptData)
 
 type Msg
     = Init
-    | UpdatePath String
     | UpdatePrefix String
+    | UpdatePath String
     | UpdateProvider String
     | UpdatePriority Int
     | SaveChanges

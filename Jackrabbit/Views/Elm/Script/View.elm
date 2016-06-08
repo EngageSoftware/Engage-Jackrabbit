@@ -3,6 +3,8 @@ module Views.Elm.Script.View exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode as Decode
+import String
 import Views.Elm.Script.Model exposing (..)
 import Views.Elm.Script.Msg exposing (..)
 
@@ -36,8 +38,17 @@ editScript script =
             [ button [ type' "button", onClick SaveChanges ] [ text "Save" ]
             , button [ type' "button", onClick CancelChanges ] [ text "Cancel" ]
             ]
-        , td [] [ input [ type' "text", value script.pathPrefixName ] [] ]
-        , td [] [ input [ type' "text", value script.scriptPath ] [] ]
-        , td [] [ input [ type' "text", value script.provider ] [] ]
-        , td [] [ input [ type' "text", value (toString script.priority) ] [] ]
+        , td [] [ input [ type' "text", onInput UpdatePrefix, value script.pathPrefixName ] [] ]
+        , td [] [ input [ type' "text", onInput UpdatePath, value script.scriptPath ] [] ]
+        , td [] [ input [ type' "text", onInput UpdateProvider, value script.provider ] [] ]
+        , td [] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority script.priority), value (toString script.priority) ] [] ]
         ]
+
+stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
+stringToIntDecoder tagger default =
+    let
+        stringToInt value =
+            String.toInt value
+                |> Result.withDefault default
+    in
+        Decode.map (\value -> tagger (stringToInt value)) targetValue
