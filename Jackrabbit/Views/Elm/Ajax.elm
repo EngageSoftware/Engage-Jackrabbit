@@ -33,8 +33,10 @@ makeSendAjaxFunction httpInfo =
 
 sendAjax : HttpInfo -> AjaxRequestInfo response -> Task.Task String response
 sendAjax httpInfo { verb, path, data, responseDecoder } =
-    (getRequestBuilder verb) (httpInfo.baseUrl ++ "Scripts/" ++ path)
+    (getRequestBuilder verb) (httpInfo.baseUrl ++ "Script/" ++ path)
         |> HttpBuilder.withHeaders httpInfo.headers
+        |> HttpBuilder.withHeader "Content-Type" "application/json"
+        |> HttpBuilder.withHeader "Accept" "application/json"
         |> HttpBuilder.withJsonBody data
         |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) HttpBuilder.stringReader
         |> Task.mapError convertErrorToErrorMessage
