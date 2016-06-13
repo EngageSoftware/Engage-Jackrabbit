@@ -27,6 +27,7 @@ type alias Model =
     , defaultProvider : String
     , defaultPriority : Int
     , lastScriptRowId : Int
+    , errorMessage : Maybe String
     , httpInfo : HttpInfo
     }
 
@@ -43,6 +44,7 @@ initialModel =
     , defaultProvider = ""
     , defaultPriority = 0
     , lastScriptRowId = 0
+    , errorMessage = Nothing
     , httpInfo =
         { baseUrl = ""
         , headers = []

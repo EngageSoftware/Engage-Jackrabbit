@@ -7,6 +7,7 @@ import Html.App as App
 import Views.Elm.Model exposing (..)
 import Views.Elm.Script.View as ScriptView
 import Views.Elm.Msg exposing (..)
+import Views.Elm.Utility exposing (emptyElement)
 
 
 view : Model -> Html Msg
@@ -17,7 +18,8 @@ view model =
                 |> List.map viewScriptRow
     in
         div []
-            [ button [ type' "button", onClick AddNewScript ] [ text "Add" ]
+            [ viewErrorMessage model.errorMessage
+            , button [ type' "button", onClick AddNewScript ] [ text "Add" ]
             , table []
                 [ thead []
                     [ tr []
@@ -37,3 +39,13 @@ view model =
 viewScriptRow : ScriptRow -> Html Msg
 viewScriptRow { rowId, script } =
     App.map (ScriptMsg rowId) (ScriptView.view script)
+
+
+viewErrorMessage : Maybe String -> Html Msg
+viewErrorMessage errorMessage =
+    case errorMessage of
+        Nothing ->
+            emptyElement
+
+        Just message ->
+            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message ]
