@@ -1,5 +1,6 @@
 module Views.Elm.Script.Model exposing (..)
 
+import Dict exposing (Dict)
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, hardcoded)
 import Json.Encode as Encode
@@ -62,3 +63,44 @@ scriptDecoder =
         |> required "ScriptPath" Decode.string
         |> required "Provider" Decode.string
         |> required "Priority" Decode.int
+
+
+compareModels : Dict String Int -> Model -> Model -> Basics.Order
+compareModels providers first second =
+    case compareScripts providers first.script second.script of
+        LT ->
+            LT
+
+        GT ->
+            GT
+
+        EQ ->
+            compareScripts providers first.originalScript second.originalScript
+
+
+compareScripts : Dict String Int -> ScriptData -> ScriptData -> Basics.Order
+compareScripts providers first second =
+    let
+        firstProviderOrder =
+            providers |> Dict.get first.provider |> Maybe.withDefault 0
+
+        secondProviderOrder =
+            providers |> Dict.get second.provider |> Maybe.withDefault 0
+    in
+        case compare firstProviderOrder secondProviderOrder of
+            LT ->
+                LT
+
+            GT ->
+                GT
+
+            EQ ->
+                case compare first.priority second.priority of
+                    LT ->
+                        LT
+
+                    GT ->
+                        GT
+
+                    EQ ->
+                        compare first.scriptPath second.scriptPath

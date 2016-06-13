@@ -1,5 +1,6 @@
 module Views.Elm.Update exposing (update)
 
+import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
@@ -19,13 +20,14 @@ update msg model =
                     let
                         ( scriptRows, lastScriptRowId ) =
                             initialData.scripts
-                                |> makeScriptRows model.lastScriptRowId initialData.httpInfo
+                                |> makeScriptRows model.lastScriptRowId initialData.httpInfo model.providers
                     in
                         Model scriptRows
                             initialData.defaultPathPrefix
                             initialData.defaultScriptPath
                             initialData.defaultProvider
                             initialData.defaultPriority
+                            model.providers
                             lastScriptRowId
                             Nothing
                             initialData.httpInfo
@@ -81,7 +83,7 @@ updateFromChild model parentMsg =
             let
                 ( scriptRows, lastScriptRowId ) =
                     scripts
-                        |> makeScriptRows model.lastScriptRowId model.httpInfo
+                        |> makeScriptRows model.lastScriptRowId model.httpInfo model.providers
             in
                 { model | scripts = scriptRows, lastScriptRowId = lastScriptRowId }
 
@@ -98,8 +100,8 @@ updateScript targetRowId msg { rowId, script } =
         ( ScriptRow rowId updatedRow, Cmd.map (ScriptMsg rowId) cmd, parentMsg )
 
 
-makeScriptRows : Int -> HttpInfo -> List Script.ScriptData -> ( List ScriptRow, Int )
-makeScriptRows lastScriptRowId httpInfo scripts =
+makeScriptRows : Int -> HttpInfo -> Dict String Int -> List Script.ScriptData -> ( List ScriptRow, Int )
+makeScriptRows lastScriptRowId httpInfo providers scripts =
     let
         nextScriptRowId =
             lastScriptRowId + 1
@@ -124,6 +126,16 @@ makeScriptRows lastScriptRowId httpInfo scripts =
 
                     ( otherScriptRows, lastScriptRowId ) =
                         otherScripts
-                            |> makeScriptRows nextScriptRowId httpInfo
+                            |> makeScriptRows nextScriptRowId httpInfo providers
+
+                    sortedScriptRows =
+                        scriptRow
+                            :: otherScriptRows
+                            |> List.sortWith (compareScriptRows providers)
                 in
-                    ( scriptRow :: otherScriptRows, lastScriptRowId )
+                    ( sortedScriptRows, lastScriptRowId )
+
+
+compareScriptRows : Dict String Int -> ScriptRow -> ScriptRow -> Basics.Order
+compareScriptRows providers first second =
+    Script.compareModels providers first.script second.script
