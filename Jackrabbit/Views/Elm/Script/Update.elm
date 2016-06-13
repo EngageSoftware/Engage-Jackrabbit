@@ -76,9 +76,6 @@ update msg model =
         RefreshScripts scripts ->
             model ! [] |> withParentMsg (ParentMsg.RefreshScripts scripts)
 
-        _ ->
-            model ! [] |> withoutParentMsg
-
 
 withoutParentMsg : ( Model, Cmd Msg ) -> ( Model, Cmd Msg, ParentMsg )
 withoutParentMsg ( model, cmd ) =
