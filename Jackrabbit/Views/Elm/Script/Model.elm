@@ -17,6 +17,7 @@ type alias ScriptData =
 
 type alias Model =
     { script : ScriptData
+    , originalScript : ScriptData
     , editing : Bool
     , httpInfo : HttpInfo
     }
@@ -24,15 +25,18 @@ type alias Model =
 
 init : Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Model
 init id pathPrefixName scriptPath provider priority editing httpInfo =
-    Model
-        (ScriptData id
-            pathPrefixName
-            scriptPath
-            provider
-            priority
-        )
-        editing
-        httpInfo
+    let
+        script =
+            ScriptData id
+                pathPrefixName
+                scriptPath
+                provider
+                priority
+    in
+        Model script
+            script
+            editing
+            httpInfo
 
 
 encodeScript : ScriptData -> Encode.Value

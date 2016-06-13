@@ -55,7 +55,7 @@ update msg model =
                 { model | script = newScript } ! [] |> withoutParentMsg
 
         CancelChanges ->
-            { model | editing = False } ! [] |> withoutParentMsg
+            { model | editing = False, script = model.originalScript } ! [] |> withoutParentMsg
 
         SaveChanges ->
             let
