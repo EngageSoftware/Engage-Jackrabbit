@@ -5,7 +5,13 @@ import Views.Elm.Script.Model as Script
 
 
 type alias InitialData =
-    { scripts : List Script.ScriptData
+    { scripts : List
+        { id : Int
+        , pathPrefixName : String
+        , scriptPath : String
+        , provider : String
+        , priority : Int
+        }
     , defaultPathPrefix : String
     , defaultScriptPath : String
     , defaultProvider : String

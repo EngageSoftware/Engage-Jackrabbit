@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="false" CodeBehind="ViewJackrabbit.ascx.cs" Inherits="Engage.Dnn.Jackrabbit.ViewJackrabbit" %>
 <%@ Import Namespace="System.Globalization" %>
+<%@ Import Namespace="Engage.Dnn.Jackrabbit" %>
 
 <asp:PlaceHolder runat="server" Visible="<%#Model.HideView %>">
     <div class="dnnFormMessage dnnFormInfo">
@@ -17,7 +18,7 @@
             Elm.Views.Main.embed(
                 document.getElementById(<%:EncodeJavaScriptString(ScriptsEditPanel.ClientID)%>),
                 {
-                    scripts: <%:new HtmlString(Model.Scripts.ToJson()) %>,
+                    scripts: <%:GenerateScriptJson(Model.Scripts) %>,
                     defaultPathPrefix: <%:EncodeJavaScriptString(Model.DefaultPathPrefix) %>,
                     defaultProvider: <%:EncodeJavaScriptString(Model.DefaultProvider) %>,
                     defaultScriptPath: <%:EncodeJavaScriptString(Model.DefaultScriptPath) %>,
@@ -43,6 +44,18 @@
 
     private static IHtmlString EncodeJavaScriptString(string value) {
         return new HtmlString(HttpUtility.JavaScriptStringEncode(value, true));
+    }
+
+    private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.ScriptViewModel> scripts) {
+        var jsonScripts = from script in scripts
+                          select new {
+                                         id = script.Id,
+                                         pathPrefixName = script.PathPrefixName,
+                                         scriptPath = script.ScriptPath,
+                                         provider = script.Provider,
+                                         priority = script.Priority,
+                                     };
+        return new HtmlString(jsonScripts.ToJson());
     }
 
 </script>
