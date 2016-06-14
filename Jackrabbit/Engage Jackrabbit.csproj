@@ -125,6 +125,7 @@
     <Compile Include="API\ServiceRouteMapper.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FeaturesController.cs" />
+    <Compile Include="LocalizationUtility.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Models\ViewModels\ViewJackrabbitViewModel.cs" />
     <Compile Include="Components\ContentItemRepository.cs" />

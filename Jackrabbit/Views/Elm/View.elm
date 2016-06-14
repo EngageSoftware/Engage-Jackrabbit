@@ -7,7 +7,7 @@ import Html.App as App
 import Views.Elm.Model exposing (..)
 import Views.Elm.Script.View as ScriptView
 import Views.Elm.Msg exposing (..)
-import Views.Elm.Utility exposing (emptyElement)
+import Views.Elm.Utility exposing (emptyElement, localizeString)
 
 
 view : Model -> Html Msg
@@ -19,15 +19,15 @@ view model =
     in
         div []
             [ viewErrorMessage model.errorMessage
-            , button [ type' "button", onClick AddNewScript ] [ text "Add" ]
+            , button [ type' "button", onClick AddNewScript ] [ text (localizeString "Add" model.localization) ]
             , table [ class "dnnTableDisplay" ]
                 [ thead []
                     [ tr []
                         [ th [ class "jackrabbit--actions" ] []
-                        , th [ class "jackrabbit--prefix" ] [ text "Path Prefix" ]
-                        , th [ class "jackrabbit--path" ] [ text "Script Path" ]
-                        , th [ class "jackrabbit--provider" ] [ text "Provider" ]
-                        , th [ class "jackrabbit--priority" ] [ text "Priority" ]
+                        , th [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name.Header" model.localization) ]
+                        , th [ class "jackrabbit--path" ] [ text (localizeString "Script Path.Header" model.localization) ]
+                        , th [ class "jackrabbit--provider" ] [ text (localizeString "Provider.Header" model.localization) ]
+                        , th [ class "jackrabbit--priority" ] [ text (localizeString "Priority.Header" model.localization) ]
                         ]
                     ]
                 , tbody []

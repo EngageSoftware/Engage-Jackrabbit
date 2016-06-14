@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add.Text" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Cancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Delete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Edit.Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="HTTP Error.Text" xml:space="preserve">
+    <value>There was an unexpected error</value>
+  </data>
   <data name="Path Prefix Name.Header" xml:space="preserve">
     <value>Path Prefix Name</value>
   </data>
@@ -125,6 +140,9 @@
   </data>
   <data name="Provider.Header" xml:space="preserve">
     <value>Provider</value>
+  </data>
+  <data name="Save.Text" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="Script Path.Header" xml:space="preserve">
     <value>Script Path</value>

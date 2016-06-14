@@ -30,7 +30,8 @@
                             [ "TabId", <%:EncodeJavaScriptString(ModuleContext.TabId)%> ],
                             [ "RequestVerificationToken", sf.getAntiForgeryValue() ]
                         ]
-                    }
+                    },
+                    localization: <%:EncodeJsonObject(LocalizationUtility.GetAllResources(this.LocalResourceFile))%>
                 });
         });
     </script>
@@ -46,16 +47,19 @@
         return new HtmlString(HttpUtility.JavaScriptStringEncode(value, true));
     }
 
+    private static IHtmlString EncodeJsonObject(object value) {
+        return new HtmlString(value.ToJson());
+    }
+
     private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.ScriptViewModel> scripts) {
-        var jsonScripts = from script in scripts
-                          select new {
-                                         id = script.Id,
-                                         pathPrefixName = script.PathPrefixName,
-                                         scriptPath = script.ScriptPath,
-                                         provider = script.Provider,
-                                         priority = script.Priority,
-                                     };
-        return new HtmlString(jsonScripts.ToJson());
+        return EncodeJsonObject(from script in scripts
+                                select new {
+                                               id = script.Id,
+                                               pathPrefixName = script.PathPrefixName,
+                                               scriptPath = script.ScriptPath,
+                                               provider = script.Provider,
+                                               priority = script.Priority,
+                                           });
     }
 
 </script>

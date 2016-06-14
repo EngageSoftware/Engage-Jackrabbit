@@ -1,6 +1,7 @@
 module Views.Elm.Model exposing (..)
 
 import Dict exposing (Dict)
+import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.Script.Model as Script
 
@@ -18,7 +19,11 @@ type alias InitialData =
     , defaultScriptPath : String
     , defaultProvider : String
     , defaultPriority : Int
-    , httpInfo : HttpInfo
+    , httpInfo :
+        { baseUrl : String
+        , headers : List ( String, String )
+        }
+    , localization : Encode.Value
     }
 
 
@@ -32,6 +37,7 @@ type alias Model =
     , lastScriptRowId : Int
     , errorMessage : Maybe String
     , httpInfo : HttpInfo
+    , localization : Dict String String
     }
 
 
@@ -59,5 +65,7 @@ initialModel =
     , httpInfo =
         { baseUrl = ""
         , headers = []
+        , defaultErrorMessage = ""
         }
+    , localization = Dict.empty
     }

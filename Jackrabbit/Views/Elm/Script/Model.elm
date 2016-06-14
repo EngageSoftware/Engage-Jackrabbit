@@ -21,11 +21,12 @@ type alias Model =
     , originalScript : ScriptData
     , editing : Bool
     , httpInfo : HttpInfo
+    , localization : Dict String String
     }
 
 
-init : Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Model
-init id pathPrefixName scriptPath provider priority editing httpInfo =
+init : Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> Model
+init id pathPrefixName scriptPath provider priority editing httpInfo localization =
     let
         script =
             ScriptData id
@@ -38,6 +39,7 @@ init id pathPrefixName scriptPath provider priority editing httpInfo =
             script
             editing
             httpInfo
+            localization
 
 
 encodeScript : ScriptData -> Encode.Value

@@ -15,6 +15,7 @@ type HttpVerb
 type alias HttpInfo =
     { baseUrl : String
     , headers : List ( String, String )
+    , defaultErrorMessage : String
     }
 
 
@@ -39,7 +40,7 @@ sendAjax httpInfo { verb, path, data, responseDecoder } =
         |> HttpBuilder.withHeader "Accept" "application/json"
         |> HttpBuilder.withJsonBody data
         |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) (HttpBuilder.jsonReader errorResponseDecoder)
-        |> Task.mapError convertErrorToErrorMessage
+        |> Task.mapError (convertErrorToErrorMessage httpInfo.defaultErrorMessage)
         |> Task.map (\response -> response.data)
 
 
@@ -56,14 +57,14 @@ getRequestBuilder verb =
             HttpBuilder.delete
 
 
-convertErrorToErrorMessage : HttpBuilder.Error String -> String
-convertErrorToErrorMessage error =
+convertErrorToErrorMessage : String -> HttpBuilder.Error String -> String
+convertErrorToErrorMessage defaultErrorMessage error =
     case error of
         HttpBuilder.BadResponse response ->
             response.data
 
         _ ->
-            "There was an unexpected error"
+            defaultErrorMessage
 
 
 errorResponseDecoder : Decode.Decoder String

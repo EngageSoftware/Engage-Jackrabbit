@@ -8,7 +8,7 @@ import Views.Elm.Script.Model as Script exposing (listScriptDecoder)
 import Views.Elm.Script.Msg as Script
 import Views.Elm.Script.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.Script.Update as Script
-import Views.Elm.Utility exposing (unzip3)
+import Views.Elm.Utility exposing (unzip3, createLocalizationDict, localizeString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -16,12 +16,18 @@ update msg model =
     case msg of
         Init initialData ->
             let
+                httpInfo =
+                    HttpInfo initialData.httpInfo.baseUrl initialData.httpInfo.headers (localizeString "HTTP Error" localization)
+
+                localization =
+                    createLocalizationDict initialData.localization
+
                 initializedModel =
                     let
                         ( scriptRows, lastScriptRowId ) =
                             initialData.scripts
                                 |> List.map (\script -> Script.ScriptData (Just script.id) script.pathPrefixName script.scriptPath script.provider script.priority)
-                                |> makeScriptRows model.lastScriptRowId initialData.httpInfo model.providers
+                                |> makeScriptRows model.lastScriptRowId httpInfo model.providers localization
                     in
                         Model scriptRows
                             initialData.defaultPathPrefix
@@ -31,7 +37,8 @@ update msg model =
                             model.providers
                             lastScriptRowId
                             Nothing
-                            initialData.httpInfo
+                            httpInfo
+                            localization
             in
                 initializedModel ! []
 
@@ -48,6 +55,7 @@ update msg model =
                         model.defaultPriority
                         True
                         model.httpInfo
+                        model.localization
 
                 newScriptRow =
                     ScriptRow nextScriptRowId newScript
@@ -84,7 +92,7 @@ updateFromChild model parentMsg =
             let
                 ( scriptRows, lastScriptRowId ) =
                     scripts
-                        |> makeScriptRows model.lastScriptRowId model.httpInfo model.providers
+                        |> makeScriptRows model.lastScriptRowId model.httpInfo model.providers model.localization
             in
                 { model | scripts = scriptRows, lastScriptRowId = lastScriptRowId }
 
@@ -101,8 +109,8 @@ updateScript targetRowId msg { rowId, script } =
         ( ScriptRow rowId updatedRow, Cmd.map (ScriptMsg rowId) cmd, parentMsg )
 
 
-makeScriptRows : Int -> HttpInfo -> Dict String Int -> List Script.ScriptData -> ( List ScriptRow, Int )
-makeScriptRows lastScriptRowId httpInfo providers scripts =
+makeScriptRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List Script.ScriptData -> ( List ScriptRow, Int )
+makeScriptRows lastScriptRowId httpInfo providers localization scripts =
     let
         nextScriptRowId =
             lastScriptRowId + 1
@@ -121,13 +129,14 @@ makeScriptRows lastScriptRowId httpInfo providers scripts =
                             script.priority
                             False
                             httpInfo
+                            localization
 
                     scriptRow =
                         ScriptRow nextScriptRowId scriptModel
 
                     ( otherScriptRows, lastScriptRowId ) =
                         otherScripts
-                            |> makeScriptRows nextScriptRowId httpInfo providers
+                            |> makeScriptRows nextScriptRowId httpInfo providers localization
 
                     sortedScriptRows =
                         scriptRow
