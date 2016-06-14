@@ -179,6 +179,19 @@
     </None>
     <Content Include="Views\ViewJackrabbit.ascx" />
     <Content Include="packages.config" />
+    <Content Include="Views\Elm\Ajax.elm" />
+    <Content Include="Views\Elm\Model.elm" />
+    <Content Include="Views\Elm\Msg.elm" />
+    <Content Include="Views\Elm\Script\Model.elm" />
+    <Content Include="Views\Elm\Script\Msg.elm" />
+    <Content Include="Views\Elm\Script\ParentMsg.elm" />
+    <Content Include="Views\Elm\Script\Update.elm" />
+    <Content Include="Views\Elm\Script\View.elm" />
+    <Content Include="Views\Elm\Update.elm" />
+    <Content Include="Views\Elm\Utility.elm" />
+    <Content Include="Views\Elm\View.elm" />
+    <Content Include="Views\Main.elm" />
+    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes_02.00.00.htm" />
