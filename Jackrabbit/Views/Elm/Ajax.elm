@@ -38,7 +38,7 @@ sendAjax httpInfo { verb, path, data, responseDecoder } =
         |> HttpBuilder.withHeader "Content-Type" "application/json"
         |> HttpBuilder.withHeader "Accept" "application/json"
         |> HttpBuilder.withJsonBody data
-        |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) HttpBuilder.stringReader
+        |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) (HttpBuilder.jsonReader errorResponseDecoder)
         |> Task.mapError convertErrorToErrorMessage
         |> Task.map (\response -> response.data)
 
@@ -64,3 +64,11 @@ convertErrorToErrorMessage error =
 
         _ ->
             "There was an unexpected error"
+
+
+errorResponseDecoder : Decode.Decoder String
+errorResponseDecoder =
+    Decode.oneOf
+        [ Decode.at [ "errorMessage" ] Decode.string
+        , Decode.at [ "Message" ] Decode.string
+        ]

@@ -53,8 +53,7 @@ namespace Engage.Dnn.Jackrabbit.Api
             }
             catch (Exception exc)
             {
-                Exceptions.LogException(exc);
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, LocalizeString("Unexpected Error"));
+                return this.HandleException(exc);
             }
         }
 
@@ -69,8 +68,7 @@ namespace Engage.Dnn.Jackrabbit.Api
             }
             catch (Exception exc)
             {
-                Exceptions.LogException(exc);
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, LocalizeString("Unexpected Error"));
+                return this.HandleException(exc);
             }
         }
 
@@ -85,9 +83,35 @@ namespace Engage.Dnn.Jackrabbit.Api
             }
             catch (Exception exc)
             {
-                Exceptions.LogException(exc);
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, LocalizeString("Unexpected Error"));
+                return this.HandleException(exc);
             }
+        }
+
+        private HttpResponseMessage HandleException(Exception exc)
+        {
+            Exceptions.LogException(exc);
+            return this.Request.CreateResponse(
+                HttpStatusCode.InternalServerError, 
+                new
+                {
+                    errorMessage = LocalizeString("Unexpected Error"),
+                    exception = this.CreateExceptionResponse(exc),
+                });
+        }
+
+        private object CreateExceptionResponse(Exception exc)
+        {
+            if (exc == null || !this.UserInfo.IsSuperUser)
+            {
+                return null;
+            }
+
+            return new
+                   {
+                        message = exc.Message,
+                        stackTrace = exc.StackTrace,
+                        innerException = this.CreateExceptionResponse(exc.InnerException),
+                   };
         }
 
         private static string LocalizeString(string key)
