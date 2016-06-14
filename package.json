@@ -1,11 +1,8 @@
 {
-  "name": "@engage-jackrabbit/website",
-  "description": "Project for Engage: Jackrabbit's DNN Platform website",
-  "version": "0.0.0",
+  "name": "@engage/jackrabbit",
+  "description": "A module for DNN Platform website's which allows referencing scripts",
+  "version": "2.0.0",
   "private": true,
-  "dependencies": {
-    "engage-dnn-javascript-libraries": "git://github.com/engagesoftware/DNN-JavaScript-Libraries.git"
-  },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "babel-preset-es2015": "^6.9.0",
