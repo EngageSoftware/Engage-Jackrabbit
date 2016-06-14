@@ -36,3 +36,4 @@ Desktop.ini
 .DS_Store
 
 dist/
+/Jackrabbit/**/*.css

@@ -192,6 +192,7 @@
     <Content Include="Views\Elm\View.elm" />
     <Content Include="Views\Main.elm" />
     <Content Include="README.md" />
+    <Content Include="module.less" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes_02.00.00.htm" />

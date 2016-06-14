@@ -20,28 +20,28 @@ view model =
 viewScript : ScriptData -> Html Msg
 viewScript script =
     tr []
-        [ td []
+        [ td [ class "jackrabbit--actions" ]
             [ button [ type' "button", onClick EditScript ] [ text "Edit" ]
             , button [ type' "button", onClick DeleteScript ] [ text "Delete" ]
             ]
-        , td [] [ text script.pathPrefixName ]
-        , td [] [ text script.scriptPath ]
-        , td [] [ text script.provider ]
-        , td [] [ text (toString script.priority) ]
+        , td [ class "jackrabbit--prefix" ] [ text script.pathPrefixName ]
+        , td [ class "jackrabbit--path" ] [ text script.scriptPath ]
+        , td [ class "jackrabbit--provider" ] [ text script.provider ]
+        , td [ class "jackrabbit--priority" ] [ text (toString script.priority) ]
         ]
 
 
 editScript : ScriptData -> Html Msg
 editScript script =
     tr []
-        [ td []
+        [ td [ class "jackrabbit--actions" ]
             [ button [ type' "button", onClick SaveChanges ] [ text "Save" ]
             , button [ type' "button", onClick CancelChanges ] [ text "Cancel" ]
             ]
-        , td [] [ input [ type' "text", onInput UpdatePrefix, value script.pathPrefixName ] [] ]
-        , td [] [ input [ type' "text", onInput UpdatePath, value script.scriptPath ] [] ]
-        , td [] [ input [ type' "text", onInput UpdateProvider, value script.provider ] [] ]
-        , td [] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority script.priority), value (toString script.priority) ] [] ]
+        , td [ class "jackrabbit--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value script.pathPrefixName ] [] ]
+        , td [ class "jackrabbit--path" ] [ input [ type' "text", onInput UpdatePath, value script.scriptPath ] [] ]
+        , td [ class "jackrabbit--provider" ] [ input [ type' "text", onInput UpdateProvider, value script.provider ] [] ]
+        , td [ class "jackrabbit--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority script.priority), value (toString script.priority) ] [] ]
         ]
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
