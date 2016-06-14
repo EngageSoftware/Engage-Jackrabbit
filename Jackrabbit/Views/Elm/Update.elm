@@ -20,6 +20,7 @@ update msg model =
                     let
                         ( scriptRows, lastScriptRowId ) =
                             initialData.scripts
+                                |> List.map (\script -> Script.ScriptData (Just script.id) script.pathPrefixName script.scriptPath script.provider script.priority)
                                 |> makeScriptRows model.lastScriptRowId initialData.httpInfo model.providers
                     in
                         Model scriptRows
