@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.App as App
 import Views.Elm.Model exposing (..)
-import Views.Elm.Script.View as ScriptView
+import Views.Elm.Script.View as Script
 import Views.Elm.Msg exposing (..)
 import Views.Elm.Utility exposing (emptyElement, localizeString)
 
@@ -38,7 +38,7 @@ view model =
 
 viewScriptRow : ScriptRow -> Html Msg
 viewScriptRow { rowId, script } =
-    App.map (ScriptMsg rowId) (ScriptView.view script)
+    App.map (ScriptMsg rowId) (Script.view script)
 
 
 viewErrorMessage : Maybe String -> Html Msg
