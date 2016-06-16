@@ -55,7 +55,10 @@ update msg model =
                 ( { model | script = newScript }, Cmd.none, ParentMsg.NoOp )
 
         CancelChanges ->
-            ( { model | editing = False, script = model.originalScript }, Cmd.none, ParentMsg.NoOp )
+            if isNothing model.script.id then
+                ( model, Cmd.none, ParentMsg.RemoveScript )
+            else
+                ( { model | editing = False, script = model.originalScript }, Cmd.none, ParentMsg.NoOp )
 
         SaveChanges ->
             let

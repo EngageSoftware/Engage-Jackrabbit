@@ -8,7 +8,7 @@ import Views.Elm.Script.Model as Script exposing (listScriptDecoder)
 import Views.Elm.Script.Msg as Script
 import Views.Elm.Script.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.Script.Update as Script
-import Views.Elm.Utility exposing (unzip3, createLocalizationDict, localizeString)
+import Views.Elm.Utility exposing (createLocalizationDict, localizeString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -64,26 +64,42 @@ update msg model =
 
         ScriptMsg rowId msg ->
             let
-                ( scripts, cmds, parentMsgs ) =
+                scriptUpdates =
                     model.scripts
                         |> List.map (updateScript rowId msg)
-                        |> unzip3
+
+                cmd =
+                    scriptUpdates
+                        |> List.map (\( script, cmd, parentMsg ) -> cmd)
+                        |> Cmd.batch
+
+                scripts =
+                    scriptUpdates
+                        |> List.map (\( script, cmd, parentMsg ) -> script)
 
                 updatedModel =
                     { model | scripts = scripts }
 
                 modelWithParentMsgs =
-                    parentMsgs
-                        |> List.foldl (flip updateFromChild) updatedModel
+                    scriptUpdates
+                        |> List.foldl updateFromChild updatedModel
             in
-                ( modelWithParentMsgs, cmds |> Cmd.batch )
+                ( modelWithParentMsgs, cmd )
 
 
-updateFromChild : Model -> ParentMsg -> Model
-updateFromChild model parentMsg =
+updateFromChild : ( ScriptRow, Cmd msg, ParentMsg ) -> Model -> Model
+updateFromChild ( scriptRow, _, parentMsg ) model =
     case parentMsg of
         ParentMsg.NoOp ->
             model
+
+        ParentMsg.RemoveScript ->
+            let
+                updatedScripts =
+                    model.scripts
+                        |> List.filter (\s -> s.rowId /= scriptRow.rowId)
+            in
+                { model | scripts = updatedScripts }
 
         ParentMsg.SaveError errorMessage ->
             { model | errorMessage = Just errorMessage }

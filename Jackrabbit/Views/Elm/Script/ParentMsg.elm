@@ -7,3 +7,4 @@ type ParentMsg
     = NoOp
     | RefreshScripts (List ScriptData)
     | SaveError String
+    | RemoveScript
