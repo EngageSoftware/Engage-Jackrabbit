@@ -12,7 +12,7 @@ update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
         EditScript ->
-            { model | editing = True } ! [] |> withoutParentMsg
+            ( { model | editing = True }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePrefix prefix ->
             let
@@ -22,7 +22,7 @@ update msg model =
                 newScript =
                     { script | pathPrefixName = prefix }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                ( { model | script = newScript }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePath path ->
             let
@@ -32,7 +32,7 @@ update msg model =
                 newScript =
                     { script | scriptPath = path }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                ( { model | script = newScript }, Cmd.none, ParentMsg.NoOp )
 
         UpdateProvider provider ->
             let
@@ -42,7 +42,7 @@ update msg model =
                 newScript =
                     { script | provider = provider }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                ( { model | script = newScript }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePriority priority ->
             let
@@ -52,10 +52,10 @@ update msg model =
                 newScript =
                     { script | priority = priority }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                ( { model | script = newScript }, Cmd.none, ParentMsg.NoOp )
 
         CancelChanges ->
-            { model | editing = False, script = model.originalScript } ! [] |> withoutParentMsg
+            ( { model | editing = False, script = model.originalScript }, Cmd.none, ParentMsg.NoOp )
 
         SaveChanges ->
             let
@@ -65,26 +65,16 @@ update msg model =
                     else
                         Put
             in
-                model ! [ createAjaxCmd model verb ] |> withoutParentMsg
+                ( model, createAjaxCmd model verb, ParentMsg.NoOp )
 
         DeleteScript ->
-            model ! [ createAjaxCmd model Delete ] |> withoutParentMsg
+            ( model, createAjaxCmd model Delete, ParentMsg.NoOp )
 
         SaveError errorMessage ->
-            model ! [] |> withParentMsg (ParentMsg.SaveError errorMessage)
+            ( model, Cmd.none, ParentMsg.SaveError errorMessage )
 
         RefreshScripts scripts ->
-            model ! [] |> withParentMsg (ParentMsg.RefreshScripts scripts)
-
-
-withoutParentMsg : ( Model, Cmd Msg ) -> ( Model, Cmd Msg, ParentMsg )
-withoutParentMsg ( model, cmd ) =
-    ( model, cmd, ParentMsg.NoOp )
-
-
-withParentMsg : ParentMsg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg, ParentMsg )
-withParentMsg parentMsg ( model, cmd ) =
-    ( model, cmd, parentMsg )
+            ( model, Cmd.none, ParentMsg.RefreshScripts scripts )
 
 
 createAjaxCmd : Model -> HttpVerb -> Cmd Msg

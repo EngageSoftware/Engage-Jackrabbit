@@ -40,7 +40,7 @@ update msg model =
                             httpInfo
                             localization
             in
-                initializedModel ! []
+                ( initializedModel, Cmd.none )
 
         AddNewScript ->
             let
@@ -60,7 +60,7 @@ update msg model =
                 newScriptRow =
                     ScriptRow nextScriptRowId newScript
             in
-                { model | scripts = newScriptRow :: model.scripts, lastScriptRowId = nextScriptRowId } ! []
+                ( { model | scripts = newScriptRow :: model.scripts, lastScriptRowId = nextScriptRowId }, Cmd.none )
 
         ScriptMsg rowId msg ->
             let
@@ -76,7 +76,7 @@ update msg model =
                     parentMsgs
                         |> List.foldl (flip updateFromChild) updatedModel
             in
-                modelWithParentMsgs ! cmds
+                ( modelWithParentMsgs, cmds |> Cmd.batch )
 
 
 updateFromChild : Model -> ParentMsg -> Model
