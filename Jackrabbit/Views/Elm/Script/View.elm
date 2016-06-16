@@ -46,6 +46,7 @@ editScript script localization =
         , td [ class "jackrabbit--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority script.priority), value (toString script.priority) ] [] ]
         ]
 
+
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
 stringToIntDecoder tagger default =
     let
