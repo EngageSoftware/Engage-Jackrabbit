@@ -114,15 +114,15 @@ updateFromChild ( scriptRow, _, parentMsg ) model =
 
 
 updateScript : Int -> Script.Msg -> ScriptRow -> ( ScriptRow, Cmd Msg, ParentMsg )
-updateScript targetRowId msg { rowId, script } =
-    let
-        ( updatedRow, cmd, parentMsg ) =
-            if targetRowId == rowId then
-                Script.update msg script
-            else
-                ( script, Cmd.none, ParentMsg.NoOp )
-    in
-        ( ScriptRow rowId updatedRow, Cmd.map (ScriptMsg rowId) cmd, parentMsg )
+updateScript targetRowId msg scriptRow =
+    if targetRowId /= scriptRow.rowId then
+        ( scriptRow, Cmd.none, ParentMsg.NoOp )
+    else
+        let
+            ( updatedRow, cmd, parentMsg ) =
+                Script.update msg scriptRow.script
+        in
+            ( ScriptRow scriptRow.rowId updatedRow, Cmd.map (ScriptMsg scriptRow.rowId) cmd, parentMsg )
 
 
 makeScriptRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List Script.ScriptData -> ( List ScriptRow, Int )
