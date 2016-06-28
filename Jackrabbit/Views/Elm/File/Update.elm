@@ -1,80 +1,80 @@
-module Views.Elm.Script.Update exposing (..)
+module Views.Elm.File.Update exposing (..)
 
 import Maybe.Extra exposing (isNothing)
 import Task
 import Views.Elm.Ajax exposing (..)
-import Views.Elm.Script.Model exposing (..)
-import Views.Elm.Script.Msg exposing (..)
-import Views.Elm.Script.ParentMsg as ParentMsg exposing (ParentMsg)
+import Views.Elm.File.Model exposing (..)
+import Views.Elm.File.Msg exposing (..)
+import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
-        EditScript ->
+        EditFile ->
             { model | editing = True } ! [] |> withoutParentMsg
 
         UpdatePrefix prefix ->
             let
-                script =
-                    model.script
+                file =
+                    model.file
 
-                newScript =
-                    { script | pathPrefixName = prefix }
+                newFile =
+                    { file | pathPrefixName = prefix }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                { model | file = newFile } ! [] |> withoutParentMsg
 
         UpdatePath path ->
             let
-                script =
-                    model.script
+                file =
+                    model.file
 
-                newScript =
-                    { script | scriptPath = path }
+                newFile =
+                    { file | filePath = path }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                { model | file = newFile } ! [] |> withoutParentMsg
 
         UpdateProvider provider ->
             let
-                script =
-                    model.script
+                file =
+                    model.file
 
-                newScript =
-                    { script | provider = provider }
+                newFile =
+                    { file | provider = provider }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                { model | file = newFile } ! [] |> withoutParentMsg
 
         UpdatePriority priority ->
             let
-                script =
-                    model.script
+                file =
+                    model.file
 
-                newScript =
-                    { script | priority = priority }
+                newFile =
+                    { file | priority = priority }
             in
-                { model | script = newScript } ! [] |> withoutParentMsg
+                { model | file = newFile } ! [] |> withoutParentMsg
 
         CancelChanges ->
-            { model | editing = False, script = model.originalScript } ! [] |> withoutParentMsg
+            { model | editing = False, file = model.originalFile } ! [] |> withoutParentMsg
 
         SaveChanges ->
             let
                 verb =
-                    if isNothing model.script.id then
+                    if isNothing model.file.id then
                         Post
                     else
                         Put
             in
                 model ! [ createAjaxCmd model verb ] |> withoutParentMsg
 
-        DeleteScript ->
+        DeleteFile ->
             model ! [ createAjaxCmd model Delete ] |> withoutParentMsg
 
         SaveError errorMessage ->
             model ! [] |> withParentMsg (ParentMsg.SaveError errorMessage)
 
-        RefreshScripts scripts ->
-            model ! [] |> withParentMsg (ParentMsg.RefreshScripts scripts)
+        RefreshFiles files ->
+            model ! [] |> withParentMsg (ParentMsg.RefreshFiles files)
 
 
 withoutParentMsg : ( Model, Cmd Msg ) -> ( Model, Cmd Msg, ParentMsg )
@@ -91,7 +91,7 @@ createAjaxCmd : Model -> HttpVerb -> Cmd Msg
 createAjaxCmd model verb =
     let
         path =
-            case model.script.id of
+            case model.file.id of
                 Just id ->
                     "?id=" ++ (toString id)
 
@@ -99,7 +99,7 @@ createAjaxCmd model verb =
                     ""
 
         requestInfo =
-            AjaxRequestInfo verb path (encodeScript model.script) listScriptDecoder
+            AjaxRequestInfo verb path (encodeFile model.file) listFileDecoder
     in
         sendAjax model.httpInfo requestInfo
-            |> Task.perform SaveError RefreshScripts
+            |> Task.perform SaveError RefreshFiles

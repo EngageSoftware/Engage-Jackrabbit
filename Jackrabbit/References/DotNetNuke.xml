@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <doc>
     <assembly>
         <name>DotNetNuke</name>
@@ -9562,7 +9562,7 @@
         </member>
         <member name="M:DotNetNuke.Framework.JavaScriptLibraries.JavaScript.IsInstalled(System.String)">
             <summary>
-                checks whether the script file is a known javascript library
+                checks whether the script file is a known javafile library
             </summary>
             <param name="jsname">script identifier</param>
             <returns></returns>
@@ -9696,7 +9696,7 @@
         </member>
         <member name="T:DotNetNuke.Framework.JavaScriptLibraries.ScriptLocation">
             <summary>
-            determine whereabouts in the page the script (and fallback script when CDN is enabled) is emitted
+            determine whereabouts in the page the script (and fallback file when CDN is enabled) is emitted
             </summary>
         </member>
         <member name="M:DotNetNuke.ComponentModel.InstanceComponentBuilder.#ctor(System.String,System.Object)">
@@ -14177,57 +14177,57 @@
             </history>
             -----------------------------------------------------------------------------
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.AddSubscriptionType(System.String,System.String,System.Int32)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.AddSubfileionType(System.String,System.String,System.Int32)">
             <summary>
             Adds a Subscription Type
             </summary>
-            <param name="subscriptionName">Subscription Type Name</param>
+            <param name="subfileionName">Subscription Type Name</param>
             <param name="friendlyName">Subscription Type FriendlyName</param>
             <param name="desktopModuleId">DesktopModule Id</param>
             <returns>Subscription Type Id</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.GetSubscriptionTypes">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.GetSubfileionTypes">
             <summary>
             Returns all the Subscription Types
             </summary>
             <returns>Subscription types</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.DeleteSubscriptionType(System.Int32)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.DeleteSubfileionType(System.Int32)">
             <summary>
             Deletes a Subscription Type
             </summary>
-            <param name="subscriptionTypeId">Subscription Type Id</param>
+            <param name="subfileionTypeId">Subscription Type Id</param>
             <returns>True if the subscription type has been deleted, false otherwise</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.AddSubscription(System.Int32,System.Int32,System.Int32,System.String,System.String,System.Int32,System.Int32,System.String)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.AddSubfileion(System.Int32,System.Int32,System.Int32,System.String,System.String,System.Int32,System.Int32,System.String)">
             <summary>
             Adds a Subscription
             </summary>
             <param name="userId">User Id</param>
             <param name="portalId">Portal id</param>
-            <param name="subscriptionTypeId">Subscription Type Id</param>
+            <param name="subfileionTypeId">Subscription Type Id</param>
             <param name="objectKey">Object Key</param>
-            <param name="description">Description</param>
+            <param name="defileion">Description</param>
             <param name="moduleId">Module Id</param>
             <param name="tabId">Tab Id</param>
             <param name="objectData">Object Data</param>
             <returns>Suscription Id</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.GetSubscriptionsByUser(System.Int32,System.Int32,System.Int32)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.GetSubfileionsByUser(System.Int32,System.Int32,System.Int32)">
             <summary>
             Returns the User Subscriptions
             </summary>
             <param name="portalId">Portal Id</param>
             <param name="userId">User Id</param>
-            <param name="subscriptionTypeId">Subscription Type Id</param>
+            <param name="subfileionTypeId">Subscription Type Id</param>
             <returns>Collection of Subscriptions</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.GetSubscriptionsByContent(System.Int32,System.Int32,System.String)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.GetSubfileionsByContent(System.Int32,System.Int32,System.String)">
             <summary>
             Returns the Content Subscriptions
             </summary>
             <param name="portalId">Portal Id</param>
-            <param name="subscriptionTypeId">Subscription Type Id</param>
+            <param name="subfileionTypeId">Subscription Type Id</param>
             <param name="objectKey">Object Key</param>
             <returns>Collection of Subscriptions</returns>
         </member>
@@ -14237,210 +14237,210 @@
             </summary>
             <param name="portalId">Portal Id</param>
             <param name="userId">User Id</param>
-            <param name="subscriptionTypeId">Subscription Type</param>
+            <param name="subfileionTypeId">Subscription Type</param>
             <param name="objectKey">Object Key</param>
             <param name="moduleId">Module Id</param>
             <param name="tabId">Tab Id</param>
             <returns>Subscription</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.DeleteSubscription(System.Int32)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.Data.IDataService.DeleteSubfileion(System.Int32)">
             <summary>
             Deletes a Subscription
             </summary>
-            <param name="subscriptionId">Subscription Id</param>
+            <param name="subfileionId">Subscription Id</param>
             <returns>True if the subscription has been deleted, false otherwise</returns>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion">
             <summary>
             This class represents a Subscription instance.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.SubscriptionId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.SubfileionId">
             <summary>
             The subscription identifier.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.UserId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.UserId">
             <summary>
             The user the subscription is associated with.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.PortalId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.PortalId">
             <summary>
             The site the subscription is associated with.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.SubscriptionTypeId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.SubfileionTypeId">
             <summary>
             The type of subscription.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.ObjectKey">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.ObjectKey">
             <summary>
             Object key that represent the content which user is subscribed to.
             The format of the ObjectKey is up to the consumer. (i.e.: blog:12, where 12 represents the post identifier).
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.ObjectData">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.ObjectData">
             <summary>
             Object Data that represents metadata to manage the subscription.
             The format of the ObjectData is up to the consumer. (i.e.: destinationModule:486, where 486 represents a extra property called Destination Module).
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.Description">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.Defileion">
             <summary>
             Description of the content which user is subscribed to.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.CreatedOnDate">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.CreatedOnDate">
             <summary>
             The date the user subscribed.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.ModuleId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.ModuleId">
             <summary>
             Associates the subscription with an instance of a module.
             If set it uses to apply to Security Trimming. 
-            If the user does not have view permission on that module the Subscription won't be retrieved by the SubscriptionController.
+            If the user does not have view permission on that module the Subscription won't be retrieved by the SubfileionController.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subscription.TabId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.Subfileion.TabId">
             <summary>
             Associates the subscription with a tab. 
             If set it uses to apply to Security Trimming. 
-            If the user does not have view permission on that tab the Subscription won't be retrieved by the SubscriptionController.
+            If the user does not have view permission on that tab the Subscription won't be retrieved by the SubfileionController.
             </summary>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.Entities.SubfileionType">
             <summary>
             This class represents a Subscription Type.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType.SubscriptionTypeId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubfileionType.SubfileionTypeId">
             <summary>
             The Subscription Type identifier.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType.SubscriptionName">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubfileionType.SubfileionName">
             <summary>
             The Subscription Name.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType.FriendlyName">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubfileionType.FriendlyName">
             <summary>
             The Subscription Friendly Name.
             </summary>
         </member>
-        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType.DesktopModuleId">
+        <member name="P:DotNetNuke.Services.Social.Subscriptions.Entities.SubfileionType.DesktopModuleId">
             <summary>
             The Desktop Module Id associated with the subscription type. 
             This is an optional field but it should be set if the Subscription Type belongs to a specific module.
             </summary>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.ISubscriptionController">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.ISubfileionController">
             <summary>
             This controller is responsible to manage the user subscriptions
             </summary>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionController.GetUserSubscriptions(DotNetNuke.Entities.Users.UserInfo,System.Int32,System.Int32)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionController.GetUserSubfileions(DotNetNuke.Entities.Users.UserInfo,System.Int32,System.Int32)">
             <summary>
             Returns the User Subscriptions.
             </summary>
             <param name="user">User Info</param>
             <param name="portalId">Portal Id</param>
-            <param name="subscriptionTypeId">Subscription Type Id</param>
+            <param name="subfileionTypeId">Subscription Type Id</param>
             <returns>Collection of subscriptions</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionController.GetContentSubscriptions(System.Int32,System.Int32,System.String)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionController.GetContentSubfileions(System.Int32,System.Int32,System.String)">
             <summary>
             Returns the Content Subscriptions.
             </summary>
             <param name="portalId">Portal Id</param>
-            <param name="subscriptionTypeId">Subscription Type Id</param>
+            <param name="subfileionTypeId">Subscription Type Id</param>
             <param name="objectKey">Object Key</param>
             <returns>Collection of subscriptions</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionController.IsSubscribed(DotNetNuke.Services.Social.Subscriptions.Entities.Subscription)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionController.IsSubscribed(DotNetNuke.Services.Social.Subfileions.Entities.Subfileion)">
             <summary>
             Returns true if a user is subscribed to a Content.
             </summary>
-            <param name="subscription">Subscription</param>
+            <param name="subfileion">Subscription</param>
             <returns>True if the user is subscribed to the content, false otherwise</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionController.AddSubscription(DotNetNuke.Services.Social.Subscriptions.Entities.Subscription)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionController.AddSubfileion(DotNetNuke.Services.Social.Subfileions.Entities.Subfileion)">
             <summary>
             Adds a new Subscription.
-            If the operation succeed the SubscriptionId property of the Subscription entity will be filled up.
+            If the operation succeed the SubscriptionId property of the Subfileion entity will be filled up.
             </summary>
-            <param name="subscription">Subscription</param>
+            <param name="subfileion">Subscription</param>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionController.DeleteSubscription(DotNetNuke.Services.Social.Subscriptions.Entities.Subscription)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionController.DeleteSubfileion(DotNetNuke.Services.Social.Subfileions.Entities.Subfileion)">
             <summary>
              Deletes a Subscription.
             </summary>
-            <param name="subscription">Subscription</param>
+            <param name="subfileion">Subscription</param>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.ISubscriptionSecurityController">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.ISubfileionSecurityController">
             <summary>
             This controller provides permission info about the User Subscription.
             </summary>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionSecurityController.HasPermission(DotNetNuke.Services.Social.Subscriptions.Entities.Subscription)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionSecurityController.HasPermission(DotNetNuke.Services.Social.Subfileions.Entities.Subfileion)">
             <summary>
-            Check if the User has permission on the Subscription based on the Subscription ModuleId and TabId.
+            Check if the User has permission on the Subscription based on the Subfileion ModuleId and TabId.
             </summary>
-            <param name="subscription">Subscription</param>
+            <param name="subfileion">Subscription</param>
             <returns>True if user has permission, false otherwise</returns>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.ISubscriptionTypeController">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.ISubfileionTypeController">
             <summary>
             This controller is responsible to manage the subscription types.
             </summary>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionTypeController.AddSubscriptionType(DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionTypeController.AddSubfileionType(DotNetNuke.Services.Social.Subfileions.Entities.SubfileionType)">
             <summary>
             Creates a new Subscription Type.
-            If the operation succeed the SubscriptionTypeId property of the Subscription entity will be filled up.
+            If the operation succeed the SubscriptionTypeId property of the Subfileion entity will be filled up.
             </summary>
-            <param name="subscriptionType">Subscription Type</param>
+            <param name="subfileionType">Subscription Type</param>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionTypeController.GetSubscriptionType(System.Func{DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType,System.Boolean})">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionTypeController.GetSubfileionType(System.Func{DotNetNuke.Services.Social.Subfileions.Entities.SubfileionType,System.Boolean})">
             <summary>
             Retrieves a Single Subscription Type that match the where predicate.
             </summary>
             <param name="predicate">Where Predicate</param>
             <returns>Subscription Type</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionTypeController.GetSubscriptionTypes">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionTypeController.GetSubfileionTypes">
             <summary>
             Retrieves all the Subscription Type.
             </summary>
             <returns>Subscription Types collection</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionTypeController.GetSubscriptionTypes(System.Func{DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType,System.Boolean})">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionTypeController.GetSubfileionTypes(System.Func{DotNetNuke.Services.Social.Subfileions.Entities.SubfileionType,System.Boolean})">
             <summary>
             Retrieves a set of Subscription Types specifying a where predicate.
             </summary>
             <param name="predicate">Where predicate</param>
             <returns>Subscription Type collection</returns>
         </member>
-        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubscriptionTypeController.DeleteSubscriptionType(DotNetNuke.Services.Social.Subscriptions.Entities.SubscriptionType)">
+        <member name="M:DotNetNuke.Services.Social.Subscriptions.ISubfileionTypeController.DeleteSubfileionType(DotNetNuke.Services.Social.Subfileions.Entities.SubfileionType)">
             <summary>
             Deletes a Subscription Type from the system.
             </summary>
-            <param name="subscriptionType">Subscription Type</param>
+            <param name="subfileionType">Subscription Type</param>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.SubscriptionController">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.SubfileionController">
             <summary>
             This controller is responsible to manage the user subscriptions.
             </summary>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.SubscriptionSecurityController">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.SubfileionSecurityController">
             <summary>
             This controller provides permission info about the User Subscription.
             </summary>
         </member>
-        <member name="T:DotNetNuke.Services.Social.Subscriptions.SubscriptionTypeController">
+        <member name="T:DotNetNuke.Services.Social.Subscriptions.SubfileionTypeController">
             <summary>
             This controller is responsible to manage the subscription types.
             </summary>
@@ -17268,7 +17268,7 @@
             		    PackageID = Null.SetNullInteger(dr["PackageID"]);
             		    ModuleName = Null.SetNullString(dr["ModuleName"]);
             		    FriendlyName = Null.SetNullString(dr["FriendlyName"]);
-            		    Description = Null.SetNullString(dr["Description"]);
+            		    Description = Null.SetNullString(dr["Defileion"]);
             		    FolderName = Null.SetNullString(dr["FolderName"]);
             		    Version = Null.SetNullString(dr["Version"]);
             		    base.FillInternal(dr);
@@ -19252,7 +19252,7 @@
             </summary>
             <param name="portalName">Name of the portal.</param>
             <param name="adminUser">The obj admin user.</param>
-            <param name="description">The description.</param>
+            <param name="defileion">The description.</param>
             <param name="keyWords">The key words.</param>
             <param name="templatePath">The template path.</param>
             <param name="templateFile">The template file.</param>
@@ -19274,7 +19274,7 @@
             <param name="username">Portal Administrator's username</param>
             <param name="password">Portal Administrator's password</param>
             <param name="email">Portal Administrator's email</param>
-            <param name="description">Description for the new portal</param>
+            <param name="defileion">Description for the new portal</param>
             <param name="keyWords">KeyWords for the new portal</param>
             <param name="templatePath">Path where the templates are stored</param>
             <param name="templateFile">Template file</param>
@@ -19301,7 +19301,7 @@
             </summary>
             <param name="portalName">Name of the portal.</param>
             <param name="adminUser">The obj admin user.</param>
-            <param name="description">The description.</param>
+            <param name="defileion">The description.</param>
             <param name="keyWords">The key words.</param>
             <param name="template"> </param>
             <param name="homeDirectory">The home directory.</param>
@@ -19518,7 +19518,7 @@
             </summary>
             <param name="portalName">Name of the portal.</param>
             <param name="adminUser">The obj admin user.</param>
-            <param name="description">The description.</param>
+            <param name="defileion">The description.</param>
             <param name="keyWords">The key words.</param>
             <param name="templatePath">The template path.</param>
             <param name="templateFile">The template file.</param>
@@ -19535,7 +19535,7 @@
             </summary>
             <param name="portalName">Name of the portal.</param>
             <param name="adminUserId">The obj admin user.</param>
-            <param name="description">The description.</param>
+            <param name="defileion">The description.</param>
             <param name="keyWords">The key words.</param>
             <param name="template"> </param>
             <param name="homeDirectory">The home directory.</param>
@@ -19551,7 +19551,7 @@
             </summary>
             <param name="portalName">Name of the portal.</param>
             <param name="adminUser">The obj admin user.</param>
-            <param name="description">The description.</param>
+            <param name="defileion">The description.</param>
             <param name="keyWords">The key words.</param>
             <param name="template"> </param>
             <param name="homeDirectory">The home directory.</param>
@@ -19572,7 +19572,7 @@
             <param name="username">Portal Administrator's username</param>
             <param name="password">Portal Administrator's password</param>
             <param name="email">Portal Administrator's email</param>
-            <param name="description">Description for the new portal</param>
+            <param name="defileion">Description for the new portal</param>
             <param name="keyWords">KeyWords for the new portal</param>
             <param name="templatePath">Path where the templates are stored</param>
             <param name="templateFile">Template file</param>
@@ -20183,7 +20183,7 @@
             Dim objPortalController As New PortalController
             Dim objPortal As PortalInfo = objPortalController.GetPortal(PortalID)
                  txtPortalName.Text = objPortal.PortalName
-                 txtDescription.Text = objPortal.Description
+                 txtDescription.Text = objPortal.Defileion
                  txtKeyWords.Text = objPortal.KeyWords
              </code></example></remarks>
         </member>
@@ -20304,7 +20304,7 @@
             Dim objPortalController As New PortalController
             Dim objPortal As PortalInfo = objPortalController.GetPortal(PortalID)
                  txtPortalName.Text = objPortal.PortalName
-                 txtDescription.Text = objPortal.Description
+                 txtDescription.Text = objPortal.Defileion
                  txtKeyWords.Text = objPortal.KeyWords
              </code></example></remarks>
         </member>
@@ -20383,7 +20383,7 @@
             Dim objPortalController As New PortalController
             Dim objPortal As PortalInfo = objPortalController.GetPortal(PortalID)
                  txtPortalName.Text = objPortal.PortalName
-                 txtDescription.Text = objPortal.Description
+                 txtDescription.Text = objPortal.Defileion
                  txtKeyWords.Text = objPortal.KeyWords
              </code></example></remarks>
         </member>
@@ -22442,7 +22442,7 @@
         </member>
         <member name="P:DotNetNuke.Framework.jQuery.UseDebugScript">
             <summary>
-            Gets the HostSetting to determine if we should use the standard jQuery script or the minified jQuery script.
+            Gets the HostSetting to determine if we should use the standard jQuery script or the minified jQuery file.
             </summary>
             <value></value>
             <returns></returns>
@@ -30816,7 +30816,7 @@
             </summary>
             <remarks>
             </remarks>
-            <param name="description">The description (detail) of the entry</param>
+            <param name="defileion">The description (detail) of the entry</param>
             <param name="type">The type of LogEntry</param>
             <history>
             	[cnurse]	07/24/2007  created
@@ -35238,7 +35238,7 @@
             AddAdminPages adds an Admin Page and an associated Module to all configured Portals
             </summary>
             <param name="tabName">The Name to give this new Tab</param>
-            <param name="description">Description.</param>
+            <param name="defileion">Description.</param>
             <param name="tabIconFile">The Icon for this new Tab</param>
             <param name="tabIconFileLarge">The large Icon for this new Tab</param>
             <param name="isVisible">A flag indicating whether the tab is visible</param>
@@ -35280,7 +35280,7 @@
             class
             </remarks>
             <param name="desktopModuleName">The Friendly Name of the Module to Add</param>
-            <param name="description">Description of the Module</param>
+            <param name="defileion">Description of the Module</param>
             <param name="moduleDefinitionName">The Module Definition Name</param>
             <param name="premium">A flag representing whether the module is a Premium module</param>
             <param name="admin">A flag representing whether the module is an Admin module</param>
@@ -35301,7 +35301,7 @@
             class
             </remarks>
             <param name="desktopModuleName">The Friendly Name of the Module to Add</param>
-            <param name="description">Description of the Module</param>
+            <param name="defileion">Description of the Module</param>
             <param name="moduleDefinitionName">The Module Definition Name</param>
             <param name="businessControllerClass">Business Control Class.</param>
             <param name="isPortable">Whether the module is enable for portals.</param>
@@ -35341,7 +35341,7 @@
             </remarks>
             <param name="parentTab">The Parent Tab</param>
             <param name="tabName">The Name to give this new Tab</param>
-            <param name="description">Description.</param>
+            <param name="defileion">Description.</param>
             <param name="tabIconFile">The Icon for this new Tab</param>
             <param name="tabIconFileLarge">The Large Icon for this new Tab</param>
             <param name="isVisible">A flag indicating whether the tab is visible</param>
@@ -35360,7 +35360,7 @@
             <param name="portalId">The Id of the Portal</param>
             <param name="parentId">The Id of the Parent Tab</param>
             <param name="tabName">The Name to give this new Tab</param>
-            <param name="description">Description.</param>
+            <param name="defileion">Description.</param>
             <param name="tabIconFile">The Icon for this new Tab</param>
             <param name="tabIconFileLarge">The large Icon for this new Tab</param>
             <param name="isVisible">A flag indicating whether the tab is visible</param>
@@ -35431,7 +35431,7 @@
             </summary>
             <remarks>
             </remarks>
-            <param name="scriptFile">The script to Execute</param>
+            <param name="fileFile">The script to Execute</param>
             <param name="writeFeedback">Need to output feedback message.</param>
             <history>
             	[cnurse]	11/09/2004	created
@@ -35602,7 +35602,7 @@
               This overload asumes the module is an Admin module and not a Premium Module
             </remarks>
             <param name = "desktopModuleName">The Friendly Name of the Module to Add</param>
-            <param name = "description">Description of the Module</param>
+            <param name = "defileion">Description of the Module</param>
             <param name = "moduleDefinitionName">The Module Definition Name</param>
             <returns>The Module Definition Id of the new Module</returns>
             <history>
@@ -35679,7 +35679,7 @@
         <member name="M:DotNetNuke.Services.Upgrade.Upgrade.ExecuteScripts(System.String)">
             -----------------------------------------------------------------------------
             <summary>
-              ExecuteScripts manages the Execution of Scripts from the Install/Scripts folder.
+              ExecuteScripts manages the Execution of Files from the Install/Files folder.
               It is also triggered by InstallDNN and UpgradeDNN
             </summary>
             <remarks>
@@ -35796,7 +35796,7 @@
         <member name="M:DotNetNuke.Services.Upgrade.Upgrade.GetUpgradeScripts(System.String,System.Version)">
             -----------------------------------------------------------------------------
             <summary>
-              GetUpgradeScripts gets an ArrayList of the Scripts required to Upgrade to the
+              GetUpgradeScripts gets an ArrayList of the Files required to Upgrade to the
               current Assembly Version
             </summary>
             <remarks>
@@ -35926,7 +35926,7 @@
             </summary>
             <remarks>
             </remarks>
-            <param name = "scriptFile">The upgrade script file</param>
+            <param name = "fileFile">The upgrade script file</param>
             <param name="writeFeedback">Write status to Response Stream?</param>
             <history>
               [cnurse]	02/14/2007	created

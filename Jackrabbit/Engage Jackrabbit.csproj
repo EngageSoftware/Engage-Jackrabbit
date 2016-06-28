@@ -121,19 +121,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\ScriptController.cs" />
+    <Compile Include="API\FileController.cs" />
     <Compile Include="API\ServiceRouteMapper.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FeaturesController.cs" />
     <Compile Include="LocalizationUtility.cs" />
+    <Compile Include="Models\FileType.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Models\ViewModels\ViewJackrabbitViewModel.cs" />
     <Compile Include="Components\ContentItemRepository.cs" />
-    <Compile Include="Models\JackrabbitScript.cs" />
+    <Compile Include="Models\JackrabbitFile.cs" />
     <Compile Include="Components\IRepository.cs" />
     <Compile Include="Presenters\SettingsPresenter.cs" />
     <Compile Include="Presenters\ViewJackrabbitPresenter.cs" />
-    <Compile Include="API\PostScriptRequest.cs" />
+    <Compile Include="API\PostFileRequest.cs" />
     <Compile Include="Views\ISettingsView.cs" />
     <Compile Include="Views\IViewJackrabbitView.cs" />
     <Compile Include="Views\Settings.ascx.cs">
@@ -146,7 +147,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventArgs\UpdatingSettingsEventArgs.cs" />
-    <Compile Include="API\PutScriptRequest.cs" />
+    <Compile Include="API\PutFileRequest.cs" />
     <Compile Include="Views\ViewJackrabbit.ascx.cs">
       <DependentUpon>ViewJackrabbit.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -183,11 +184,11 @@
     <Content Include="Views\Elm\Ajax.elm" />
     <Content Include="Views\Elm\Model.elm" />
     <Content Include="Views\Elm\Msg.elm" />
-    <Content Include="Views\Elm\Script\Model.elm" />
-    <Content Include="Views\Elm\Script\Msg.elm" />
-    <Content Include="Views\Elm\Script\ParentMsg.elm" />
-    <Content Include="Views\Elm\Script\Update.elm" />
-    <Content Include="Views\Elm\Script\View.elm" />
+    <Content Include="Views\Elm\File\Model.elm" />
+    <Content Include="Views\Elm\File\Msg.elm" />
+    <Content Include="Views\Elm\File\ParentMsg.elm" />
+    <Content Include="Views\Elm\File\Update.elm" />
+    <Content Include="Views\Elm\File\View.elm" />
     <Content Include="Views\Elm\Update.elm" />
     <Content Include="Views\Elm\Utility.elm" />
     <Content Include="Views\Elm\View.elm" />
@@ -203,7 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\App_LocalResources\Settings.ascx.resx" />
-    <Content Include="Views\App_LocalResources\ViewJackrabbit.ascx.resx" />
+    <Content Include="Views\App_LocalResources\ViewJackrabbit.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

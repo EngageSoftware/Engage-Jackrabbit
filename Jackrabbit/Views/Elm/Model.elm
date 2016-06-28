@@ -3,20 +3,21 @@ module Views.Elm.Model exposing (..)
 import Dict exposing (Dict)
 import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpInfo)
-import Views.Elm.Script.Model as Script
+import Views.Elm.File.Model as File
 
 
 type alias InitialData =
-    { scripts :
+    { files :
         List
-            { id : Int
+            { fileType : String
+            , id : Int
             , pathPrefixName : String
-            , scriptPath : String
+            , filePath : String
             , provider : String
             , priority : Int
             }
     , defaultPathPrefix : String
-    , defaultScriptPath : String
+    , defaultFilePath : String
     , defaultProvider : String
     , defaultPriority : Int
     , httpInfo :
@@ -28,30 +29,30 @@ type alias InitialData =
 
 
 type alias Model =
-    { scripts : List ScriptRow
+    { files : List FileRow
     , defaultPathPrefix : String
-    , defaultScriptPath : String
+    , defaultFilePath : String
     , defaultProvider : String
     , defaultPriority : Int
     , providers : Dict String Int
-    , lastScriptRowId : Int
+    , lastRowId : Int
     , errorMessage : Maybe String
     , httpInfo : HttpInfo
     , localization : Dict String String
     }
 
 
-type alias ScriptRow =
+type alias FileRow =
     { rowId : Int
-    , script : Script.Model
+    , file : File.Model
     }
 
 
 initialModel : Model
 initialModel =
-    { scripts = []
+    { files = []
     , defaultPathPrefix = ""
-    , defaultScriptPath = ""
+    , defaultFilePath = ""
     , defaultProvider = ""
     , defaultPriority = 0
     , providers =
@@ -60,7 +61,7 @@ initialModel =
             , ( "DnnBodyProvider", 2 )
             , ( "DnnFormBottomProvider", 3 )
             ]
-    , lastScriptRowId = 0
+    , lastRowId = 0
     , errorMessage = Nothing
     , httpInfo =
         { baseUrl = ""

@@ -16,6 +16,20 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>Utility extension methods</summary>
     public static class Extensions
     {
+        /// <summary> Parses the value as an <typeparamref name="TEnum"/> <c>enum</c>, returning <c>null</c> if the parsing is not successful.</summary>
+        /// <param name="this">The value to parse.</param>
+        /// <returns>An <typeparamref name="TEnum"/> value, or <c>null</c>.</returns>
+        public static TEnum? ParseNullableEnum<TEnum>(this string @this) where TEnum : struct
+        {
+            TEnum value;
+            if (Enum.TryParse(@this, out value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
         /// <summary> Parses the value as an <see cref="int"/>, returning <c>null</c> if the parsing is not successful.
         /// Uses <see cref="CultureInfo.InvariantCulture"/> and <see cref="NumberStyles.Integer"/>.</summary>
         /// <param name="this">The value to parse.</param>

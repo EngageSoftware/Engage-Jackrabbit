@@ -12,6 +12,7 @@
 namespace Engage.Dnn.Jackrabbit
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.UI;
 
@@ -23,10 +24,17 @@ namespace Engage.Dnn.Jackrabbit
 
     using WebFormsMvp;
 
-    /// <summary>Includes the scripts</summary>
+    /// <summary>Includes the files</summary>
     [PresenterBinding(typeof(ViewJackrabbitPresenter))]
     public partial class ViewJackrabbit : ModuleView<ViewJackrabbitViewModel>, IViewJackrabbitView
     {
+        /// <summary>TA map from <see cref="FileType"/> to the API to register that type of file</summary>
+        private static readonly Dictionary<FileType, Action<Page, string, int, string>> FileRegistrations = new Dictionary<FileType, Action<Page, string, int, string>>(2)
+                                                                                                            {
+                                                                                                                { FileType.JavaScript, ClientResourceManager.RegisterScript },
+                                                                                                                { FileType.CSS, ClientResourceManager.RegisterStyleSheet },
+                                                                                                            };
+
         /// <summary>Raises the <see cref="Control.Load" /> event.</summary>
         /// <param name="e">The <see cref="EventArgs" /> object that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
@@ -35,8 +43,8 @@ namespace Engage.Dnn.Jackrabbit
             {
                 base.OnLoad(e);
 
-                // NOTE: loading scripts before PreRender fixes a bug where sometimes scripts don't load on postback
-                this.RegisterScripts();
+                // NOTE: loading files before PreRender fixes a bug where sometimes files don't load on postback
+                this.RegisterFiles();
 
                 if (!this.Model.HideView)
                 {
@@ -80,12 +88,12 @@ namespace Engage.Dnn.Jackrabbit
             ClientResourceManager.RegisterScript(this.Page, "~/DesktopModules/Engage/Jackrabbit/elm.min.js", FileOrder.Js.DefaultPriority, "DnnFormBottomProvider");
         }
 
-        /// <summary>Registers the scripts.</summary>
-        private void RegisterScripts()
+        /// <summary>Registers the files.</summary>
+        private void RegisterFiles()
         {
-            foreach (var script in this.Model.Scripts)
+            foreach (var file in this.Model.Files)
             {
-                ClientResourceManager.RegisterScript(this.Page, script.FullScriptPath, script.Priority, script.Provider);
+                FileRegistrations[file.FileType](this.Page, file.FullFilePath, file.Priority, file.Provider);
             }
         }
 

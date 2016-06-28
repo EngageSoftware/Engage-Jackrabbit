@@ -8,7 +8,7 @@
     </div>
 </asp:PlaceHolder>
 <asp:PlaceHolder runat="server" Visible="<%#!Model.HideView %>">
-    <asp:Panel runat="server" ID="ScriptsEditPanel"></asp:Panel>
+    <asp:Panel runat="server" ID="FilesEditPanel"></asp:Panel>
     <script>
         /*global jQuery, Elm */
         jQuery(function documentReady($) {
@@ -16,12 +16,12 @@
 
             var sf = $.ServicesFramework(<%:ModuleContext.ModuleId%>);
             Elm.Views.Main.embed(
-                document.getElementById(<%:EncodeJavaScriptString(ScriptsEditPanel.ClientID)%>),
+                document.getElementById(<%:EncodeJavaScriptString(this.FilesEditPanel.ClientID)%>),
                 {
-                    scripts: <%:GenerateScriptJson(Model.Scripts) %>,
+                    files: <%:GenerateScriptJson(Model.Files) %>,
                     defaultPathPrefix: <%:EncodeJavaScriptString(Model.DefaultPathPrefix) %>,
                     defaultProvider: <%:EncodeJavaScriptString(Model.DefaultProvider) %>,
-                    defaultScriptPath: <%:EncodeJavaScriptString(Model.DefaultScriptPath) %>,
+                    defaultFilePath: <%:EncodeJavaScriptString(Model.DefaultFilePath) %>,
                     defaultPriority: <%:Model.DefaultPriority %>,
                     httpInfo: {
                         baseUrl: sf.getServiceRoot('Engage/Jackrabbit'),
@@ -51,15 +51,16 @@
         return new HtmlString(value.ToJson());
     }
 
-    private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.ScriptViewModel> scripts) {
-        return EncodeJsonObject(from script in scripts
+    private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.FileViewModel> files) {
+        return EncodeJsonObject(from file in files
                                 select new {
-                                               id = script.Id,
-                                               pathPrefixName = script.PathPrefixName,
-                                               scriptPath = script.ScriptPath,
-                                               provider = script.Provider,
-                                               priority = script.Priority,
-                                           });
+                                    type = file.FileType.ToString(),
+                                    id = file.Id,
+                                    pathPrefixName = file.PathPrefixName,
+                                    filePath = file.FilePath,
+                                    provider = file.Provider,
+                                    priority = file.Priority,
+                                });
     }
 
 </script>

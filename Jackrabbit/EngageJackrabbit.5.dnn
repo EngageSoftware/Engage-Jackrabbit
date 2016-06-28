@@ -2,7 +2,7 @@
   <packages>
     <package name="Engage: Jackrabbit" type="Module" version="1.0.0">
       <friendlyName>Engage: Jackrabbit</friendlyName>
-      <description>Engage: Jackrabbit is a utility module for DotNetNuke which allows an administrator to add scripts to a page, while taking advantage of the Client Resource Management Framework for minification, deduplication, and bundling</description>
+      <description>Engage: Jackrabbit is a utility module for DotNetNuke which allows an administrator to add scripts and CSS to a page, while taking advantage of the Client Resource Management Framework for minification, deduplication, and bundling</description>
       <iconFile>DesktopModules/Engage/Jackrabbit/jackrabbit-icon.png</iconFile>
       <owner>
         <name>Engage Software</name>

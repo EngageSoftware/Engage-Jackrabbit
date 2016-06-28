@@ -1,10 +1,10 @@
 module Views.Elm.Msg exposing (..)
 
 import Views.Elm.Model exposing (..)
-import Views.Elm.Script.Msg as ScriptMsg
+import Views.Elm.File.Msg as File
 
 
 type Msg
     = Init InitialData
-    | AddNewScript
-    | ScriptMsg Int ScriptMsg.Msg
+    | AddNewFile
+    | FileMsg Int File.Msg

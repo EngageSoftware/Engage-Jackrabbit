@@ -21,8 +21,8 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>A repository backed by the DNN content item store</summary>
     public class ContentItemRepository : IRepository
     {
-        /// <summary>The name of the Jackrabbit Script content type</summary>
-        private const string JackrabbitScriptContentTypeName = FeaturesController.SettingsPrefix + "_Script";
+        /// <summary>The name of the Jackrabbit file content type</summary>
+        private const string JackrabbitFileContentTypeName = FeaturesController.SettingsPrefix + "_Script";
 
         /// <summary>The content type controller</summary>
         private readonly IContentTypeController contentTypeController = new ContentTypeController();
@@ -30,87 +30,92 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>The content controller</summary>
         private readonly IContentController contentController = new ContentController();
 
-        /// <summary>Backing field for <see cref="JackrabbitScriptContentType"/></summary>
-        private readonly Lazy<ContentType> jackrabbitScriptContentType;
+        /// <summary>Backing field for <see cref="JackrabbitFileContentType"/></summary>
+        private readonly Lazy<ContentType> jackrabbitFileContentType;
 
         /// <summary>Initializes a new instance of the <see cref="ContentItemRepository"/> class.</summary>
         public ContentItemRepository()
         {
-            this.jackrabbitScriptContentType = new Lazy<ContentType>(this.InitializeContentType);
+            this.jackrabbitFileContentType = new Lazy<ContentType>(this.InitializeContentType);
         }
 
-        /// <summary>Gets the content type for jackrabbit scripts.</summary>
-        private ContentType JackrabbitScriptContentType
+        /// <summary>Gets the content type for jackrabbit files.</summary>
+        private ContentType JackrabbitFileContentType
         {
-            get { return this.jackrabbitScriptContentType.Value; }
+            get
+            {
+                return this.jackrabbitFileContentType.Value;
+            }
         }
 
-        /// <summary>Gets the scripts.</summary>
+        /// <summary>Gets the files.</summary>
         /// <param name="moduleId">The module ID.</param>
-        /// <returns>A sequence of <see cref="JackrabbitScript"/> instances.</returns>
-        public IEnumerable<JackrabbitScript> GetScripts(int moduleId)
+        /// <returns>A sequence of <see cref="JackrabbitFile"/> instances.</returns>
+        public IEnumerable<JackrabbitFile> GetFiles(int moduleId)
         {
             return from ci in this.contentController.GetContentItemsByModuleId(moduleId)
-                   where ci.ContentTypeId == this.JackrabbitScriptContentType.ContentTypeId
+                   where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
                    select
-                       new JackrabbitScript(
-                       ci.ContentItemId,
-                       ci.Metadata["PathPrefixName"],
-                       ci.Content,
-                       ci.Metadata["Provider"],
-                       ci.Metadata["Priority"].ParseNullableInt32());
+                       new JackrabbitFile(
+                           ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScript,
+                           ci.ContentItemId,
+                           ci.Metadata["PathPrefixName"],
+                           ci.Content,
+                           ci.Metadata["Provider"],
+                           ci.Metadata["Priority"].ParseNullableInt32());
         }
 
-        /// <summary>Adds the script.</summary>
+        /// <summary>Adds the file.</summary>
         /// <param name="moduleId">The module ID.</param>
-        /// <param name="script">The script.</param>
-        public void AddScript(int moduleId, JackrabbitScript script)
+        /// <param name="file">The file.</param>
+        public void AddFile(int moduleId, JackrabbitFile file)
         {
-            var contentItem = new ContentItem { ContentTypeId = this.JackrabbitScriptContentType.ContentTypeId, ModuleID = moduleId, };
-            FillContentItem(script, contentItem);
+            var contentItem = new ContentItem { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId, };
+            FillContentItem(file, contentItem);
             this.contentController.AddContentItem(contentItem);
         }
 
-        /// <summary>Updates the script.</summary>
-        /// <param name="script">The script.</param>
-        public void UpdateScript(JackrabbitScript script)
+        /// <summary>Updates the file.</summary>
+        /// <param name="file">The file.</param>
+        public void UpdateFile(JackrabbitFile file)
         {
-            var contentItem = this.contentController.GetContentItem(script.Id);
+            var contentItem = this.contentController.GetContentItem(file.Id);
             if (contentItem == null)
             {
                 return;
             }
 
-            FillContentItem(script, contentItem);
+            FillContentItem(file, contentItem);
             this.contentController.UpdateContentItem(contentItem);
         }
 
-        /// <summary>Deletes the script.</summary>
-        /// <param name="scriptId">The script's ID.</param>
-        public void DeleteScript(int scriptId)
+        /// <summary>Deletes the file.</summary>
+        /// <param name="fileId">The file's ID.</param>
+        public void DeleteFile(int fileId)
         {
-            this.contentController.DeleteContentItem(scriptId);
+            this.contentController.DeleteContentItem(fileId);
         }
 
-        /// <summary>Fills the <paramref name="contentItem"/> with the properties from the <paramref name="script"/>.</summary>
-        /// <param name="script">The script.</param>
+        /// <summary>Fills the <paramref name="contentItem"/> with the properties from the <paramref name="file"/>.</summary>
+        /// <param name="file">The file.</param>
         /// <param name="contentItem">The content item.</param>
-        private static void FillContentItem(JackrabbitScript script, ContentItem contentItem)
+        private static void FillContentItem(JackrabbitFile file, ContentItem contentItem)
         {
-            contentItem.Content = script.ScriptPath;
-            contentItem.Metadata["PathPrefixName"] = script.PathPrefixName;
-            contentItem.Metadata["Provider"] = script.Provider;
-            contentItem.Metadata["Priority"] = script.Priority.ToString(CultureInfo.InvariantCulture);
+            contentItem.Content = file.FilePath;
+            contentItem.Metadata["FileType"] = file.FileType.ToString();
+            contentItem.Metadata["PathPrefixName"] = file.PathPrefixName;
+            contentItem.Metadata["Provider"] = file.Provider;
+            contentItem.Metadata["Priority"] = file.Priority.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>Initializes the content type.</summary>
         /// <returns>A <see cref="ContentType"/> instance.</returns>
         private ContentType InitializeContentType()
         {
-            var contentType = this.contentTypeController.GetContentTypes().SingleOrDefault(ct => ct.ContentType == JackrabbitScriptContentTypeName);
+            var contentType = this.contentTypeController.GetContentTypes().SingleOrDefault(ct => ct.ContentType == JackrabbitFileContentTypeName);
             if (contentType == null)
             {
-                var typeId = this.contentTypeController.AddContentType(new ContentType(JackrabbitScriptContentTypeName));
+                var typeId = this.contentTypeController.AddContentType(new ContentType(JackrabbitFileContentTypeName));
                 contentType = this.contentTypeController.GetContentTypes().Single(ct => ct.ContentTypeId == typeId);
             }
 

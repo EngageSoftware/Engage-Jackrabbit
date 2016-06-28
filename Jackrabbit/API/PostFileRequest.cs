@@ -1,4 +1,4 @@
-﻿// <copyright file="PostScriptRequest.cs" company="Engage Software">
+﻿// <copyright file="PostFileRequest.cs" company="Engage Software">
 // Engage: Jackrabbit
 // Copyright (c) 2004-2016
 // by Engage Software ( http://www.engagesoftware.com )
@@ -13,14 +13,17 @@ namespace Engage.Dnn.Jackrabbit
 {
     using System;
 
-    /// <summary>Information about adding a script to this module</summary>
-    public class PostScriptRequest
+    /// <summary>Information about adding a file to this module</summary>
+    public class PostFileRequest
     {
+        /// <summary>Gets or sets the file type.</summary>
+        public FileType FileType { get; set; }
+
         /// <summary>Gets or sets the name of the path prefix.</summary>
         public string PathPrefixName { get; set; }
 
-        /// <summary>Gets or sets the script path.</summary>
-        public string ScriptPath { get; set; }
+        /// <summary>Gets or sets the file path.</summary>
+        public string FilePath { get; set; }
 
         /// <summary>Gets or sets the provider.</summary>
         public string Provider { get; set; }

@@ -23,14 +23,14 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Gets or sets a value indicating whether the view of the module should display or not (but the container might still display, to let editors know it's there).</summary>
         public bool HideView { get; set; }
 
-        /// <summary>Gets or sets the scripts being included by this module.</summary>
-        public IEnumerable<ScriptViewModel> Scripts { get; set; }
+        /// <summary>Gets or sets the files being included by this module.</summary>
+        public IEnumerable<FileViewModel> Files { get; set; }
 
         /// <summary>Gets or sets the default path prefix.</summary>
         public string DefaultPathPrefix { get; set; }
 
-        /// <summary>Gets or sets the default script path.</summary>
-        public string DefaultScriptPath { get; set; }
+        /// <summary>Gets or sets the default file path.</summary>
+        public string DefaultFilePath { get; set; }
 
         /// <summary>Gets or sets the default provider.</summary>
         public string DefaultProvider { get; set; }
@@ -38,44 +38,49 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>Gets or sets the default priority.</summary>
         public int DefaultPriority { get; set; }
 
-        /// <summary>Represents a script included by this module</summary>
+        /// <summary>Represents a file included by this module</summary>
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "I'm cool with nested classes in view models")]
-        public class ScriptViewModel
+        public class FileViewModel
         {
-            /// <summary>Initializes a new instance of the <see cref="ScriptViewModel" /> class.</summary>
-            /// <param name="id">The ID of the script.</param>
+            /// <summary>Initializes a new instance of the <see cref="FileViewModel" /> class.</summary>
+            /// <param name="fileType">Type of the file.</param>
+            /// <param name="id">The ID of the file.</param>
             /// <param name="pathPrefixName">Name of the path prefix.</param>
-            /// <param name="scriptPath">The script path.</param>
-            /// <param name="fullScriptPath">The script path combined with the prefix.</param>
+            /// <param name="filePath">The file path.</param>
+            /// <param name="fullFilePath">The file path combined with the prefix.</param>
             /// <param name="provider">The provider.</param>
             /// <param name="priority">The priority.</param>
-            public ScriptViewModel(int id, string pathPrefixName, string scriptPath, string fullScriptPath, string provider, int priority)
+            public FileViewModel(FileType fileType, int id, string pathPrefixName, string filePath, string fullFilePath, string provider, int priority)
             {
+                this.FileType = fileType;
                 this.Id = id;
                 this.PathPrefixName = pathPrefixName;
-                this.ScriptPath = scriptPath;
-                this.FullScriptPath = fullScriptPath;
+                this.FilePath = filePath;
+                this.FullFilePath = fullFilePath;
                 this.Provider = provider;
                 this.Priority = priority;
             }
 
-            /// <summary>Gets the ID of the script.</summary>
-            public int Id { get; private set; }
+            /// <summary>Gets the type of the file.</summary>
+            public FileType FileType { get; }
+
+            /// <summary>Gets the ID of the file.</summary>
+            public int Id { get; }
 
             /// <summary>Gets the name of the path prefix.</summary>
-            public string PathPrefixName { get; private set; }
+            public string PathPrefixName { get; }
 
-            /// <summary>Gets the script path.</summary>
-            public string ScriptPath { get; private set; }
+            /// <summary>Gets the file path.</summary>
+            public string FilePath { get; }
 
-            /// <summary>Gets the script path combined with the prefix.</summary>
-            public string FullScriptPath { get; private set; }
+            /// <summary>Gets the file path combined with the prefix.</summary>
+            public string FullFilePath { get; }
 
             /// <summary>Gets the provider.</summary>
-            public string Provider { get; private set; }
+            public string Provider { get; }
 
             /// <summary>Gets the priority.</summary>
-            public int Priority { get; private set; }
+            public int Priority { get; }
         }
     }
 }

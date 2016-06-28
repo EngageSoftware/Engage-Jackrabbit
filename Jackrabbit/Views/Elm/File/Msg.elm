@@ -1,6 +1,6 @@
-module Views.Elm.Script.Msg exposing (..)
+module Views.Elm.File.Msg exposing (..)
 
-import Views.Elm.Script.Model exposing (ScriptData)
+import Views.Elm.File.Model exposing (FileData)
 
 
 type Msg
@@ -10,7 +10,7 @@ type Msg
     | UpdatePriority Int
     | SaveChanges
     | CancelChanges
-    | EditScript
-    | DeleteScript
-    | RefreshScripts (List ScriptData)
+    | EditFile
+    | DeleteFile
+    | RefreshFiles (List FileData)
     | SaveError String

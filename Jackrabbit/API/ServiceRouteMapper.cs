@@ -15,7 +15,7 @@ namespace Engage.Dnn.Jackrabbit.Api
 
     using DotNetNuke.Web.Api;
 
-    /// <summary>Maps the route to the scripts service</summary>
+    /// <summary>Maps the route to the files service</summary>
     /// <seealso cref="DotNetNuke.Web.Api.IServiceRouteMapper" />
     public class ServiceRouteMapper : IServiceRouteMapper
     {

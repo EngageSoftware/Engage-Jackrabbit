@@ -1,4 +1,4 @@
-// <copyright file="ScriptController.cs" company="Engage Software">
+// <copyright file="FileController.cs" company="Engage Software">
 // Engage: Jackrabbit
 // Copyright (c) 2004-2016
 // by Engage Software ( http://www.engagesoftware.com )
@@ -20,36 +20,36 @@ namespace Engage.Dnn.Jackrabbit.Api
     using DotNetNuke.Services.Localization;
     using DotNetNuke.Web.Api;
 
-    /// <summary>Web API for scripts</summary>
+    /// <summary>Web API for Jackrabbit files</summary>
     /// <seealso cref="DotNetNuke.Web.Api.DnnApiController" />
     [DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.Edit)]
     [SupportedModules("Engage: Jackrabbit")]
-    public class ScriptController : DnnApiController
+    public class FileController : DnnApiController
     {
         /// <summary>The data repository</summary>
         private readonly IRepository repository;
 
-        /// <summary>Initializes a new instance of the <see cref="ScriptController"/> class.</summary>
-        public ScriptController()
+        /// <summary>Initializes a new instance of the <see cref="FileController"/> class.</summary>
+        public FileController()
             : this(new ContentItemRepository())
         {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="ScriptController" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="FileController" /> class.</summary>
         /// <param name="repository">The repository.</param>
-        internal ScriptController(IRepository repository)
+        internal FileController(IRepository repository)
         {
             this.repository = repository;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public HttpResponseMessage PostScript(PostScriptRequest request)
+        public HttpResponseMessage PostFile(PostFileRequest request)
         {
             try
             {
-                this.repository.AddScript(this.ActiveModule.ModuleID, new JackrabbitScript(request.PathPrefixName, request.ScriptPath, request.Provider, request.Priority));
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetScripts(this.ActiveModule.ModuleID));
+                this.repository.AddFile(this.ActiveModule.ModuleID, new JackrabbitFile(request.FileType, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
+                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetFiles(this.ActiveModule.ModuleID));
             }
             catch (Exception exc)
             {
@@ -59,12 +59,12 @@ namespace Engage.Dnn.Jackrabbit.Api
 
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public HttpResponseMessage PutScript(int id, PutScriptRequest request)
+        public HttpResponseMessage PutFile(int id, PutFileRequest request)
         {
             try
             {
-                this.repository.UpdateScript(new JackrabbitScript(id, request.PathPrefixName, request.ScriptPath, request.Provider, request.Priority));
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetScripts(this.ActiveModule.ModuleID));
+                this.repository.UpdateFile(new JackrabbitFile(request.FileType, id, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
+                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetFiles(this.ActiveModule.ModuleID));
             }
             catch (Exception exc)
             {
@@ -74,12 +74,12 @@ namespace Engage.Dnn.Jackrabbit.Api
 
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public HttpResponseMessage DeleteScript(int id)
+        public HttpResponseMessage DeleteFile(int id)
         {
             try
             {
-                this.repository.DeleteScript(id);
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetScripts(this.ActiveModule.ModuleID));
+                this.repository.DeleteFile(id);
+                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetFiles(this.ActiveModule.ModuleID));
             }
             catch (Exception exc)
             {

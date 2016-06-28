@@ -4,10 +4,10 @@ import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
-import Views.Elm.Script.Model as Script exposing (listScriptDecoder)
-import Views.Elm.Script.Msg as Script
-import Views.Elm.Script.ParentMsg as ParentMsg exposing (ParentMsg)
-import Views.Elm.Script.Update as Script
+import Views.Elm.File.Model as File exposing (listFileDecoder, typeStringToFileType)
+import Views.Elm.File.Msg as File
+import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
+import Views.Elm.File.Update as File
 import Views.Elm.Utility exposing (unzip3, createLocalizationDict, localizeString)
 
 
@@ -24,53 +24,62 @@ update msg model =
 
                 initializedModel =
                     let
-                        ( scriptRows, lastScriptRowId ) =
-                            initialData.scripts
-                                |> List.map (\script -> Script.ScriptData (Just script.id) script.pathPrefixName script.scriptPath script.provider script.priority)
-                                |> makeScriptRows model.lastScriptRowId httpInfo model.providers localization
+                        initialFileToFileData file =
+                            case typeStringToFileType file.fileType of
+                                Err _ ->
+                                    Nothing
+
+                                Ok fileType ->
+                                    Just (File.FileData fileType (Just file.id) file.pathPrefixName file.filePath file.provider file.priority)
+
+                        ( fileRows, lastRowId ) =
+                            initialData.files
+                                |> List.filterMap initialFileToFileData
+                                |> makeFileRows model.lastRowId httpInfo model.providers localization
                     in
-                        Model scriptRows
+                        Model fileRows
                             initialData.defaultPathPrefix
-                            initialData.defaultScriptPath
+                            initialData.defaultFilePath
                             initialData.defaultProvider
                             initialData.defaultPriority
                             model.providers
-                            lastScriptRowId
+                            lastRowId
                             Nothing
                             httpInfo
                             localization
             in
                 initializedModel ! []
 
-        AddNewScript ->
+        AddNewFile ->
             let
-                nextScriptRowId =
-                    model.lastScriptRowId + 1
+                nextRowId =
+                    model.lastRowId + 1
 
-                newScript =
-                    Script.init Nothing
+                newFile =
+                    File.init File.JavaScript
+                        Nothing
                         model.defaultPathPrefix
-                        model.defaultScriptPath
+                        model.defaultFilePath
                         model.defaultProvider
                         model.defaultPriority
                         True
                         model.httpInfo
                         model.localization
 
-                newScriptRow =
-                    ScriptRow nextScriptRowId newScript
+                newFileRow =
+                    FileRow nextRowId newFile
             in
-                { model | scripts = newScriptRow :: model.scripts, lastScriptRowId = nextScriptRowId } ! []
+                { model | files = newFileRow :: model.files, lastRowId = nextRowId } ! []
 
-        ScriptMsg rowId msg ->
+        FileMsg rowId msg ->
             let
-                ( scripts, cmds, parentMsgs ) =
-                    model.scripts
-                        |> List.map (updateScript rowId msg)
+                ( files, cmds, parentMsgs ) =
+                    model.files
+                        |> List.map (updateFile rowId msg)
                         |> unzip3
 
                 updatedModel =
-                    { model | scripts = scripts }
+                    { model | files = files }
 
                 modelWithParentMsgs =
                     parentMsgs
@@ -88,64 +97,65 @@ updateFromChild model parentMsg =
         ParentMsg.SaveError errorMessage ->
             { model | errorMessage = Just errorMessage }
 
-        ParentMsg.RefreshScripts scripts ->
+        ParentMsg.RefreshFiles files ->
             let
-                ( scriptRows, lastScriptRowId ) =
-                    scripts
-                        |> makeScriptRows model.lastScriptRowId model.httpInfo model.providers model.localization
+                ( fileRows, lastRowId ) =
+                    files
+                        |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization
             in
-                { model | scripts = scriptRows, lastScriptRowId = lastScriptRowId }
+                { model | files = fileRows, lastRowId = lastRowId }
 
 
-updateScript : Int -> Script.Msg -> ScriptRow -> ( ScriptRow, Cmd Msg, ParentMsg )
-updateScript targetRowId msg { rowId, script } =
+updateFile : Int -> File.Msg -> FileRow -> ( FileRow, Cmd Msg, ParentMsg )
+updateFile targetRowId msg { rowId, file } =
     let
         ( updatedRow, cmd, parentMsg ) =
             if targetRowId == rowId then
-                Script.update msg script
+                File.update msg file
             else
-                ( script, Cmd.none, ParentMsg.NoOp )
+                ( file, Cmd.none, ParentMsg.NoOp )
     in
-        ( ScriptRow rowId updatedRow, Cmd.map (ScriptMsg rowId) cmd, parentMsg )
+        ( FileRow rowId updatedRow, Cmd.map (FileMsg rowId) cmd, parentMsg )
 
 
-makeScriptRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List Script.ScriptData -> ( List ScriptRow, Int )
-makeScriptRows lastScriptRowId httpInfo providers localization scripts =
+makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.FileData -> ( List FileRow, Int )
+makeFileRows lastRowId httpInfo providers localization files =
     let
-        nextScriptRowId =
-            lastScriptRowId + 1
+        nextRowId =
+            lastRowId + 1
     in
-        case scripts of
+        case files of
             [] ->
-                ( [], nextScriptRowId )
+                ( [], nextRowId )
 
-            script :: otherScripts ->
+            file :: otherFiles ->
                 let
-                    scriptModel =
-                        Script.init script.id
-                            script.pathPrefixName
-                            script.scriptPath
-                            script.provider
-                            script.priority
+                    fileModel =
+                        File.init file.fileType
+                            file.id
+                            file.pathPrefixName
+                            file.filePath
+                            file.provider
+                            file.priority
                             False
                             httpInfo
                             localization
 
-                    scriptRow =
-                        ScriptRow nextScriptRowId scriptModel
+                    fileRow =
+                        FileRow nextRowId fileModel
 
-                    ( otherScriptRows, lastScriptRowId ) =
-                        otherScripts
-                            |> makeScriptRows nextScriptRowId httpInfo providers localization
+                    ( otherFileRows, lastRowId ) =
+                        otherFiles
+                            |> makeFileRows nextRowId httpInfo providers localization
 
-                    sortedScriptRows =
-                        scriptRow
-                            :: otherScriptRows
-                            |> List.sortWith (compareScriptRows providers)
+                    sortedFileRows =
+                        fileRow
+                            :: otherFileRows
+                            |> List.sortWith (compareFileRows providers)
                 in
-                    ( sortedScriptRows, lastScriptRowId )
+                    ( sortedFileRows, lastRowId )
 
 
-compareScriptRows : Dict String Int -> ScriptRow -> ScriptRow -> Basics.Order
-compareScriptRows providers first second =
-    Script.compareModels providers first.script second.script
+compareFileRows : Dict String Int -> FileRow -> FileRow -> Basics.Order
+compareFileRows providers first second =
+    File.compareModels providers first.file second.file

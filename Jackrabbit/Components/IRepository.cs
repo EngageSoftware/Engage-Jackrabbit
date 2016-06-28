@@ -16,22 +16,22 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>Represents the ability to get data</summary>
     public interface IRepository
     {
-        /// <summary>Gets the scripts registered for the given module.</summary>
+        /// <summary>Gets the files registered for the given module.</summary>
         /// <param name="moduleId">The module ID.</param>
-        /// <returns>A sequence of <see cref="JackrabbitScript"/> instances.</returns>
-        IEnumerable<JackrabbitScript> GetScripts(int moduleId);
+        /// <returns>A sequence of <see cref="JackrabbitFile"/> instances.</returns>
+        IEnumerable<JackrabbitFile> GetFiles(int moduleId);
 
-        /// <summary>Adds the script.</summary>
+        /// <summary>Adds the file.</summary>
         /// <param name="moduleId">The module ID.</param>
-        /// <param name="script">The script.</param>
-        void AddScript(int moduleId, JackrabbitScript script);
+        /// <param name="file">The file.</param>
+        void AddFile(int moduleId, JackrabbitFile file);
 
-        /// <summary>Updates the script.</summary>
-        /// <param name="script">The script.</param>
-        void UpdateScript(JackrabbitScript script);
+        /// <summary>Updates the file.</summary>
+        /// <param name="file">The file.</param>
+        void UpdateFile(JackrabbitFile file);
 
-        /// <summary>Deletes the script.</summary>
-        /// <param name="scriptId">The script's ID.</param>
-        void DeleteScript(int scriptId);
+        /// <summary>Deletes the file.</summary>
+        /// <param name="fileId">The file's ID.</param>
+        void DeleteFile(int fileId);
     }
 }

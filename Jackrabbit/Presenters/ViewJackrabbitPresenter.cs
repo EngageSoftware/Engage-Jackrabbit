@@ -65,9 +65,9 @@ namespace Engage.Dnn.Jackrabbit
             {
                 this.View.Model.HideContainer = !ModulePermissionController.CanManageModule(this.ModuleInfo);
                 this.View.Model.HideView = !this.IsEditable;
-                this.View.Model.Scripts = this.GetScripts();
+                this.View.Model.Files = this.GetFiles();
                 this.View.Model.DefaultPathPrefix = string.Empty;
-                this.View.Model.DefaultScriptPath = "~/";
+                this.View.Model.DefaultFilePath = "~/";
                 this.View.Model.DefaultProvider = "DnnFormBottomProvider";
                 this.View.Model.DefaultPriority = (int)FileOrder.Js.DefaultPriority;
             }
@@ -77,32 +77,34 @@ namespace Engage.Dnn.Jackrabbit
             }
         }
 
-        /// <summary>Gets the scripts.</summary>
-        /// <returns>A sequence of <see cref="ViewJackrabbitViewModel.ScriptViewModel"/> instances.</returns>
-        private IEnumerable<ViewJackrabbitViewModel.ScriptViewModel> GetScripts()
+        /// <summary>Gets the files.</summary>
+        /// <returns>A sequence of <see cref="ViewJackrabbitViewModel.FileViewModel"/> instances.</returns>
+        private IEnumerable<ViewJackrabbitViewModel.FileViewModel> GetFiles()
         {
-            return this.repository.GetScripts(this.ModuleId).Select(this.CreateScriptViewModel).OrderBy(s => s.Priority);
+            return this.repository.GetFiles(this.ModuleId).Select(this.CreateFileViewModel).OrderBy(s => s.Priority);
         }
 
-        /// <summary>Creates the script view model.</summary>
-        /// <param name="script">The script.</param>
-        /// <returns>A new <see cref="ViewJackrabbitViewModel.ScriptViewModel" /> instance.</returns>
-        private ViewJackrabbitViewModel.ScriptViewModel CreateScriptViewModel(JackrabbitScript script)
+        /// <summary>Creates the file view model.</summary>
+        /// <param name="file">The file.</param>
+        /// <returns>A new <see cref="ViewJackrabbitViewModel.FileViewModel" /> instance.</returns>
+        private ViewJackrabbitViewModel.FileViewModel CreateFileViewModel(JackrabbitFile file)
         {
-            var fullScriptPath = script.ScriptPath;
-            var prefixPath = string.IsNullOrEmpty(script.PathPrefixName) ? null : this.DependencyLoader.Paths.Find(p => p.Name == script.PathPrefixName);
+            var fullFilePath = file.FilePath;
+            var prefixPath = string.IsNullOrEmpty(file.PathPrefixName) ? null : this.DependencyLoader.Paths.Find(p => p.Name == file.PathPrefixName);
             if (prefixPath != null)
             {
-                fullScriptPath = prefixPath.Path + script.ScriptPath;
+                fullFilePath = prefixPath.Path + file.FilePath;
             }
 
-            return new ViewJackrabbitViewModel.ScriptViewModel(
-                script.Id,
-                script.PathPrefixName,
-                script.ScriptPath,
-                fullScriptPath,
-                script.Provider,
-                script.Priority ?? (int)FileOrder.Js.DefaultPriority);
+            var defaultPriority = file.FileType == FileType.JavaScript ? (int)FileOrder.Js.DefaultPriority : (int)FileOrder.Css.DefaultPriority;
+            return new ViewJackrabbitViewModel.FileViewModel(
+                file.FileType,
+                file.Id,
+                file.PathPrefixName,
+                file.FilePath,
+                fullFilePath,
+                file.Provider,
+                file.Priority ?? defaultPriority);
         }
     }
 }
