@@ -7,42 +7,11 @@ import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 
 
-type ScriptData
-    = JavaScriptFile ScriptFileData
-    | JavaScriptLibrary LibraryData
-    | CssFile CssFileData
-
-
-type alias ScriptFileData =
+type alias ScriptData =
     { id : Maybe Int
     , pathPrefixName : String
     , scriptPath : String
     , provider : String
-    , priority : Int
-    }
-
-
-type alias CssFileData =
-    { id : Maybe Int
-    , pathPrefixName : String
-    , scriptPath : String
-    , provider : String
-    , priority : Int
-    }
-
-
-type SpecificVersion
-    = Strict
-    | LatestMajor
-    | LatestMinor
-    | Latest
-
-
-type alias LibraryData =
-    { id : Maybe Int
-    , libraryName : String
-    , version : String
-    , specificVersion : SpecificVersion
     , priority : Int
     }
 
@@ -60,13 +29,11 @@ init : Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dic
 init id pathPrefixName scriptPath provider priority editing httpInfo localization =
     let
         script =
-            JavaScriptFile
-                (ScriptFileData id
-                    pathPrefixName
-                    scriptPath
-                    provider
-                    priority
-                )
+            ScriptData id
+                pathPrefixName
+                scriptPath
+                provider
+                priority
     in
         Model script
             script
@@ -75,7 +42,7 @@ init id pathPrefixName scriptPath provider priority editing httpInfo localizatio
             localization
 
 
-encodeScript : ScriptFileData -> Encode.Value
+encodeScript : ScriptData -> Encode.Value
 encodeScript script =
     Encode.object
         [ ( "pathPrefixName", Encode.string script.pathPrefixName )
@@ -85,14 +52,14 @@ encodeScript script =
         ]
 
 
-listScriptDecoder : Decode.Decoder (List ScriptFileData)
+listScriptDecoder : Decode.Decoder (List ScriptData)
 listScriptDecoder =
     Decode.list scriptDecoder
 
 
-scriptDecoder : Decode.Decoder ScriptFileData
+scriptDecoder : Decode.Decoder ScriptData
 scriptDecoder =
-    decode ScriptFileData
+    decode ScriptData
         |> required "Id" (Decode.maybe Decode.int)
         |> required "PathPrefixName" Decode.string
         |> required "ScriptPath" Decode.string
