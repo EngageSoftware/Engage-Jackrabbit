@@ -8,7 +8,7 @@ import Views.Elm.File.Model as File exposing (listFileDecoder, typeIdToFileType)
 import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.File.Update as File
-import Views.Elm.Utility exposing (unzip3, createLocalizationDict, localizeString)
+import Views.Elm.Utility exposing (createLocalizationDict, localizeString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -48,7 +48,7 @@ update msg model =
                             httpInfo
                             localization
             in
-                initializedModel ! []
+                ( initializedModel, Cmd.none )
 
         AddNewFile ->
             let
@@ -69,30 +69,46 @@ update msg model =
                 newFileRow =
                     FileRow nextRowId newFile
             in
-                { model | files = newFileRow :: model.files, lastRowId = nextRowId } ! []
+                ( { model | files = newFileRow :: model.files, lastRowId = nextRowId }, Cmd.none )
 
         FileMsg rowId msg ->
             let
-                ( files, cmds, parentMsgs ) =
+                fileUpdates =
                     model.files
                         |> List.map (updateFile rowId msg)
-                        |> unzip3
+
+                cmd =
+                    fileUpdates
+                        |> List.map (\( file, cmd, parentMsg ) -> cmd)
+                        |> Cmd.batch
+
+                files =
+                    fileUpdates
+                        |> List.map (\( file, cmd, parentMsg ) -> file)
 
                 updatedModel =
                     { model | files = files }
 
                 modelWithParentMsgs =
-                    parentMsgs
-                        |> List.foldl (flip updateFromChild) updatedModel
+                    fileUpdates
+                        |> List.foldl updateFromChild updatedModel
             in
-                modelWithParentMsgs ! cmds
+                ( modelWithParentMsgs, cmd )
 
 
-updateFromChild : Model -> ParentMsg -> Model
-updateFromChild model parentMsg =
+updateFromChild : ( FileRow, Cmd msg, ParentMsg ) -> Model -> Model
+updateFromChild ( fileRow, _, parentMsg ) model =
     case parentMsg of
         ParentMsg.NoOp ->
             model
+
+        ParentMsg.RemoveFile ->
+            let
+                updatedFiles =
+                    model.files
+                        |> List.filter (\s -> s.rowId /= fileRow.rowId)
+            in
+                { model | files = updatedFiles }
 
         ParentMsg.SaveError errorMessage ->
             { model | errorMessage = Just errorMessage }
@@ -107,15 +123,15 @@ updateFromChild model parentMsg =
 
 
 updateFile : Int -> File.Msg -> FileRow -> ( FileRow, Cmd Msg, ParentMsg )
-updateFile targetRowId msg { rowId, file } =
-    let
-        ( updatedRow, cmd, parentMsg ) =
-            if targetRowId == rowId then
-                File.update msg file
-            else
-                ( file, Cmd.none, ParentMsg.NoOp )
-    in
-        ( FileRow rowId updatedRow, Cmd.map (FileMsg rowId) cmd, parentMsg )
+updateFile targetRowId msg fileRow =
+    if targetRowId /= fileRow.rowId then
+        ( fileRow, Cmd.none, ParentMsg.NoOp )
+    else
+        let
+            ( updatedRow, cmd, parentMsg ) =
+                File.update msg fileRow.file
+        in
+            ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
 
 
 makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.FileData -> ( List FileRow, Int )

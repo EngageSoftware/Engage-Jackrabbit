@@ -7,3 +7,4 @@ type ParentMsg
     = NoOp
     | RefreshFiles (List FileData)
     | SaveError String
+    | RemoveFile

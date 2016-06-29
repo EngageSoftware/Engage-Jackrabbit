@@ -12,7 +12,7 @@ update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
         EditFile ->
-            { model | editing = True } ! [] |> withoutParentMsg
+            ( { model | editing = True }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePrefix prefix ->
             let
@@ -22,7 +22,7 @@ update msg model =
                 newFile =
                     { file | pathPrefixName = prefix }
             in
-                { model | file = newFile } ! [] |> withoutParentMsg
+                ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePath path ->
             let
@@ -32,7 +32,7 @@ update msg model =
                 newFile =
                     { file | filePath = path }
             in
-                { model | file = newFile } ! [] |> withoutParentMsg
+                ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         UpdateProvider provider ->
             let
@@ -42,7 +42,7 @@ update msg model =
                 newFile =
                     { file | provider = provider }
             in
-                { model | file = newFile } ! [] |> withoutParentMsg
+                ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePriority priority ->
             let
@@ -52,10 +52,13 @@ update msg model =
                 newFile =
                     { file | priority = priority }
             in
-                { model | file = newFile } ! [] |> withoutParentMsg
+                ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         CancelChanges ->
-            { model | editing = False, file = model.originalFile } ! [] |> withoutParentMsg
+            if isNothing model.file.id then
+                ( model, Cmd.none, ParentMsg.RemoveFile )
+            else
+                ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.NoOp )
 
         SaveChanges ->
             let
@@ -65,26 +68,16 @@ update msg model =
                     else
                         Put
             in
-                model ! [ createAjaxCmd model verb ] |> withoutParentMsg
+                ( model, createAjaxCmd model verb, ParentMsg.NoOp )
 
         DeleteFile ->
-            model ! [ createAjaxCmd model Delete ] |> withoutParentMsg
+            ( model, createAjaxCmd model Delete, ParentMsg.NoOp )
 
         SaveError errorMessage ->
-            model ! [] |> withParentMsg (ParentMsg.SaveError errorMessage)
+            ( model, Cmd.none, ParentMsg.SaveError errorMessage )
 
         RefreshFiles files ->
-            model ! [] |> withParentMsg (ParentMsg.RefreshFiles files)
-
-
-withoutParentMsg : ( Model, Cmd Msg ) -> ( Model, Cmd Msg, ParentMsg )
-withoutParentMsg ( model, cmd ) =
-    ( model, cmd, ParentMsg.NoOp )
-
-
-withParentMsg : ParentMsg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg, ParentMsg )
-withParentMsg parentMsg ( model, cmd ) =
-    ( model, cmd, parentMsg )
+            ( model, Cmd.none, ParentMsg.RefreshFiles files )
 
 
 createAjaxCmd : Model -> HttpVerb -> Cmd Msg
