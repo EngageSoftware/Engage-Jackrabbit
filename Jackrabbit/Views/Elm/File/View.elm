@@ -21,29 +21,29 @@ view model =
 
 viewFile : FileData -> Dict String String -> Html Msg
 viewFile file localization =
-    tr []
-        [ td [ class "jackrabbit--actions" ]
+    tr [ classList (getRowClasses file) ]
+        [ td [ class "jackrabbit-file--actions" ]
             [ button [ type' "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
             , button [ type' "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
             ]
-        , td [ class "jackrabbit--prefix" ] [ text file.pathPrefixName ]
-        , td [ class "jackrabbit--path" ] [ text file.filePath ]
-        , td [ class "jackrabbit--provider" ] [ text file.provider ]
-        , td [ class "jackrabbit--priority" ] [ text (toString file.priority) ]
+        , td [ class "jackrabbit-file--prefix" ] [ text file.pathPrefixName ]
+        , td [ class "jackrabbit-file--path" ] [ text file.filePath ]
+        , td [ class "jackrabbit-file--provider" ] [ text file.provider ]
+        , td [ class "jackrabbit-file--priority" ] [ text (toString file.priority) ]
         ]
 
 
 editFile : FileData -> Dict String String -> Html Msg
 editFile file localization =
-    tr []
-        [ td [ class "jackrabbit--actions" ]
+    tr [ classList (getRowClasses file) ]
+        [ td [ class "jackrabbit-file--actions" ]
             [ button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
             , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
             ]
-        , td [ class "jackrabbit--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value file.pathPrefixName ] [] ]
-        , td [ class "jackrabbit--path" ] [ input [ type' "text", onInput UpdatePath, value file.filePath ] [] ]
-        , td [ class "jackrabbit--provider" ] [ input [ type' "text", onInput UpdateProvider, value file.provider ] [] ]
-        , td [ class "jackrabbit--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority file.priority), value (toString file.priority) ] [] ]
+        , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value file.pathPrefixName ] [] ]
+        , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value file.filePath ] [] ]
+        , td [ class "jackrabbit-file--provider" ] [ input [ type' "text", onInput UpdateProvider, value file.provider ] [] ]
+        , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority file.priority), value (toString file.priority) ] [] ]
         ]
 
 
@@ -55,3 +55,14 @@ stringToIntDecoder tagger default =
                 |> Result.withDefault default
     in
         Decode.map (\value -> tagger (stringToInt value)) targetValue
+
+
+getRowClasses : FileData -> List ( String, Bool )
+getRowClasses file =
+    [ ( "jackrabbit-file", True )
+    , ( "jackrabbit-file__type-javascript", file.fileType == JavaScript )
+    , ( "jackrabbit-file__type-css", file.fileType == CSS )
+    , ( "jackrabbit-file__provider-head", file.provider == "DnnPageHeaderProvider" )
+    , ( "jackrabbit-file__provider-body", file.provider == "DnnBodyProvider" )
+    , ( "jackrabbit-file__provider-bottom", file.provider == "DnnFormBottomProvider" )
+    ]
