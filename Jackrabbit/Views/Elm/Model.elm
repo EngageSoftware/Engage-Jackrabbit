@@ -9,7 +9,7 @@ import Views.Elm.File.Model as File
 type alias InitialData =
     { files :
         List
-            { fileType : String
+            { fileType : Int
             , id : Int
             , pathPrefixName : String
             , filePath : String

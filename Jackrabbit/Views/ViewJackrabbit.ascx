@@ -54,7 +54,7 @@
     private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.FileViewModel> files) {
         return EncodeJsonObject(from file in files
                                 select new {
-                                    type = file.FileType.ToString(),
+                                    fileType = file.FileType,
                                     id = file.Id,
                                     pathPrefixName = file.PathPrefixName,
                                     filePath = file.FilePath,

@@ -76,22 +76,22 @@ fileDecoder =
         |> required "Priority" Decode.int
 
 
-typeStringToFileType : String -> Result String FileType
-typeStringToFileType typeString =
-    case typeString of
-        "JavaScript" ->
+typeIdToFileType : Int -> Result String FileType
+typeIdToFileType typeId =
+    case typeId of
+        0 ->
             Result.Ok JavaScript
 
-        "CSS" ->
+        1 ->
             Result.Ok CSS
 
         _ ->
-            Result.Err ("Invalid file type: " ++ typeString)
+            Result.Err ("Invalid file type: " ++ (toString typeId))
 
 
 fileTypeDecoder : Decode.Decoder FileType
 fileTypeDecoder =
-    Decode.customDecoder Decode.string typeStringToFileType
+    Decode.customDecoder Decode.int typeIdToFileType
 
 
 compareModels : Dict String Int -> Model -> Model -> Basics.Order

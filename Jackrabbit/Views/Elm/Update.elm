@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
-import Views.Elm.File.Model as File exposing (listFileDecoder, typeStringToFileType)
+import Views.Elm.File.Model as File exposing (listFileDecoder, typeIdToFileType)
 import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.File.Update as File
@@ -25,7 +25,7 @@ update msg model =
                 initializedModel =
                     let
                         initialFileToFileData file =
-                            case typeStringToFileType file.fileType of
+                            case typeIdToFileType file.fileType of
                                 Err _ ->
                                     Nothing
 
