@@ -160,9 +160,11 @@
     <Content Include="jackrabbit-icon.png" />
     <Content Include="Licenses\EULA-Free.txt" />
     <Content Include="References\ClientDependency.Core.dll" />
+    <Content Include="References\DotNetNuke.Instrumentation.dll" />
     <Content Include="References\DotNetNuke.Web.Client.dll" />
     <Content Include="References\DotNetNuke.Web.dll" />
     <Content Include="References\DotNetNuke.Web.xml" />
+    <Content Include="References\DotNetNuke.WebUtility.dll" />
     <Content Include="References\DotNetNuke.xml" />
     <Content Include="References\System.Net.Http.dll" />
     <Content Include="References\System.Net.Http.Formatting.dll" />
