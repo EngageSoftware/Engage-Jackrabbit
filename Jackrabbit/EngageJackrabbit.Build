@@ -27,7 +27,7 @@
 
   <target name="package" description="Creates packages for this module, one for each value in the licenses and versions properties">
 
-    <call target="build"/>
+    <!--call target="build"/-->
 
     <property name="assemblyFile" value="${projectDll}"/>
     <call target="set-assemblyVersion"/>
