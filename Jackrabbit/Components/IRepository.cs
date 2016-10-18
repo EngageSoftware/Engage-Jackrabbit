@@ -21,6 +21,11 @@ namespace Engage.Dnn.Jackrabbit
         /// <returns>A sequence of <see cref="JackrabbitFile"/> instances.</returns>
         IEnumerable<JackrabbitFile> GetFiles(int moduleId);
 
+        /// <summary>Gets the libraries registered for the given module.</summary>
+        /// <param name="moduleId">The module ID.</param>
+        /// <returns>A sequence of <see cref="JackrabbitLibrary"/> instances.</returns>
+        IEnumerable<JackrabbitLibrary> GetLibraries(int moduleId);
+
         /// <summary>Adds the file.</summary>
         /// <param name="moduleId">The module ID.</param>
         /// <param name="file">The file.</param>

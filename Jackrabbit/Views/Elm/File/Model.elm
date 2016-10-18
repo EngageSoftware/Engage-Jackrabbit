@@ -7,14 +7,21 @@ import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 
 
-type FileType
-    = JavaScript
-    | CSS
+type Specificity
+    = Exact
+    | LatestMinor
+    | LatestMajor
+    | Latest
+
+
+type ThingToLoad
+    = JavaScriptLibrary FileData LibraryData
+    | JavaScriptFile FileData
+    | CssFile FileData
 
 
 type alias FileData =
-    { fileType : FileType
-    , id : Maybe Int
+    { id : Maybe Int
     , pathPrefixName : String
     , filePath : String
     , provider : String
@@ -22,9 +29,16 @@ type alias FileData =
     }
 
 
+type alias LibraryData =
+    { libraryName : String
+    , version : String
+    , versionSpecificity : Specificity
+    }
+
+
 type alias Model =
-    { file : FileData
-    , originalFile : FileData
+    { file : ThingToLoad
+    , originalFile : ThingToLoad
     , editing : Bool
     , httpInfo : HttpInfo
     , localization : Dict String String
@@ -76,20 +90,20 @@ fileDecoder =
         |> required "Priority" Decode.int
 
 
-typeIdToFileType : Int -> Result String FileType
+typeIdToFileType : Int -> Result String (FileData -> ThingToLoad)
 typeIdToFileType typeId =
     case typeId of
         0 ->
-            Result.Ok JavaScript
+            Result.Ok JavaScriptFile
 
         1 ->
-            Result.Ok CSS
+            Result.Ok CssFile
 
         _ ->
             Result.Err ("Invalid file type: " ++ (toString typeId))
 
 
-fileTypeDecoder : Decode.Decoder FileType
+fileTypeDecoder : Decode.Decoder (FileData -> ThingToLoad)
 fileTypeDecoder =
     Decode.customDecoder Decode.int typeIdToFileType
 

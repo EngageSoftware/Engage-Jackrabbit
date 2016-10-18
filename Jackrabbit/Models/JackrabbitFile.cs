@@ -37,13 +37,9 @@ namespace Engage.Dnn.Jackrabbit
         /// <param name="provider">The provider.</param>
         /// <param name="priority">The priority.</param>
         public JackrabbitFile(FileType fileType, int id, string pathPrefixName, string filePath, string provider, int? priority)
+         : this(fileType, pathPrefixName, filePath, provider, priority)
         {
-            this.FileType = fileType;
             this.Id = id;
-            this.PathPrefixName = pathPrefixName;
-            this.FilePath = filePath;
-            this.Provider = provider;
-            this.Priority = priority;
         }
 
         /// <summary>Gets the type of the file.</summary>
