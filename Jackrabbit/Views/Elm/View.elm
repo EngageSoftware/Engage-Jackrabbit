@@ -16,10 +16,13 @@ view model =
         fileRows =
             model.files
                 |> List.map viewFileRow
+
+        addFile =
+            showAddFile model model.tempFileRow
     in
         div []
             [ viewErrorMessage model.errorMessage
-            , button [ type' "button", onClick AddNewFile ] [ text (localizeString "Add" model.localization) ]
+            , addFile
             , table [ class "dnnTableDisplay" ]
                 [ thead []
                     [ tr []
@@ -39,6 +42,16 @@ view model =
 viewFileRow : FileRow -> Html Msg
 viewFileRow { rowId, file } =
     App.map (FileMsg rowId) (File.view file)
+
+
+showAddFile : Model -> Maybe FileRow -> Html Msg
+showAddFile model tempFile =
+    case tempFile of
+        Nothing ->
+            button [ type' "button", onClick AddNewFile ] [ text (localizeString "Add" model.localization) ]
+
+        Just { rowId, file } ->
+            App.map (FileMsg rowId) (File.viewAddForm file)
 
 
 viewErrorMessage : Maybe String -> Html Msg

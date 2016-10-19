@@ -9,6 +9,8 @@ import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.File.Update as File
 import Views.Elm.Utility exposing (createLocalizationDict, localizeString)
+import List.Extra exposing (..)
+import Maybe.Extra exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -47,6 +49,7 @@ update msg model =
                             Nothing
                             httpInfo
                             localization
+                            Nothing
             in
                 ( initializedModel, Cmd.none )
 
@@ -56,7 +59,7 @@ update msg model =
                     model.lastRowId + 1
 
                 newFile =
-                    File.init File.JavaScript
+                    File.init File.Default
                         Nothing
                         model.defaultPathPrefix
                         model.defaultFilePath
@@ -69,35 +72,59 @@ update msg model =
                 newFileRow =
                     FileRow nextRowId newFile
             in
-                ( { model | files = newFileRow :: model.files, lastRowId = nextRowId }, Cmd.none )
+                ( { model | tempFileRow = Just newFileRow, lastRowId = nextRowId }, Cmd.none )
 
         FileMsg rowId msg ->
             let
-                fileUpdates =
+                matchingFileRow =
                     model.files
-                        |> List.map (updateFile rowId msg)
+                        |> List.Extra.find (findRow rowId)
+
+                fileRow =
+                    Maybe.oneOf [ matchingFileRow, model.tempFileRow ]
+
+                fileUpdate =
+                    fileRow
+                        |> Maybe.map (updateFile rowId msg)
 
                 cmd =
-                    fileUpdates
-                        |> List.map (\( file, cmd, parentMsg ) -> cmd)
-                        |> Cmd.batch
+                    fileUpdate
+                        |> Maybe.map (\( file, cmd, parentMsg ) -> cmd)
+                        |> Maybe.withDefault Cmd.none
 
-                files =
-                    fileUpdates
-                        |> List.map (\( file, cmd, parentMsg ) -> file)
+                file =
+                    fileUpdate
+                        |> Maybe.map (\( file, cmd, parentMsg ) -> file)
 
                 updatedModel =
-                    { model | files = files }
+                    case file of
+                        Nothing ->
+                            { model | errorMessage = Just "Error: Impossible State" }
+
+                        Just f ->
+                            if Maybe.Extra.isNothing matchingFileRow then
+                                { model | tempFileRow = Just f }
+                            else
+                                { model | files = List.Extra.replaceIf (\fr -> fr.rowId == rowId) f model.files }
 
                 modelWithParentMsgs =
-                    fileUpdates
-                        |> List.foldl updateFromChild updatedModel
+                    fileUpdate
+                        |> Maybe.map (updateFromChild updatedModel)
+                        |> Maybe.withDefault model
             in
                 ( modelWithParentMsgs, cmd )
 
 
-updateFromChild : ( FileRow, Cmd msg, ParentMsg ) -> Model -> Model
-updateFromChild ( fileRow, _, parentMsg ) model =
+findRow : Int -> FileRow -> Bool
+findRow rowId fileRow =
+    if fileRow.rowId == rowId then
+        True
+    else
+        False
+
+
+updateFromChild : Model -> ( FileRow, Cmd msg, ParentMsg ) -> Model
+updateFromChild model ( fileRow, _, parentMsg ) =
     case parentMsg of
         ParentMsg.NoOp ->
             model
@@ -120,6 +147,20 @@ updateFromChild ( fileRow, _, parentMsg ) model =
                         |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization
             in
                 { model | files = fileRows, lastRowId = lastRowId }
+
+        ParentMsg.AddTempFile file ->
+            let
+                newFileRow =
+                    { rowId = model.lastRowId, file = file }
+            in
+                { model | files = newFileRow :: model.files, tempFileRow = Nothing }
+
+        ParentMsg.CancelTempForm ->
+            let
+                newLastRow =
+                    model.lastRowId - 1
+            in
+                { model | lastRowId = newLastRow, tempFileRow = Nothing }
 
 
 updateFile : Int -> File.Msg -> FileRow -> ( FileRow, Cmd Msg, ParentMsg )

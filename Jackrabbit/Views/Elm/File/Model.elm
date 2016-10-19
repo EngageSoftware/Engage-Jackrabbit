@@ -10,6 +10,7 @@ import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 type FileType
     = JavaScript
     | CSS
+    | Default
 
 
 type alias FileData =

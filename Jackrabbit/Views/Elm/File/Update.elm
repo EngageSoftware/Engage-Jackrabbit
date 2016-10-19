@@ -70,6 +70,19 @@ update msg model =
             in
                 ( model, createAjaxCmd model verb, ParentMsg.NoOp )
 
+        SaveTempForm ->
+            let
+                verb =
+                    if isNothing model.file.id then
+                        Post
+                    else
+                        Put
+            in
+                ( model, createAjaxCmd model verb, ParentMsg.AddTempFile model )
+
+        CancelTempForm ->
+            ( model, Cmd.none, ParentMsg.CancelTempForm )
+
         DeleteFile ->
             ( model, createAjaxCmd model Delete, ParentMsg.NoOp )
 
@@ -78,6 +91,16 @@ update msg model =
 
         RefreshFiles files ->
             ( model, Cmd.none, ParentMsg.RefreshFiles files )
+
+        SetFileType fileType ->
+            let
+                file =
+                    model.file
+
+                newFile =
+                    { file | fileType = fileType }
+            in
+                ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
 
 createAjaxCmd : Model -> HttpVerb -> Cmd Msg

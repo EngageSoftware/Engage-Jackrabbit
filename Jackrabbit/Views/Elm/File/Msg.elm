@@ -1,6 +1,6 @@
 module Views.Elm.File.Msg exposing (..)
 
-import Views.Elm.File.Model exposing (FileData)
+import Views.Elm.File.Model exposing (FileData, FileType)
 
 
 type Msg
@@ -14,3 +14,6 @@ type Msg
     | DeleteFile
     | RefreshFiles (List FileData)
     | SaveError String
+    | SaveTempForm
+    | CancelTempForm
+    | SetFileType FileType

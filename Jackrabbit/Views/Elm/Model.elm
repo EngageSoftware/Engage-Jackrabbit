@@ -39,6 +39,7 @@ type alias Model =
     , errorMessage : Maybe String
     , httpInfo : HttpInfo
     , localization : Dict String String
+    , tempFileRow : Maybe FileRow
     }
 
 
@@ -69,4 +70,5 @@ initialModel =
         , defaultErrorMessage = ""
         }
     , localization = Dict.empty
+    , tempFileRow = Nothing
     }

@@ -19,6 +19,11 @@ view model =
         viewFile model.file model.localization
 
 
+viewAddForm : Model -> Html Msg
+viewAddForm model =
+    addForm model.file model.localization
+
+
 viewFile : FileData -> Dict String String -> Html Msg
 viewFile file localization =
     tr [ classList (getRowClasses file) ]
@@ -45,6 +50,31 @@ editFile file localization =
         , td [ class "jackrabbit-file--provider" ] [ input [ type' "text", onInput UpdateProvider, value file.provider ] [] ]
         , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority file.priority), value (toString file.priority) ] [] ]
         ]
+
+
+addForm : FileData -> Dict String String -> Html Msg
+addForm file localization =
+    if file.fileType == Default then
+        div []
+            [ label []
+                [ text "Select the File Type:"
+                , button [ type' "button", onClick (SetFileType JavaScript) ] [ text "JavaScript" ]
+                , button [ type' "button", onClick (SetFileType CSS) ] [ text "CSS" ]
+                ]
+            ]
+    else
+        div []
+            [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
+            , input [ type' "text", onInput UpdatePrefix, value file.pathPrefixName ] []
+            , label [ class "jackrabbit--path" ] [ text "File Path" ]
+            , input [ type' "text", onInput UpdatePath, value file.filePath ] []
+            , label [ class "jackrabbit--provider" ] [ text "Provider" ]
+            , input [ type' "text", onInput UpdateProvider, value file.provider ] []
+            , label [ class "jackrabbit--priority" ] [ text "Priority" ]
+            , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority file.priority), value (toString file.priority) ] []
+            , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
+            , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
+            ]
 
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
