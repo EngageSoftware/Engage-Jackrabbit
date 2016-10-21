@@ -6,25 +6,20 @@ import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.File.Model as File
 
 
+type alias InitialHttpInfo =
+    { baseUrl : String
+    , headers : List ( String, String )
+    }
+
+
 type alias InitialData =
-    { files :
-        List
-            { fileType : Int
-            , id : Int
-            , pathPrefixName : String
-            , filePath : String
-            , provider : String
-            , priority : Int
-            }
+    { files : List File.ThingToLoad
     , defaultPathPrefix : String
     , defaultFilePath : String
     , defaultProvider : String
     , defaultPriority : Int
-    , httpInfo :
-        { baseUrl : String
-        , headers : List ( String, String )
-        }
-    , localization : Encode.Value
+    , httpInfo : InitialHttpInfo
+    , localization : Dict String String
     }
 
 

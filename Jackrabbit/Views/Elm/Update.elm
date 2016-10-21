@@ -11,45 +11,53 @@ import Views.Elm.File.Update as File
 import Views.Elm.Utility exposing (createLocalizationDict, localizeString)
 import List.Extra exposing (..)
 import Maybe.Extra exposing (..)
+import Json.Decode as Decode exposing (decodeValue)
+import Json.Decode.Pipeline exposing (decode, required, hardcoded)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Init initialData ->
+        Init initialDataJson ->
             let
-                httpInfo =
-                    HttpInfo initialData.httpInfo.baseUrl initialData.httpInfo.headers (localizeString "HTTP Error" localization)
-
-                localization =
-                    createLocalizationDict initialData.localization
-
                 initializedModel =
-                    let
-                        initialFileToThing file =
-                            case typeIdToFileType file.fileType of
-                                Err _ ->
+                    case (Decode.decodeValue intialDataDecoder initialDataJson) of
+                        Err omg ->
+                            Debug.crash "HALP"
+
+                        Ok initialData ->
+                            let
+                                httpInfo =
+                                    HttpInfo initialData.httpInfo.baseUrl initialData.httpInfo.headers (localizeString "HTTP Error" localization)
+
+                                localization =
+                                    initialData.localization
+
+                                {- initialFileToThing file =
+                                   case typeIdToFileType file.fileType of
+                                       Err _ ->
+                                           Nothing
+
+                                       Ok makeThing ->
+                                           Just (makeThing (File.FileData (Just file.id) file.pathPrefixName file.filePath file.provider file.priority))
+                                -}
+                                ( fileRows, lastRowId ) =
+                                    initialData.files
+                                        --|> List.filterMap initialFileToThing
+                                        |>
+                                            makeFileRows model.lastRowId httpInfo model.providers localization
+                            in
+                                Model fileRows
+                                    initialData.defaultPathPrefix
+                                    initialData.defaultFilePath
+                                    initialData.defaultProvider
+                                    initialData.defaultPriority
+                                    model.providers
+                                    lastRowId
                                     Nothing
-
-                                Ok makeThing ->
-                                    Just (makeThing (File.FileData (Just file.id) file.pathPrefixName file.filePath file.provider file.priority))
-
-                        ( fileRows, lastRowId ) =
-                            initialData.files
-                                |> List.filterMap initialFileToThing
-                                |> makeFileRows model.lastRowId httpInfo model.providers localization
-                    in
-                        Model fileRows
-                            initialData.defaultPathPrefix
-                            initialData.defaultFilePath
-                            initialData.defaultProvider
-                            initialData.defaultPriority
-                            model.providers
-                            lastRowId
-                            Nothing
-                            httpInfo
-                            localization
-                            Nothing
+                                    httpInfo
+                                    localization
+                                    Nothing
             in
                 ( initializedModel, Cmd.none )
 
@@ -211,6 +219,40 @@ makeFileRows lastRowId httpInfo providers localization files =
 compareFileRows : Dict String Int -> FileRow -> FileRow -> Basics.Order
 compareFileRows providers first second =
     File.compareModels providers first.file second.file
+
+
+intialDataDecoder : Decode.Decoder InitialData
+intialDataDecoder =
+    decode InitialData
+        |> required "files" listFileDecoder
+        |> required "defaultPathPrefix" Decode.string
+        |> required "defaultFilePath" Decode.string
+        |> required "defaultProvider" Decode.string
+        |> required "defaultPriority" Decode.int
+        |> required "httpInfo" httpDecoder
+        |> required "localization" decodeLocalization
+
+
+decodeLocalization : Decode.Decoder (Dict String String)
+decodeLocalization =
+    Decode.dict Decode.string
+
+
+decodeHttpHeaders : Decode.Decoder (List ( String, String ))
+decodeHttpHeaders =
+    Decode.list stringTupleDecoder
+
+
+stringTupleDecoder : Decode.Decoder ( String, String )
+stringTupleDecoder =
+    Decode.tuple2 (,) Decode.string Decode.string
+
+
+httpDecoder : Decode.Decoder InitialHttpInfo
+httpDecoder =
+    decode InitialHttpInfo
+        |> required "baseUrl" Decode.string
+        |> required "headers" decodeHttpHeaders
 
 
 
