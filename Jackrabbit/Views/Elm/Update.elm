@@ -26,17 +26,17 @@ update msg model =
 
                 initializedModel =
                     let
-                        initialFileToFileData file =
+                        initialFileToThing file =
                             case typeIdToFileType file.fileType of
                                 Err _ ->
                                     Nothing
 
-                                Ok fileType ->
-                                    Just (File.FileData fileType (Just file.id) file.pathPrefixName file.filePath file.provider file.priority)
+                                Ok makeThing ->
+                                    Just (makeThing (File.FileData (Just file.id) file.pathPrefixName file.filePath file.provider file.priority))
 
                         ( fileRows, lastRowId ) =
                             initialData.files
-                                |> List.filterMap initialFileToFileData
+                                |> List.filterMap initialFileToThing
                                 |> makeFileRows model.lastRowId httpInfo model.providers localization
                     in
                         Model fileRows
@@ -137,7 +137,7 @@ updateFromChild model ( fileRow, _, parentMsg ) =
             in
                 { model | files = updatedFiles }
 
-        ParentMsg.SaveError errorMessage ->
+        ParentMsg.Error errorMessage ->
             { model | errorMessage = Just errorMessage }
 
         ParentMsg.RefreshFiles files ->
@@ -175,7 +175,7 @@ updateFile targetRowId msg fileRow =
             ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
 
 
-makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.FileData -> ( List FileRow, Int )
+makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.ThingToLoad -> ( List FileRow, Int )
 makeFileRows lastRowId httpInfo providers localization files =
     let
         nextRowId =
@@ -188,12 +188,7 @@ makeFileRows lastRowId httpInfo providers localization files =
             file :: otherFiles ->
                 let
                     fileModel =
-                        File.init file.fileType
-                            file.id
-                            file.pathPrefixName
-                            file.filePath
-                            file.provider
-                            file.priority
+                        File.fromThing file
                             False
                             httpInfo
                             localization
@@ -216,3 +211,7 @@ makeFileRows lastRowId httpInfo providers localization files =
 compareFileRows : Dict String Int -> FileRow -> FileRow -> Basics.Order
 compareFileRows providers first second =
     File.compareModels providers first.file second.file
+
+
+
+--JavaScriptLibrary library file -> file

@@ -6,6 +6,7 @@ import Views.Elm.Ajax exposing (..)
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
+import Views.Elm.Utility exposing (localizeString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
@@ -16,46 +17,38 @@ update msg model =
 
         UpdatePrefix prefix ->
             let
-                file =
-                    model.file
-
                 newFile =
-                    { file | pathPrefixName = prefix }
+                    model.file
+                        |> updateFile (\file -> { file | pathPrefixName = prefix })
             in
                 ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePath path ->
             let
-                file =
-                    model.file
-
                 newFile =
-                    { file | filePath = path }
+                    model.file
+                        |> updateFile (\file -> { file | filePath = path })
             in
                 ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         UpdateProvider provider ->
             let
-                file =
-                    model.file
-
                 newFile =
-                    { file | provider = provider }
+                    model.file
+                        |> updateFile (\file -> { file | provider = provider })
             in
                 ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePriority priority ->
             let
-                file =
-                    model.file
-
                 newFile =
-                    { file | priority = priority }
+                    model.file
+                        |> updateFile (\file -> { file | priority = priority })
             in
                 ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
         CancelChanges ->
-            if isNothing model.file.id then
+            if isNothing (getFile model.file).id then
                 ( model, Cmd.none, ParentMsg.RemoveFile )
             else
                 ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.NoOp )
@@ -63,7 +56,7 @@ update msg model =
         SaveChanges ->
             let
                 verb =
-                    if isNothing model.file.id then
+                    if isNothing (getFile model.file).id then
                         Post
                     else
                         Put
@@ -73,7 +66,7 @@ update msg model =
         SaveTempForm ->
             let
                 verb =
-                    if isNothing model.file.id then
+                    if isNothing (getFile model.file).id then
                         Post
                     else
                         Put
@@ -86,28 +79,36 @@ update msg model =
         DeleteFile ->
             ( model, createAjaxCmd model Delete, ParentMsg.NoOp )
 
-        SaveError errorMessage ->
-            ( model, Cmd.none, ParentMsg.SaveError errorMessage )
+        Error errorMessage ->
+            ( model, Cmd.none, ParentMsg.Error errorMessage )
 
         RefreshFiles files ->
             ( model, Cmd.none, ParentMsg.RefreshFiles files )
 
-        SetFileType fileType ->
+        SetFileType string file ->
             let
-                file =
-                    model.file
-
-                newFile =
-                    { file | fileType = fileType }
+                fileData =
+                    getFile file
             in
-                ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
+                case string of
+                    "JavaScript" ->
+                        ( { model | file = JavaScriptFile fileData }, Cmd.none, ParentMsg.NoOp )
+
+                    "Css" ->
+                        ( { model | file = CssFile fileData }, Cmd.none, ParentMsg.NoOp )
+
+                    _ ->
+                        ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )
 
 
 createAjaxCmd : Model -> HttpVerb -> Cmd Msg
 createAjaxCmd model verb =
     let
+        fileData =
+            getFile model.file
+
         path =
-            case model.file.id of
+            case fileData.id of
                 Just id ->
                     "?id=" ++ (toString id)
 
@@ -118,4 +119,4 @@ createAjaxCmd model verb =
             AjaxRequestInfo verb path (encodeFile model.file) listFileDecoder
     in
         sendAjax model.httpInfo requestInfo
-            |> Task.perform SaveError RefreshFiles
+            |> Task.perform Error RefreshFiles

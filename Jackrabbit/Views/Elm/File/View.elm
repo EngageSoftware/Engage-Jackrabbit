@@ -24,57 +24,71 @@ viewAddForm model =
     addForm model.file model.localization
 
 
-viewFile : FileData -> Dict String String -> Html Msg
+viewFile : ThingToLoad -> Dict String String -> Html Msg
 viewFile file localization =
-    tr [ classList (getRowClasses file) ]
-        [ td [ class "jackrabbit-file--actions" ]
-            [ button [ type' "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
-            , button [ type' "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
-            ]
-        , td [ class "jackrabbit-file--prefix" ] [ text file.pathPrefixName ]
-        , td [ class "jackrabbit-file--path" ] [ text file.filePath ]
-        , td [ class "jackrabbit-file--provider" ] [ text file.provider ]
-        , td [ class "jackrabbit-file--priority" ] [ text (toString file.priority) ]
-        ]
-
-
-editFile : FileData -> Dict String String -> Html Msg
-editFile file localization =
-    tr [ classList (getRowClasses file) ]
-        [ td [ class "jackrabbit-file--actions" ]
-            [ button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
-            , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
-            ]
-        , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value file.pathPrefixName ] [] ]
-        , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value file.filePath ] [] ]
-        , td [ class "jackrabbit-file--provider" ] [ input [ type' "text", onInput UpdateProvider, value file.provider ] [] ]
-        , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority file.priority), value (toString file.priority) ] [] ]
-        ]
-
-
-addForm : FileData -> Dict String String -> Html Msg
-addForm file localization =
-    if file.fileType == Default then
-        div []
-            [ label []
-                [ text "Select the File Type:"
-                , button [ type' "button", onClick (SetFileType JavaScript) ] [ text "JavaScript" ]
-                , button [ type' "button", onClick (SetFileType CSS) ] [ text "CSS" ]
+    let
+        fileData =
+            getFile file
+    in
+        tr [ classList (getRowClasses file) ]
+            [ td [ class "jackrabbit-file--actions" ]
+                [ button [ type' "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
+                , button [ type' "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
                 ]
+            , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
+            , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
+            , td [ class "jackrabbit-file--provider" ] [ text fileData.provider ]
+            , td [ class "jackrabbit-file--priority" ] [ text (toString fileData.priority) ]
             ]
-    else
-        div []
-            [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
-            , input [ type' "text", onInput UpdatePrefix, value file.pathPrefixName ] []
-            , label [ class "jackrabbit--path" ] [ text "File Path" ]
-            , input [ type' "text", onInput UpdatePath, value file.filePath ] []
-            , label [ class "jackrabbit--provider" ] [ text "Provider" ]
-            , input [ type' "text", onInput UpdateProvider, value file.provider ] []
-            , label [ class "jackrabbit--priority" ] [ text "Priority" ]
-            , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority file.priority), value (toString file.priority) ] []
-            , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
-            , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
+
+
+editFile : ThingToLoad -> Dict String String -> Html Msg
+editFile file localization =
+    let
+        fileData =
+            getFile file
+    in
+        tr [ classList (getRowClasses file) ]
+            [ td [ class "jackrabbit-file--actions" ]
+                [ button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+                , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
+                ]
+            , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] [] ]
+            , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value fileData.filePath ] [] ]
+            , td [ class "jackrabbit-file--provider" ] [ input [ type' "text", onInput UpdateProvider, value fileData.provider ] [] ]
+            , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] [] ]
             ]
+
+
+addForm : ThingToLoad -> Dict String String -> Html Msg
+addForm file localization =
+    let
+        fileData =
+            getFile file
+    in
+        case file of
+            Default fileData ->
+                div []
+                    [ label []
+                        [ text "Select the File Type:"
+                        , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text "JavaScript" ]
+                        , button [ type' "button", onClick (SetFileType "Css" file) ] [ text "CSS" ]
+                        ]
+                    ]
+
+            _ ->
+                div []
+                    [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
+                    , input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] []
+                    , label [ class "jackrabbit--path" ] [ text "File Path" ]
+                    , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
+                    , label [ class "jackrabbit--provider" ] [ text "Provider" ]
+                    , input [ type' "text", onInput UpdateProvider, value fileData.provider ] []
+                    , label [ class "jackrabbit--priority" ] [ text "Priority" ]
+                    , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
+                    , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
+                    , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
+                    ]
 
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
@@ -87,12 +101,35 @@ stringToIntDecoder tagger default =
         Decode.map (\value -> tagger (stringToInt value)) targetValue
 
 
-getRowClasses : FileData -> List ( String, Bool )
+getRowClasses : ThingToLoad -> List ( String, Bool )
 getRowClasses file =
-    [ ( "jackrabbit-file", True )
-    , ( "jackrabbit-file__type-javascript", file.fileType == JavaScript )
-    , ( "jackrabbit-file__type-css", file.fileType == CSS )
-    , ( "jackrabbit-file__provider-head", file.provider == "DnnPageHeaderProvider" )
-    , ( "jackrabbit-file__provider-body", file.provider == "DnnBodyProvider" )
-    , ( "jackrabbit-file__provider-bottom", file.provider == "DnnFormBottomProvider" )
-    ]
+    let
+        oldFile =
+            getFile file
+
+        provider =
+            oldFile.provider
+
+        js =
+            case file of
+                JavaScriptFile fileData ->
+                    True
+
+                _ ->
+                    False
+
+        css =
+            case file of
+                CssFile fileData ->
+                    True
+
+                _ ->
+                    False
+    in
+        [ ( "jackrabbit-file", True )
+        , ( "jackrabbit-file__type-javascript", js )
+        , ( "jackrabbit-file__type-css", css )
+        , ( "jackrabbit-file__provider-head", provider == "DnnPageHeaderProvider" )
+        , ( "jackrabbit-file__provider-body", provider == "DnnBodyProvider" )
+        , ( "jackrabbit-file__provider-bottom", provider == "DnnFormBottomProvider" )
+        ]
