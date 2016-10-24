@@ -1,6 +1,6 @@
 module Views.Elm.File.Msg exposing (..)
 
-import Views.Elm.File.Model exposing (FileData, ThingToLoad)
+import Views.Elm.File.Model exposing (FileData, JackRabbitFile)
 
 
 type Msg
@@ -8,12 +8,16 @@ type Msg
     | UpdatePath String
     | UpdateProvider String
     | UpdatePriority Int
+    | UpdateLibraryName String
+    | UpdateVersion String
+    | UpdateVersionSpecificity String
     | SaveChanges
     | CancelChanges
     | EditFile
     | DeleteFile
-    | RefreshFiles (List ThingToLoad)
+    | RefreshFiles (List JackRabbitFile)
     | Error String
     | SaveTempForm
     | CancelTempForm
-    | SetFileType String ThingToLoad
+    | SetFileType String JackRabbitFile
+    | SetLibrary JackRabbitFile

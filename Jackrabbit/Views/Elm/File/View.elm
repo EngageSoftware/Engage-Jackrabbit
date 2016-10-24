@@ -24,7 +24,7 @@ viewAddForm model =
     addForm model.file model.localization
 
 
-viewFile : ThingToLoad -> Dict String String -> Html Msg
+viewFile : JackRabbitFile -> Dict String String -> Html Msg
 viewFile file localization =
     let
         fileData =
@@ -42,7 +42,7 @@ viewFile file localization =
             ]
 
 
-editFile : ThingToLoad -> Dict String String -> Html Msg
+editFile : JackRabbitFile -> Dict String String -> Html Msg
 editFile file localization =
     let
         fileData =
@@ -60,7 +60,7 @@ editFile file localization =
             ]
 
 
-addForm : ThingToLoad -> Dict String String -> Html Msg
+addForm : JackRabbitFile -> Dict String String -> Html Msg
 addForm file localization =
     let
         fileData =
@@ -87,15 +87,15 @@ addForm file localization =
         libraryForm =
             div []
                 [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
-                , input [ type' "text" {- add onInput -} ] []
+                , input [ type' "text", onInput UpdateLibraryName ] []
                 , label [ class "jackrabbit--prefix" ] [ text "Version" ]
-                , input [ type' "text" {- add on input -} ] []
+                , input [ type' "text", onInput UpdateVersion ] []
                 , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
-                , select [{- add oninput -}]
-                    [ option [] [ text "Latest" ]
-                    , option [] [ text "Latest Major" ]
-                    , option [] [ text "Latest Minor" ]
-                    , option [] [ text "Exact" ]
+                , select [ onInput UpdateVersionSpecificity ]
+                    [ option [ value "Exact" ] [ text "Exact" ]
+                    , option [ value "LatestMinor" ] [ text "Latest Minor" ]
+                    , option [ value "LatestMajor" ] [ text "Latest Major" ]
+                    , option [ value "Latest" ] [ text "Latest" ]
                     ]
                 , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
                 , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
@@ -108,7 +108,7 @@ addForm file localization =
                         [ text "Select the File Type:"
                         , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text "JavaScript" ]
                         , button [ type' "button", onClick (SetFileType "Css" file) ] [ text "CSS" ]
-                        , button [ type' "button", onClick (SetFileType "JavaScriptLibrary" file) ] [ text "JS Library" ]
+                        , button [ type' "button", onClick (SetLibrary file) ] [ text "JS Library" ]
                         ]
                     ]
 
@@ -118,7 +118,7 @@ addForm file localization =
             JavaScriptFile fileData ->
                 fileForm
 
-            JavaScriptLib fileData ->
+            JavaScriptLib fileData libData ->
                 libraryForm
 
 
@@ -132,7 +132,7 @@ stringToIntDecoder tagger default =
         Decode.map (\value -> tagger (stringToInt value)) targetValue
 
 
-getRowClasses : ThingToLoad -> List ( String, Bool )
+getRowClasses : JackRabbitFile -> List ( String, Bool )
 getRowClasses file =
     let
         oldFile =

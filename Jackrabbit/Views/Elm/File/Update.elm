@@ -47,6 +47,59 @@ update msg model =
             in
                 ( { model | file = newFile }, Cmd.none, ParentMsg.NoOp )
 
+        UpdateLibraryName libraryName ->
+            let
+                libFile =
+                    model.file
+                        |> getLibrary
+
+                library =
+                    model.file
+                        |> updateLibrary (\libFile -> { libFile | libraryName = libraryName })
+            in
+                ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
+
+        UpdateVersion version ->
+            let
+                libFile =
+                    model.file
+                        |> getLibrary
+
+                library =
+                    model.file
+                        |> updateLibrary (\libFile -> { libFile | version = version })
+            in
+                ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
+
+        UpdateVersionSpecificity specificity ->
+            let
+                libFile =
+                    model.file
+                        |> getLibrary
+
+                newSpecificity =
+                    case specificity of
+                        "Exact" ->
+                            Exact
+
+                        "LatestMinor" ->
+                            LatestMinor
+
+                        "LatestMajor" ->
+                            LatestMajor
+
+                        "Latest" ->
+                            Latest
+
+                        _ ->
+                            Exact
+
+                library =
+                    model.file
+                        |> updateLibrary (\libFile -> { libFile | versionSpecificity = newSpecificity })
+            in
+                ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
+
         CancelChanges ->
             if isNothing (getFile model.file).id then
                 ( model, Cmd.none, ParentMsg.RemoveFile )
@@ -97,11 +150,18 @@ update msg model =
                     "Css" ->
                         ( { model | file = CssFile fileData }, Cmd.none, ParentMsg.NoOp )
 
-                    "JavaScriptLibrary" ->
-                        ( { model | file = JavaScriptLib fileData }, Cmd.none, ParentMsg.NoOp )
-
                     _ ->
                         ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )
+
+        SetLibrary file ->
+            let
+                fileData =
+                    getFile file
+
+                libData =
+                    LibraryData "" "" Exact
+            in
+                ( { model | file = JavaScriptLib fileData libData }, Cmd.none, ParentMsg.NoOp )
 
 
 createAjaxCmd : Model -> HttpVerb -> Cmd Msg

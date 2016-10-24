@@ -1,7 +1,6 @@
 module Views.Elm.Model exposing (..)
 
 import Dict exposing (Dict)
-import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.File.Model as File
 
@@ -13,7 +12,7 @@ type alias InitialHttpInfo =
 
 
 type alias InitialData =
-    { files : List File.ThingToLoad
+    { files : List File.JackRabbitFile
     , defaultPathPrefix : String
     , defaultFilePath : String
     , defaultProvider : String

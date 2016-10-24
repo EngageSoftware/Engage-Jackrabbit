@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
-import Views.Elm.File.Model as File exposing (listFileDecoder, typeIdToFileType)
+import Views.Elm.File.Model as File exposing (listFileDecoder)
 import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.File.Update as File
@@ -183,7 +183,7 @@ updateFile targetRowId msg fileRow =
             ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
 
 
-makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.ThingToLoad -> ( List FileRow, Int )
+makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.JackRabbitFile -> ( List FileRow, Int )
 makeFileRows lastRowId httpInfo providers localization files =
     let
         nextRowId =
@@ -196,7 +196,7 @@ makeFileRows lastRowId httpInfo providers localization files =
             file :: otherFiles ->
                 let
                     fileModel =
-                        File.fromThing file
+                        File.fromJRFile file
                             False
                             httpInfo
                             localization
