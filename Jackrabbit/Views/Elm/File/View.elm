@@ -65,6 +65,41 @@ addForm file localization =
     let
         fileData =
             getFile file
+
+        fileForm =
+            div []
+                [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
+                , input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] []
+                , label [ class "jackrabbit--path" ] [ text "File Path" ]
+                , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
+                , label [ class "jackrabbit--provider" ] [ text "Provider" ]
+                , select [ onInput UpdateProvider ]
+                    [ option [] [ text "DnnPageHeaderProvider" ]
+                    , option [] [ text "DnnBodyProvider" ]
+                    , option [] [ text "DnnFormBottomProvider" ]
+                    ]
+                , label [ class "jackrabbit--priority" ] [ text "Priority" ]
+                , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
+                , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
+                , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
+                ]
+
+        libraryForm =
+            div []
+                [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
+                , input [ type' "text" {- add onInput -} ] []
+                , label [ class "jackrabbit--prefix" ] [ text "Version" ]
+                , input [ type' "text" {- add on input -} ] []
+                , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
+                , select [{- add oninput -}]
+                    [ option [] [ text "Latest" ]
+                    , option [] [ text "Latest Major" ]
+                    , option [] [ text "Latest Minor" ]
+                    , option [] [ text "Exact" ]
+                    ]
+                , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
+                , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
+                ]
     in
         case file of
             Default fileData ->
@@ -77,23 +112,14 @@ addForm file localization =
                         ]
                     ]
 
-            _ ->
-                div []
-                    [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
-                    , input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] []
-                    , label [ class "jackrabbit--path" ] [ text "File Path" ]
-                    , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
-                    , label [ class "jackrabbit--provider" ] [ text "Provider" ]
-                    , select [ onInput UpdateProvider ]
-                        [ option [] [ text "DnnPageHeaderProvider" ]
-                        , option [] [ text "DnnBodyProvider" ]
-                        , option [] [ text "DnnFormBottomProvider" ]
-                        ]
-                    , label [ class "jackrabbit--priority" ] [ text "Priority" ]
-                    , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-                    , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
-                    , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
-                    ]
+            CssFile fileData ->
+                fileForm
+
+            JavaScriptFile fileData ->
+                fileForm
+
+            JavaScriptLib fileData ->
+                libraryForm
 
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
