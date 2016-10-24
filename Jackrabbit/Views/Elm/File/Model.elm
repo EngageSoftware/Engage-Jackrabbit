@@ -9,8 +9,24 @@ import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 
 type ThingToLoad
     = JavaScriptFile FileData
+    | JavaScriptLib FileData
+      --LibraryData
     | CssFile FileData
     | Default FileData
+
+
+type alias LibraryData =
+    { libraryName : String
+    , version : String
+    , versionSpecificity : Specificity
+    }
+
+
+type Specificity
+    = Exact
+    | LatestMinor
+    | LatestMajor
+    | Latest
 
 
 type alias FileData =
@@ -93,6 +109,9 @@ typeIdToFileType typeId =
         1 ->
             Result.Ok (\file -> CssFile file)
 
+        2 ->
+            Result.Ok (\file -> JavaScriptLib file)
+
         _ ->
             Result.Err ("Invalid file type: " ++ (toString typeId))
 
@@ -105,6 +124,9 @@ fileTypeToTypeId thing =
 
         CssFile file ->
             1
+
+        JavaScriptLib file ->
+            2
 
         Default file ->
             3
@@ -124,6 +146,9 @@ getFile thing =
         CssFile file ->
             file
 
+        JavaScriptLib file ->
+            file
+
         Default file ->
             file
 
@@ -135,10 +160,13 @@ updateFile updater thing =
             JavaScriptFile (updater file)
 
         CssFile file ->
-            JavaScriptFile (updater file)
+            CssFile (updater file)
+
+        JavaScriptLib file ->
+            JavaScriptLib (updater file)
 
         Default file ->
-            JavaScriptFile (updater file)
+            Default (updater file)
 
 
 compareModels : Dict String Int -> Model -> Model -> Basics.Order

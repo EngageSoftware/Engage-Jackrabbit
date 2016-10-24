@@ -97,6 +97,9 @@ update msg model =
                     "Css" ->
                         ( { model | file = CssFile fileData }, Cmd.none, ParentMsg.NoOp )
 
+                    "JavaScriptLibrary" ->
+                        ( { model | file = JavaScriptLib fileData }, Cmd.none, ParentMsg.NoOp )
+
                     _ ->
                         ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )
 

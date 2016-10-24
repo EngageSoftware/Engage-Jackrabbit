@@ -73,7 +73,7 @@ update msg model =
                         model.defaultFilePath
                         model.defaultProvider
                         model.defaultPriority
-                        True
+                        False
                         model.httpInfo
                         model.localization
 

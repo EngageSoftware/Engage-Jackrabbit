@@ -73,6 +73,7 @@ addForm file localization =
                         [ text "Select the File Type:"
                         , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text "JavaScript" ]
                         , button [ type' "button", onClick (SetFileType "Css" file) ] [ text "CSS" ]
+                        , button [ type' "button", onClick (SetFileType "JavaScriptLibrary" file) ] [ text "JS Library" ]
                         ]
                     ]
 
