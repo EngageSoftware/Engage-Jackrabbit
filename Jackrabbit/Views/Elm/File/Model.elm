@@ -155,16 +155,16 @@ versionDecoder =
 specificityToTypeId : Specificity -> Int
 specificityToTypeId specificity =
     case specificity of
-        Exact ->
+        Latest ->
             0
 
-        LatestMinor ->
+        LatestMajor ->
             1
 
-        LatestMajor ->
+        LatestMinor ->
             2
 
-        Latest ->
+        Exact ->
             3
 
 
@@ -172,16 +172,16 @@ intToVersionSpecificity : Int -> Result String Specificity
 intToVersionSpecificity versionInt =
     case versionInt of
         0 ->
-            Result.Ok Exact
+            Result.Ok Latest
 
         1 ->
-            Result.Ok LatestMinor
-
-        2 ->
             Result.Ok LatestMajor
 
+        2 ->
+            Result.Ok LatestMinor
+
         3 ->
-            Result.Ok Latest
+            Result.Ok Exact
 
         _ ->
             Result.Err ("Invalid version type: " ++ (toString versionInt))
