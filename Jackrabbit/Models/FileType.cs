@@ -13,7 +13,8 @@ namespace Engage.Dnn.Jackrabbit
     /// <summary>The type of a <see cref="JackrabbitFile"/></summary>
     public enum FileType
     {
-        JavaScript = 0,
-        CSS,
+        JavaScriptFile = 0,
+        CssFile,
+        JavaScriptLib,
     }
 }

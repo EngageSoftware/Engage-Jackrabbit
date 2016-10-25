@@ -127,6 +127,8 @@
     <Compile Include="FeaturesController.cs" />
     <Compile Include="LocalizationUtility.cs" />
     <Compile Include="Models\FileType.cs" />
+    <Compile Include="Models\JackrabbitLibrary.cs" />
+    <Compile Include="Models\JackrabbitLibraryInfo.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Models\ViewModels\ViewJackrabbitViewModel.cs" />
     <Compile Include="Components\ContentItemRepository.cs" />

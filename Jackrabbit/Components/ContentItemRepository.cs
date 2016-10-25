@@ -16,13 +16,25 @@ namespace Engage.Dnn.Jackrabbit
     using System.Globalization;
     using System.Linq;
 
+    using DotNetNuke.Common;
     using DotNetNuke.Entities.Content;
+    using DotNetNuke.Entities.Controllers;
+    using DotNetNuke.Entities.Host;
+    using DotNetNuke.Framework.JavaScriptLibraries;
+    using DotNetNuke.Web.Client;
 
     /// <summary>A repository backed by the DNN content item store</summary>
     public class ContentItemRepository : IRepository
     {
         /// <summary>The name of the Jackrabbit file content type</summary>
         private const string JackrabbitFileContentTypeName = FeaturesController.SettingsPrefix + "_Script";
+
+        private static readonly Dictionary<ScriptLocation, string> ScriptLocationToProviderName = new Dictionary<ScriptLocation, string>(3)
+                                                                                                  {
+                                                                                                      { ScriptLocation.PageHead, "DnnPageHeaderProvider" },
+                                                                                                      { ScriptLocation.BodyTop, "DnnBodyProvider" },
+                                                                                                      { ScriptLocation.BodyBottom, "DnnFormBottomProvider" },
+                                                                                                  };
 
         /// <summary>The content type controller</summary>
         private readonly IContentTypeController contentTypeController = new ContentTypeController();
@@ -57,12 +69,25 @@ namespace Engage.Dnn.Jackrabbit
                    where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
                    select
                        new JackrabbitFile(
-                           ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScript,
+                           ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScriptFile,
                            ci.ContentItemId,
                            ci.Metadata["PathPrefixName"],
                            ci.Content,
                            ci.Metadata["Provider"],
                            ci.Metadata["Priority"].ParseNullableInt32());
+        }
+
+        public IEnumerable<JackrabbitLibrary> GetLibraries(int moduleId)
+        {
+            return from ci in this.contentController.GetContentItemsByModuleId(moduleId)
+                   where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
+                   select
+                   new JackrabbitLibrary(
+                       ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScriptLib,
+                       ci.ContentItemId,
+                       ci.Metadata["LibraryName"],
+                       Version.Parse(ci.Metadata["Version"]),
+                       ci.Metadata["VersionSpecificity"].ParseNullableEnum<SpecificVersion>() ?? SpecificVersion.Latest);
         }
 
         /// <summary>Adds the file.</summary>
@@ -72,6 +97,13 @@ namespace Engage.Dnn.Jackrabbit
         {
             var contentItem = new ContentItem { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId, };
             FillContentItem(file, contentItem);
+            this.contentController.AddContentItem(contentItem);
+        }
+
+        public void AddLibrary(int moduleId, JackrabbitLibrary library)
+        {
+            var contentItem = new ContentItem() { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId, };
+            FillContentItem(library, contentItem);
             this.contentController.AddContentItem(contentItem);
         }
 
@@ -89,11 +121,67 @@ namespace Engage.Dnn.Jackrabbit
             this.contentController.UpdateContentItem(contentItem);
         }
 
+        public void UpdateLibrary(JackrabbitLibrary library)
+        {
+            var contentItem = this.contentController.GetContentItem(library.Id);
+            if (contentItem == null)
+            {
+                return;
+            }
+            FillContentItem(library, contentItem);
+            this.contentController.UpdateContentItem(contentItem);
+        }
+
         /// <summary>Deletes the file.</summary>
         /// <param name="fileId">The file's ID.</param>
-        public void DeleteFile(int fileId)
+        public void DeleteItem(int fileId)
         {
             this.contentController.DeleteContentItem(fileId);
+        }
+
+        public JackrabbitLibraryInfo GetLibraryInfo(JackrabbitLibrary library)
+        {
+            var libraries = from l in JavaScriptLibraryController.Instance.GetLibraries()
+                            where l.LibraryName.Equals(library.LibraryName, StringComparison.OrdinalIgnoreCase)
+                            where l.Version >= library.Version
+                            where library.VersionSpecificity == SpecificVersion.Latest
+                            || (library.VersionSpecificity == SpecificVersion.LatestMajor && l.Version.Major == library.Version.Major)
+                            || (library.VersionSpecificity == SpecificVersion.LatestMinor && l.Version.Major == library.Version.Major && l.Version.Minor == library.Version.Minor)
+                            || ((int)library.VersionSpecificity == 3 && l.Version == library.Version)
+                            orderby l.Version descending 
+                            select l;
+
+            var matchingLibrary = libraries.FirstOrDefault();
+            if (matchingLibrary == null)
+            {
+                return JackrabbitLibraryInfo.Null;
+            }
+
+            var path = GetLibraryPath(matchingLibrary);
+            var provider = ScriptLocationToProviderName[matchingLibrary.PreferredScriptLocation];
+            var priority = matchingLibrary.PackageID + (int)FileOrder.Js.DefaultPriority;
+
+            return new JackrabbitLibraryInfo(path, provider, priority);
+        }
+
+        private static string GetLibraryPath(JavaScriptLibrary library)
+        {
+            if (Host.CdnEnabled)
+            {
+                var customUrl = HostController.Instance.GetString("CustomCDN_" + library.LibraryName);
+                if (!string.IsNullOrEmpty(customUrl))
+                {
+                    return customUrl;
+                }
+
+                if (!string.IsNullOrEmpty(library.CDNPath))
+                {
+                    return library.CDNPath;
+                }
+            }
+
+            var versionFolderName = Globals.FormatVersion(library.Version, "00", 3, "_");
+            return $"~/Resources/libraries/{library.LibraryName}/{versionFolderName}/{library.FileName}";
         }
 
         /// <summary>Fills the <paramref name="contentItem"/> with the properties from the <paramref name="file"/>.</summary>
@@ -106,6 +194,15 @@ namespace Engage.Dnn.Jackrabbit
             contentItem.Metadata["PathPrefixName"] = file.PathPrefixName;
             contentItem.Metadata["Provider"] = file.Provider;
             contentItem.Metadata["Priority"] = file.Priority.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private static void FillContentItem(JackrabbitLibrary library, ContentItem contentItem)
+        {
+            
+            contentItem.Metadata["FileType"] = library.FileType.ToString();
+            contentItem.Metadata["LibraryName"] = library.LibraryName;
+            contentItem.Metadata["Version"] = library.Version.ToString();
+            contentItem.Metadata["VersionSpecificity"] = library.VersionSpecificity.ToString();
         }
 
         /// <summary>Initializes the content type.</summary>

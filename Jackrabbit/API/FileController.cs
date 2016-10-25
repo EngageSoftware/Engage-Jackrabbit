@@ -11,6 +11,8 @@
 namespace Engage.Dnn.Jackrabbit.Api
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
@@ -48,8 +50,20 @@ namespace Engage.Dnn.Jackrabbit.Api
         {
             try
             {
-                this.repository.AddFile(this.ActiveModule.ModuleID, new JackrabbitFile(request.FileType, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetFiles(this.ActiveModule.ModuleID));
+                if (request.FileType == FileType.JavaScriptLib)
+                {
+                    this.repository.AddLibrary(
+                           this.ActiveModule.ModuleID,
+                           new JackrabbitLibrary(request.FileType, request.LibraryName, request.Version, request.VersionSpecificity));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                }
+                else
+                {
+                    this.repository.AddFile(
+                            this.ActiveModule.ModuleID,
+                            new JackrabbitFile(request.FileType, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                }
             }
             catch (Exception exc)
             {
@@ -63,8 +77,18 @@ namespace Engage.Dnn.Jackrabbit.Api
         {
             try
             {
-                this.repository.UpdateFile(new JackrabbitFile(request.FileType, id, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetFiles(this.ActiveModule.ModuleID));
+                if (request.FileType == FileType.JavaScriptLib)
+                {
+                    this.repository.UpdateLibrary(
+                            new JackrabbitLibrary(request.FileType, request.LibraryName, request.Version, request.VersionSpecificity));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                }
+                else
+                {
+                    this.repository.UpdateFile(
+                            new JackrabbitFile(request.FileType, id, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                }
             }
             catch (Exception exc)
             {
@@ -72,14 +96,34 @@ namespace Engage.Dnn.Jackrabbit.Api
             }
         }
 
+        private IEnumerable<object> GetAllItems(int moduleId)
+        {
+            return this.repository.GetFiles(moduleId)
+                                  .Cast<object>()
+                                  .Concat(from library in this.repository.GetLibraries(moduleId)
+                                          let libraryInfo = this.repository.GetLibraryInfo(library)
+                                          select new
+                                                 {
+                                                     library.Id,
+                                                     library.FileType,
+                                                     library.LibraryName,
+                                                     library.Version,
+                                                     library.VersionSpecificity,
+                                                     PathPrefixName = "",
+                                                     libraryInfo.FilePath,
+                                                     libraryInfo.Provider,
+                                                     libraryInfo.Priority,
+                                                 });
+        }
+
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public HttpResponseMessage DeleteFile(int id)
+        public HttpResponseMessage DeleteItem(int id)
         {
             try
             {
-                this.repository.DeleteFile(id);
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.repository.GetFiles(this.ActiveModule.ModuleID));
+                this.repository.DeleteItem(id);
+                return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
             }
             catch (Exception exc)
             {

@@ -30,8 +30,28 @@ namespace Engage.Dnn.Jackrabbit
         /// <param name="file">The file.</param>
         void UpdateFile(JackrabbitFile file);
 
+        /// <summary>Gets the libraries registered for the given module.</summary>
+        /// <param name="moduleId">The module ID.</param>
+        /// <returns>A sequence of <see cref="JackrabbitLibrary"/> instances.</returns>
+        /// <returns></returns>
+        IEnumerable<JackrabbitLibrary> GetLibraries(int moduleId);
+
+        /// <summary>Adds the library.</summary>
+        /// <param name="moduleId">The module ID.</param>
+        /// <param name="library">The library.</param>
+        void AddLibrary(int moduleId, JackrabbitLibrary library);
+
+        /// <summary>Updates the library.</summary>
+        /// <param name="library">The library.</param>
+        void UpdateLibrary(JackrabbitLibrary library);
+
         /// <summary>Deletes the file.</summary>
         /// <param name="fileId">The file's ID.</param>
-        void DeleteFile(int fileId);
+        void DeleteItem(int fileId);
+
+        /// <summary>Gets the details of a <see cref="JackrabbitLibrary"/>.</summary>
+        /// <param name="library">The library.</param>
+        /// <returns>A new <see cref="JackrabbitLibraryInfo"/> instance</returns>
+        JackrabbitLibraryInfo GetLibraryInfo(JackrabbitLibrary library);
     }
 }

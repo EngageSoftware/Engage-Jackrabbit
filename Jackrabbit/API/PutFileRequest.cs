@@ -13,6 +13,8 @@ namespace Engage.Dnn.Jackrabbit
 {
     using System;
 
+    using DotNetNuke.Framework.JavaScriptLibraries;
+
     /// <summary>Contains information about updating a file in this module</summary>
     public class PutFileRequest
     {
@@ -30,5 +32,11 @@ namespace Engage.Dnn.Jackrabbit
 
         /// <summary>Gets or sets the priority.</summary>
         public int Priority { get; set; }
+
+        public string LibraryName { get; set; }
+
+        public Version Version { get; set; }
+
+        public SpecificVersion VersionSpecificity { get; set; }
     }
 }
