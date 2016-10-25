@@ -91,10 +91,10 @@ encodeFile file =
         else
             Encode.object
                 [ ( "fileType", Encode.int (fileTypeToTypeId file) )
-                , ( "pathPrefixName", Encode.string file.pathPrefixName )
-                , ( "filePath", Encode.string file.filePath )
-                , ( "provider", Encode.string file.provider )
-                , ( "priority", Encode.int file.priority )
+                , ( "pathPrefixName", Encode.string fileData.pathPrefixName )
+                , ( "filePath", Encode.string fileData.filePath )
+                , ( "provider", Encode.string fileData.provider )
+                , ( "priority", Encode.int fileData.priority )
                 ]
 
 
