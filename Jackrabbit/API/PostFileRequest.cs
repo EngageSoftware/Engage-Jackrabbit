@@ -35,8 +35,8 @@ namespace Engage.Dnn.Jackrabbit
 
         public string LibraryName { get; set; }
 
-        public Version Version { get; set; }
+        public string Version { get; set; }
 
-        public SpecificVersion VersionSpecificity { get; set; }
+        public SpecificVersion Specificity { get; set; }
     }
 }

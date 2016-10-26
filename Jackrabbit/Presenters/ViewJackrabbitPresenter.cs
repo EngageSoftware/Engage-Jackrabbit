@@ -96,7 +96,7 @@ namespace Engage.Dnn.Jackrabbit
                 fullFilePath = prefixPath.Path + file.FilePath;
             }
 
-            var defaultPriority = file.FileType == FileType.JavaScript ? (int)FileOrder.Js.DefaultPriority : (int)FileOrder.Css.DefaultPriority;
+            var defaultPriority = file.FileType == FileType.CssFile ? (int)FileOrder.Css.DefaultPriority : (int)FileOrder.Js.DefaultPriority;
             return new ViewJackrabbitViewModel.FileViewModel(
                 file.FileType,
                 file.Id,

@@ -54,7 +54,7 @@ namespace Engage.Dnn.Jackrabbit.Api
                 {
                     this.repository.AddLibrary(
                            this.ActiveModule.ModuleID,
-                           new JackrabbitLibrary(request.FileType, request.LibraryName, request.Version, request.VersionSpecificity));
+                           new JackrabbitLibrary(request.FileType, request.LibraryName, Version.Parse(request.Version), request.Specificity));
                     return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
                 }
                 else
@@ -107,9 +107,9 @@ namespace Engage.Dnn.Jackrabbit.Api
                                                      library.Id,
                                                      library.FileType,
                                                      library.LibraryName,
-                                                     library.Version,
+                                                     Version = library.Version.ToString(),
                                                      library.VersionSpecificity,
-                                                     PathPrefixName = "",
+                                                     PathPrefixName = "JS Library",
                                                      libraryInfo.FilePath,
                                                      libraryInfo.Provider,
                                                      libraryInfo.Priority,

@@ -31,8 +31,8 @@ namespace Engage.Dnn.Jackrabbit
         /// <summary>TA map from <see cref="FileType"/> to the API to register that type of file</summary>
         private static readonly Dictionary<FileType, Action<Page, string, int, string>> FileRegistrations = new Dictionary<FileType, Action<Page, string, int, string>>(2)
                                                                                                             {
-                                                                                                                { FileType.JavaScript, ClientResourceManager.RegisterScript },
-                                                                                                                { FileType.CSS, ClientResourceManager.RegisterStyleSheet },
+                                                                                                                { FileType.JavaScriptFile, ClientResourceManager.RegisterScript },
+                                                                                                                { FileType.CssFile, ClientResourceManager.RegisterStyleSheet },
                                                                                                             };
 
         /// <summary>Raises the <see cref="Control.Load" /> event.</summary>

@@ -67,25 +67,27 @@ namespace Engage.Dnn.Jackrabbit
         {
             return from ci in this.contentController.GetContentItemsByModuleId(moduleId)
                    where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
-                   select
-                       new JackrabbitFile(
-                           ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScriptFile,
-                           ci.ContentItemId,
-                           ci.Metadata["PathPrefixName"],
-                           ci.Content,
-                           ci.Metadata["Provider"],
-                           ci.Metadata["Priority"].ParseNullableInt32());
+                   let fileType = ParseFileType(ci)
+                   where fileType == FileType.CssFile || fileType == FileType.JavaScriptFile
+                   select new JackrabbitFile(
+                       fileType,
+                       ci.ContentItemId,
+                       ci.Metadata["PathPrefixName"],
+                       ci.Content,
+                       ci.Metadata["Provider"],
+                       ci.Metadata["Priority"].ParseNullableInt32());
         }
 
         public IEnumerable<JackrabbitLibrary> GetLibraries(int moduleId)
         {
             return from ci in this.contentController.GetContentItemsByModuleId(moduleId)
                    where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
-                   select
-                   new JackrabbitLibrary(
-                       ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScriptLib,
+                   let fileType = ParseFileType(ci)
+                   where fileType == FileType.JavaScriptLib
+                   select new JackrabbitLibrary(
+                       fileType,
                        ci.ContentItemId,
-                       ci.Metadata["LibraryName"],
+                       ci.Content,
                        Version.Parse(ci.Metadata["Version"]),
                        ci.Metadata["VersionSpecificity"].ParseNullableEnum<SpecificVersion>() ?? SpecificVersion.Latest);
         }
@@ -102,7 +104,7 @@ namespace Engage.Dnn.Jackrabbit
 
         public void AddLibrary(int moduleId, JackrabbitLibrary library)
         {
-            var contentItem = new ContentItem() { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId, };
+            var contentItem = new ContentItem { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId,};
             FillContentItem(library, contentItem);
             this.contentController.AddContentItem(contentItem);
         }
@@ -198,11 +200,15 @@ namespace Engage.Dnn.Jackrabbit
 
         private static void FillContentItem(JackrabbitLibrary library, ContentItem contentItem)
         {
-            
+            contentItem.Content = library.LibraryName;
             contentItem.Metadata["FileType"] = library.FileType.ToString();
-            contentItem.Metadata["LibraryName"] = library.LibraryName;
             contentItem.Metadata["Version"] = library.Version.ToString();
             contentItem.Metadata["VersionSpecificity"] = library.VersionSpecificity.ToString();
+        }
+
+        private static FileType ParseFileType(ContentItem ci)
+        {
+            return ci.Metadata["FileType"].ParseNullableEnum<FileType>() ?? FileType.JavaScriptFile;
         }
 
         /// <summary>Initializes the content type.</summary>
