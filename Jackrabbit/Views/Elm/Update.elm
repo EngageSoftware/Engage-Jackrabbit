@@ -43,9 +43,7 @@ update msg model =
                                 -}
                                 ( fileRows, lastRowId ) =
                                     initialData.files
-                                        --|> List.filterMap initialFileToThing
-                                        |>
-                                            makeFileRows model.lastRowId httpInfo model.providers localization
+                                        |> makeFileRows model.lastRowId httpInfo model.providers localization
                             in
                                 Model fileRows
                                     initialData.defaultPathPrefix
@@ -81,6 +79,9 @@ update msg model =
                     FileRow nextRowId newFile
             in
                 ( { model | tempFileRow = Just newFileRow, lastRowId = nextRowId }, Cmd.none )
+
+        DismissError ->
+            ( { model | errorMessage = Nothing }, Cmd.none )
 
         FileMsg rowId msg ->
             let

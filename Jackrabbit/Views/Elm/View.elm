@@ -61,4 +61,4 @@ viewErrorMessage errorMessage =
             emptyElement
 
         Just message ->
-            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message ]
+            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message, button [ type' "button", onClick DismissError ] [ text "Dismiss Error" ] ]

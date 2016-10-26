@@ -8,3 +8,4 @@ type Msg
     = Init Encode.Value
     | AddNewFile
     | FileMsg Int File.Msg
+    | DismissError
