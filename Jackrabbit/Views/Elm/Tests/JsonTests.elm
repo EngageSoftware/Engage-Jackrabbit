@@ -3,7 +3,7 @@ module Views.Elm.Tests.JsonTests exposing (tests)
 import Test exposing (..)
 import Expect exposing (Expectation)
 import Json.Decode as Decode
-import Views.Elm.File.Model exposing (fileDecoder, ThingToLoad(..), FileData)
+import Views.Elm.File.Model exposing (fileDecoder, JackRabbitFile(..), FileData, LibraryData, Specificity(..), encodeFile)
 
 
 tests : List Test
@@ -57,14 +57,23 @@ tests =
 
                     Ok _ ->
                         Expect.fail "Incorrect type"
-      {--
-    , test "can decode CSS file" <|
+    , test "can decode JavaScriptLibraries with correct fileData" <|
         \() ->
-            """\x0D
-            {"FileType":1,"Id":5,"PathPrefixName":"","FilePath":"~/sddfddddd.css","Provider":"DnnFormBottomProvider","Priority":120}\x0D
-            """
-                |> Decode.decodeString thingDecoder
-                |> Result.map CssFile
-                |> Expect.equal (Ok (CssFile (FileData (Just 5) "" "~/sddfddddd.css" "DnnFormBottomProvider" 120)))
-                --}
+            let
+                json =
+                    """\x0D
+                        {"FileType":2,"Id":36,"PathPrefixName":"JS Library","FilePath":"blank.js","Provider":"DnnFormBottomProvider","Priority":156,"LibraryName":"html5shiv","Version":"1.8.1","VersionSpecificity":2}
+                    """
+            in
+                case Decode.decodeString fileDecoder json of
+                    Err err ->
+                        Expect.fail err
+
+                    Ok (JavaScriptLib fileData libData) ->
+                        fileData
+                            |> Expect.equal (FileData (Just 36) "JS Library" "blank.js" "DnnFormBottomProvider" 156)
+
+                    --|> Expect.equal (LibraryData "JsonTests" "1.8.3" LatestMajor)
+                    Ok _ ->
+                        Expect.fail "Incorrect type"
     ]
