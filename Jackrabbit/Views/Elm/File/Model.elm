@@ -22,10 +22,10 @@ type alias LibraryData =
 
 
 type Specificity
-    = Exact
-    | LatestMinor
+    = Latest
     | LatestMajor
-    | Latest
+    | LatestMinor
+    | Exact
 
 
 type alias FileData =
