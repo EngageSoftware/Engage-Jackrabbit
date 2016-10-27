@@ -8,15 +8,47 @@ import Json.Decode as Decode
 import String
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
-import Views.Elm.Utility exposing (localizeString)
+import Views.Elm.Utility exposing (localizeString, emptyElement)
 
 
 view : Model -> Html Msg
 view model =
     if model.editing then
-        editFile model.file model.localization
+        case model.file of
+            JavaScriptLib fileData libFile ->
+                emptyElement
+
+            _ ->
+                editFile model.file model.localization
     else
         viewFile model.file model.localization
+
+
+editLib : Model -> Html Msg
+editLib model =
+    if model.editing then
+        case model.file of
+            JavaScriptLib fileData libFile ->
+                div []
+                    [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
+                    , input [ type' "text", onInput UpdateLibraryName, value libFile.libraryName ] []
+                    , label [ class "jackrabbit--prefix" ] [ text "Version" ]
+                    , input [ type' "text", onInput UpdateVersion, value libFile.version ] []
+                    , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
+                    , select [ onInput UpdateVersionSpecificity, defaultValue (toString libFile.versionSpecificity) ]
+                        [ option [ value "Latest" ] [ text "Latest" ]
+                        , option [ value "LatestMajor" ] [ text "Latest Major" ]
+                        , option [ value "LatestMinor" ] [ text "Latest Minor" ]
+                        , option [ value "Exact" ] [ text "Exact" ]
+                        ]
+                    , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" model.localization) ]
+                    , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" model.localization) ]
+                    ]
+
+            _ ->
+                emptyElement
+    else
+        emptyElement
 
 
 viewAddForm : Model -> Html Msg

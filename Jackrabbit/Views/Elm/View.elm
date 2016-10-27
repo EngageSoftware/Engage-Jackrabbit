@@ -17,12 +17,18 @@ view model =
             model.files
                 |> List.map viewFileRow
 
+        editLibForm =
+            model.files
+                |> List.map addEditForm
+
         addFile =
             showAddFile model model.tempFileRow
     in
         div []
             [ viewErrorMessage model.errorMessage
             , addFile
+            , div []
+                editLibForm
             , table [ class "dnnTableDisplay" ]
                 [ thead []
                     [ tr []
@@ -42,6 +48,11 @@ view model =
 viewFileRow : FileRow -> Html Msg
 viewFileRow { rowId, file } =
     App.map (FileMsg rowId) (File.view file)
+
+
+addEditForm : FileRow -> Html Msg
+addEditForm { rowId, file } =
+    App.map (FileMsg rowId) (File.editLib file)
 
 
 showAddFile : Model -> Maybe FileRow -> Html Msg
