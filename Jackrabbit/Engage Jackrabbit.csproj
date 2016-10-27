@@ -196,6 +196,7 @@
     <Content Include="README.md" />
     <Content Include="module.less" />
     <Content Include="web.config" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes_02.00.00.htm" />
