@@ -46,21 +46,27 @@
   <ItemGroup>
     <Reference Include="ClientDependency.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\ClientDependency.Core.dll</HintPath>
+      <HintPath>bin\ClientDependency.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DotNetNuke, Version=5.1.1.98, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetNuke, Version=7.2.0.607, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\DotNetNuke.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DotNetNuke.Web, Version=5.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DotNetNuke.Instrumentation, Version=6.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\DotNetNuke.Web.dll</HintPath>
+      <HintPath>bin\DotNetNuke.Instrumentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DotNetNuke.Web, Version=7.2.0.607, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\DotNetNuke.Web.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DotNetNuke.Web.Client, Version=6.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\DotNetNuke.Web.Client.dll</HintPath>
+      <HintPath>bin\DotNetNuke.Web.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -74,17 +80,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\System.Net.Http.dll</HintPath>
+      <HintPath>bin\System.Net.Http.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\System.Net.Http.Formatting.dll</HintPath>
+      <HintPath>bin\System.Net.Http.Formatting.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\System.Net.Http.WebRequest.dll</HintPath>
+      <HintPath>bin\System.Net.Http.WebRequest.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Web" />
@@ -95,7 +101,7 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\System.Web.Http.dll</HintPath>
+      <HintPath>bin\System.Web.Http.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -104,9 +110,9 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WebFormsMvp, Version=0.9.7.4, Culture=neutral, PublicKeyToken=537f18701145dff0, processorArchitecture=MSIL">
+    <Reference Include="WebFormsMvp, Version=1.4.1.0, Culture=neutral, PublicKeyToken=537f18701145dff0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\WebFormsMvp.dll</HintPath>
+      <HintPath>bin\WebFormsMvp.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -152,21 +158,21 @@
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
     <Content Include="jackrabbit-icon.png" />
     <Content Include="Licenses\EULA-Free.txt" />
-    <Content Include="References\ClientDependency.Core.dll" />
-    <Content Include="References\DotNetNuke.Instrumentation.dll" />
-    <Content Include="References\DotNetNuke.Web.Client.dll" />
-    <Content Include="References\DotNetNuke.Web.dll" />
-    <Content Include="References\DotNetNuke.Web.xml" />
-    <Content Include="References\DotNetNuke.WebUtility.dll" />
-    <Content Include="References\DotNetNuke.xml" />
-    <Content Include="References\System.Net.Http.dll" />
-    <Content Include="References\System.Net.Http.Formatting.dll" />
-    <Content Include="References\System.Net.Http.WebRequest.dll" />
-    <Content Include="References\System.Web.Http.dll" />
-    <Content Include="References\WebFormsMvp.dll" />
+    <Content Include="bin\ClientDependency.Core.dll" />
+    <Content Include="bin\DotNetNuke.Instrumentation.dll" />
+    <Content Include="bin\DotNetNuke.Web.Client.dll" />
+    <Content Include="bin\DotNetNuke.Web.dll" />
+    <Content Include="bin\DotNetNuke.Web.xml" />
+    <Content Include="bin\DotNetNuke.WebUtility.dll" />
+    <Content Include="bin\DotNetNuke.xml" />
+    <Content Include="bin\System.Net.Http.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.WebRequest.dll" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\WebFormsMvp.dll" />
     <Content Include="Licenses\EULA-Free.htm" />
     <Content Include="Views\Settings.ascx" />
-    <Content Include="References\DotNetNuke.dll" />
+    <Content Include="bin\DotNetNuke.dll" />
     <Content Include="Engage Jackrabbit.ruleset" />
     <None Include="EngageJackrabbit.5.dnn" />
     <None Include="EngageJackrabbit.Build" />
