@@ -98,7 +98,7 @@ namespace Engage.Dnn.Jackrabbit
             /// <param name="fullFilePath">The file path combined with the prefix.</param>
             /// <param name="provider">The provider.</param>
             /// <param name="priority">The priority.</param>
-            public LibraryViewModel(FileType fileType, int id, string pathPrefixName, string filePath, string fullFilePath, string provider, int priority, string libraryName, Version version, SpecificVersion versionSpecificity)
+            public LibraryViewModel(FileType fileType, int id, string pathPrefixName, string filePath, string fullFilePath, string provider, int priority, string libraryName, string version, SpecificVersion versionSpecificity)
             {
                 this.FileType = fileType;
                 this.Id = id;
@@ -135,7 +135,7 @@ namespace Engage.Dnn.Jackrabbit
 
             public string LibraryName { get; }
 
-            public Version Version { get; }
+            public string Version { get; }
 
             public SpecificVersion VersionSpecificity { get; }
         }

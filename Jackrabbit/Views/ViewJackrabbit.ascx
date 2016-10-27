@@ -1,6 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="false" CodeBehind="ViewJackrabbit.ascx.cs" Inherits="Engage.Dnn.Jackrabbit.ViewJackrabbit" %>
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="Engage.Dnn.Jackrabbit" %>
+<%@ Import Namespace="DotNetNuke.Common.Utilities" %>
 
 <asp:PlaceHolder runat="server" Visible="<%#Model.HideView %>">
     <div class="dnnFormMessage dnnFormInfo">
@@ -18,7 +19,7 @@
             Elm.Views.Main.embed(
                 document.getElementById(<%:EncodeJavaScriptString(this.FilesEditPanel.ClientID)%>),
                 {
-                    files: <%:GenerateScriptJson(Model.Files, Model.Libraries) %>,
+                    files: <%:GenerateScriptJson(this.Model.Files, Model.Libraries) %>,
                     defaultPathPrefix: <%:EncodeJavaScriptString(Model.DefaultPathPrefix) %>,
                     defaultProvider: <%:EncodeJavaScriptString(Model.DefaultProvider) %>,
                     defaultFilePath: <%:EncodeJavaScriptString(Model.DefaultFilePath) %>,

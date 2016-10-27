@@ -99,7 +99,7 @@ namespace Engage.Dnn.Jackrabbit
                        libraryInfo.Provider,
                        libraryInfo.Priority,
                        library.LibraryName,
-                       library.Version,
+                       library.Version.ToString(),
                        library.VersionSpecificity);
         }
 
