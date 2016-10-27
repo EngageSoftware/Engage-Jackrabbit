@@ -93,8 +93,8 @@ namespace Engage.Dnn.Jackrabbit
                    new ViewJackrabbitViewModel.LibraryViewModel(
                        library.FileType,
                        library.Id,
-                       libraryInfo.FilePath,
                        "JS Library",
+                       libraryInfo.FilePath,
                        "JS Library" + libraryInfo.FilePath,
                        libraryInfo.Provider,
                        libraryInfo.Priority,
