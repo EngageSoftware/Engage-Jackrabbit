@@ -66,6 +66,7 @@ namespace Engage.Dnn.Jackrabbit
                 this.View.Model.HideContainer = !ModulePermissionController.CanManageModule(this.ModuleInfo);
                 this.View.Model.HideView = !this.IsEditable;
                 this.View.Model.Files = this.GetFiles();
+                this.View.Model.Libraries = this.GetLibraries();
                 this.View.Model.DefaultPathPrefix = string.Empty;
                 this.View.Model.DefaultFilePath = "~/";
                 this.View.Model.DefaultProvider = "DnnFormBottomProvider";
@@ -82,6 +83,24 @@ namespace Engage.Dnn.Jackrabbit
         private IEnumerable<ViewJackrabbitViewModel.FileViewModel> GetFiles()
         {
             return this.repository.GetFiles(this.ModuleId).Select(this.CreateFileViewModel).OrderBy(s => s.Priority);
+        }
+
+        private IEnumerable<ViewJackrabbitViewModel.LibraryViewModel> GetLibraries()
+        {
+            return from library in this.repository.GetLibraries(this.ModuleId)
+                   let libraryInfo = this.repository.GetLibraryInfo(library)
+                   select
+                   new ViewJackrabbitViewModel.LibraryViewModel(
+                       library.FileType,
+                       library.Id,
+                       libraryInfo.FilePath,
+                       "JS Library",
+                       "JS Library" + libraryInfo.FilePath,
+                       libraryInfo.Provider,
+                       libraryInfo.Priority,
+                       library.LibraryName,
+                       library.Version,
+                       library.VersionSpecificity);
         }
 
         /// <summary>Creates the file view model.</summary>

@@ -18,7 +18,7 @@
             Elm.Views.Main.embed(
                 document.getElementById(<%:EncodeJavaScriptString(this.FilesEditPanel.ClientID)%>),
                 {
-                    files: <%:GenerateScriptJson(Model.Files) %>,
+                    files: <%:GenerateScriptJson(Model.Files, Model.Libraries) %>,
                     defaultPathPrefix: <%:EncodeJavaScriptString(Model.DefaultPathPrefix) %>,
                     defaultProvider: <%:EncodeJavaScriptString(Model.DefaultProvider) %>,
                     defaultFilePath: <%:EncodeJavaScriptString(Model.DefaultFilePath) %>,
@@ -51,8 +51,9 @@
         return new HtmlString(value.ToJson());
     }
 
-    private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.FileViewModel> files) {
-        return EncodeJsonObject(files);
+    private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.FileViewModel> files, IEnumerable<ViewJackrabbitViewModel.LibraryViewModel> libraries) {
+        var newEnumerable = files.Cast<object>().Concat(libraries);
+        return EncodeJsonObject(newEnumerable);
     }
 
 </script>
