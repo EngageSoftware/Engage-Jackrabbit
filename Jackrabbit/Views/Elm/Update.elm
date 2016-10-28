@@ -33,14 +33,6 @@ update msg model =
                                 localization =
                                     initialData.localization
 
-                                {- initialFileToThing file =
-                                   case typeIdToFileType file.fileType of
-                                       Err _ ->
-                                           Nothing
-
-                                       Ok makeThing ->
-                                           Just (makeThing (File.FileData (Just file.id) file.pathPrefixName file.filePath file.provider file.priority))
-                                -}
                                 ( fileRows, lastRowId ) =
                                     initialData.files
                                         |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete
