@@ -37,6 +37,6 @@ namespace Engage.Dnn.Jackrabbit
 
         public Version Version { get; set; }
 
-        public SpecificVersion VersionSpecificity { get; set; }
+        public SpecificVersion Specificity { get; set; }
     }
 }

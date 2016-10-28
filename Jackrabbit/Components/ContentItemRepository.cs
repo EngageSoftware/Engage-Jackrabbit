@@ -89,7 +89,7 @@ namespace Engage.Dnn.Jackrabbit
                        ci.ContentItemId,
                        ci.Content,
                        Version.Parse(ci.Metadata["Version"]),
-                       ci.Metadata["VersionSpecificity"].ParseNullableEnum<SpecificVersion>() ?? SpecificVersion.Latest);
+                       ci.Metadata["Specificity"].ParseNullableEnum<SpecificVersion>() ?? SpecificVersion.Latest);
         }
 
         /// <summary>Adds the file.</summary>
@@ -130,6 +130,7 @@ namespace Engage.Dnn.Jackrabbit
             {
                 return;
             }
+
             FillContentItem(library, contentItem);
             this.contentController.UpdateContentItem(contentItem);
         }
@@ -146,10 +147,10 @@ namespace Engage.Dnn.Jackrabbit
             var libraries = from l in JavaScriptLibraryController.Instance.GetLibraries()
                             where l.LibraryName.Equals(library.LibraryName, StringComparison.OrdinalIgnoreCase)
                             where l.Version >= library.Version
-                            where library.VersionSpecificity == SpecificVersion.Latest
-                            || (library.VersionSpecificity == SpecificVersion.LatestMajor && l.Version.Major == library.Version.Major)
-                            || (library.VersionSpecificity == SpecificVersion.LatestMinor && l.Version.Major == library.Version.Major && l.Version.Minor == library.Version.Minor)
-                            || ((int)library.VersionSpecificity == 3 && l.Version == library.Version)
+                            where library.Specificity == SpecificVersion.Latest
+                            || (library.Specificity == SpecificVersion.LatestMajor && l.Version.Major == library.Version.Major)
+                            || (library.Specificity == SpecificVersion.LatestMinor && l.Version.Major == library.Version.Major && l.Version.Minor == library.Version.Minor)
+                            || ((int)library.Specificity == 3 && l.Version == library.Version)
                             orderby l.Version descending 
                             select l;
 
@@ -203,7 +204,7 @@ namespace Engage.Dnn.Jackrabbit
             contentItem.Content = library.LibraryName;
             contentItem.Metadata["FileType"] = library.FileType.ToString();
             contentItem.Metadata["Version"] = library.Version.ToString();
-            contentItem.Metadata["VersionSpecificity"] = library.VersionSpecificity.ToString();
+            contentItem.Metadata["Specificity"] = library.Specificity.ToString();
         }
 
         private static FileType ParseFileType(ContentItem ci)

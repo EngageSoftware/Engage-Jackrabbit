@@ -62,7 +62,7 @@ tests =
             let
                 json =
                     """\x0D
-                        {"FileType":2,"Id":36,"PathPrefixName":"JS Library","FilePath":"blank.js","Provider":"DnnFormBottomProvider","Priority":156,"LibraryName":"html5shiv","Version":"1.8.1","VersionSpecificity":2}
+                        {"FileType":2,"Id":36,"PathPrefixName":"JS Library","FilePath":"blank.js","Provider":"DnnFormBottomProvider","Priority":156,"LibraryName":"html5shiv","Version":"1.8.1","Specificity":2}
                     """
             in
                 case Decode.decodeString fileDecoder json of

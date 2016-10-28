@@ -17,7 +17,7 @@ type JackRabbitFile
 type alias LibraryData =
     { libraryName : String
     , version : String
-    , versionSpecificity : Specificity
+    , specificity : Specificity
     }
 
 
@@ -86,7 +86,7 @@ encodeFile file =
                     [ ( "fileType", Encode.int (fileTypeToTypeId file) )
                     , ( "libraryName", Encode.string libFile.libraryName )
                     , ( "version", Encode.string libFile.version )
-                    , ( "specificity", Encode.int (specificityToTypeId libFile.versionSpecificity) )
+                    , ( "specificity", Encode.int (specificityToTypeId libFile.specificity) )
                     ]
         else
             Encode.object
@@ -133,7 +133,7 @@ jackRabbitFileDecoder typeId =
                 |> required "Priority" Decode.int
 
         2 ->
-            decode (\id pathPrefix path provider priority libraryName version versionSpecificity -> JavaScriptLib (FileData id pathPrefix path provider priority) (LibraryData libraryName version versionSpecificity))
+            decode (\id pathPrefix path provider priority libraryName version specificity -> JavaScriptLib (FileData id pathPrefix path provider priority) (LibraryData libraryName version specificity))
                 |> required "Id" (Decode.maybe Decode.int)
                 |> required "PathPrefixName" Decode.string
                 |> required "FilePath" Decode.string
@@ -141,15 +141,15 @@ jackRabbitFileDecoder typeId =
                 |> required "Priority" Decode.int
                 |> required "LibraryName" Decode.string
                 |> required "Version" Decode.string
-                |> required "VersionSpecificity" versionDecoder
+                |> required "Specificity" specificityDecoder
 
         _ ->
             Decode.fail ("Invalid file type: " ++ (toString typeId))
 
 
-versionDecoder : Decode.Decoder Specificity
-versionDecoder =
-    Decode.customDecoder Decode.int intToVersionSpecificity
+specificityDecoder : Decode.Decoder Specificity
+specificityDecoder =
+    Decode.customDecoder Decode.int intToSpecificity
 
 
 specificityToTypeId : Specificity -> Int
@@ -168,8 +168,8 @@ specificityToTypeId specificity =
             3
 
 
-intToVersionSpecificity : Int -> Result String Specificity
-intToVersionSpecificity versionInt =
+intToSpecificity : Int -> Result String Specificity
+intToSpecificity versionInt =
     case versionInt of
         0 ->
             Result.Ok Latest

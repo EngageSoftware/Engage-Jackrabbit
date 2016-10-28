@@ -100,7 +100,7 @@ namespace Engage.Dnn.Jackrabbit
                        libraryInfo.Priority,
                        library.LibraryName,
                        library.Version.ToString(),
-                       library.VersionSpecificity);
+                       library.Specificity);
         }
 
         /// <summary>Creates the file view model.</summary>

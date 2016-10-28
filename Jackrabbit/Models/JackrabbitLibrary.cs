@@ -17,24 +17,31 @@ namespace Engage.Dnn.Jackrabbit
 
     public class JackrabbitLibrary
     {
-        /// <summary>Initializes a new instance of the <see cref="JackrabbitFile" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="JackrabbitLibrary" /> class.</summary>
         /// <param name="fileType">The type of file</param>
         /// <param name="libraryName">The name of the library.</param>
         /// <param name="version">The version.</param>
-        /// <param name="versionSpecificity">The version specificity.</param>
-        public JackrabbitLibrary(FileType fileType, string libraryName, Version version, SpecificVersion versionSpecificity)
+        /// <param name="specificity">The version specificity.</param>
+        public JackrabbitLibrary(FileType fileType, string libraryName, Version version, SpecificVersion specificity)
         {
             this.FileType = fileType;
             this.LibraryName = libraryName;
             this.Version = version;
-            this.VersionSpecificity = versionSpecificity;
+            this.Specificity = specificity;
         }
 
-        public JackrabbitLibrary(FileType fileType, int id, string libraryName, Version version, SpecificVersion versionSpecificity)
-            : this(fileType, libraryName, version, versionSpecificity)
+        /// <summary>Initializes a new instance of the <see cref="JackrabbitLibrary" /> class.</summary>
+        /// <param name="fileType">Type of the file.</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="libraryName">The name of the library.</param>
+        /// <param name="version">The version.</param>
+        /// <param name="specificity">The version specificity.</param>
+        public JackrabbitLibrary(FileType fileType, int id, string libraryName, Version version, SpecificVersion specificity)
+            : this(fileType, libraryName, version, specificity)
         {
             this.Id = id;
         }
+
         /// <summary>Gets the type of the file.</summary>
         public FileType FileType { get; }
 
@@ -48,7 +55,7 @@ namespace Engage.Dnn.Jackrabbit
         public Version Version { get; }
 
         ///<summary>Gets the version specificity</summary>
-        public SpecificVersion VersionSpecificity { get; }
+        public SpecificVersion Specificity { get; }
 
     }
 }

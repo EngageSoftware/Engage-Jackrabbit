@@ -80,7 +80,7 @@ namespace Engage.Dnn.Jackrabbit.Api
                 if (request.FileType == FileType.JavaScriptLib)
                 {
                     this.repository.UpdateLibrary(
-                            new JackrabbitLibrary(request.FileType, request.LibraryName, request.Version, request.VersionSpecificity));
+                            new JackrabbitLibrary(request.FileType, request.LibraryName, request.Version, request.Specificity));
                     return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
                 }
                 else
@@ -108,7 +108,7 @@ namespace Engage.Dnn.Jackrabbit.Api
                                                      library.FileType,
                                                      library.LibraryName,
                                                      Version = library.Version.ToString(),
-                                                     library.VersionSpecificity,
+                                                     library.Specificity,
                                                      PathPrefixName = "JS Library",
                                                      libraryInfo.FilePath,
                                                      libraryInfo.Provider,

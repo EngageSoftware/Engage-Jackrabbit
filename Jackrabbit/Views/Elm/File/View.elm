@@ -29,21 +29,7 @@ editLib model =
     if model.editing then
         case model.file of
             JavaScriptLib fileData libFile ->
-                div []
-                    [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
-                    , input [ type' "text", onInput UpdateLibraryName, value libFile.libraryName ] []
-                    , label [ class "jackrabbit--prefix" ] [ text "Version" ]
-                    , input [ type' "text", onInput UpdateVersion, value libFile.version ] []
-                    , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
-                    , select [ onInput UpdateVersionSpecificity, defaultValue (toString libFile.versionSpecificity) ]
-                        [ option [ value "Latest" ] [ text "Latest" ]
-                        , option [ value "LatestMajor" ] [ text "Latest Major" ]
-                        , option [ value "LatestMinor" ] [ text "Latest Minor" ]
-                        , option [ value "Exact" ] [ text "Exact" ]
-                        ]
-                    , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" model.localization) ]
-                    , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" model.localization) ]
-                    ]
+                libraryForm model.file model.localization
 
             _ ->
                 emptyElement
@@ -92,6 +78,29 @@ editFile file localization =
             ]
 
 
+libraryForm : JackRabbitFile -> Dict String String -> Html Msg
+libraryForm file localization =
+    let
+        libraryData =
+            getLibrary file
+    in
+        div []
+            [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
+            , input [ type' "text", onInput UpdateLibraryName, value libraryData.libraryName ] []
+            , label [ class "jackrabbit--prefix" ] [ text "Version" ]
+            , input [ type' "text", onInput UpdateVersion, value libraryData.version ] []
+            , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
+            , select [ onInput UpdateSpecificity ]
+                [ option [ value "Latest", selected (libraryData.specificity == Latest) ] [ text "Latest" ]
+                , option [ value "LatestMajor", selected (libraryData.specificity == LatestMajor) ] [ text "Latest Major" ]
+                , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text "Latest Minor" ]
+                , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text "Exact" ]
+                ]
+            , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+            , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
+            ]
+
+
 addForm : JackRabbitFile -> Dict String String -> Html Msg
 addForm file localization =
     let
@@ -112,25 +121,8 @@ addForm file localization =
                     ]
                 , label [ class "jackrabbit--priority" ] [ text "Priority" ]
                 , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-                , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
-                , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
-                ]
-
-        libraryForm =
-            div []
-                [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
-                , input [ type' "text", onInput UpdateLibraryName ] []
-                , label [ class "jackrabbit--prefix" ] [ text "Version" ]
-                , input [ type' "text", onInput UpdateVersion ] []
-                , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
-                , select [ onInput UpdateVersionSpecificity ]
-                    [ option [ value "Latest" ] [ text "Latest" ]
-                    , option [ value "LatestMajor" ] [ text "Latest Major" ]
-                    , option [ value "LatestMinor" ] [ text "Latest Minor" ]
-                    , option [ value "Exact" ] [ text "Exact" ]
-                    ]
-                , button [ type' "button", onClick SaveTempForm ] [ text (localizeString "Save" localization) ]
-                , button [ type' "button", onClick CancelTempForm ] [ text (localizeString "Cancel" localization) ]
+                , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+                , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
                 ]
     in
         case file of
@@ -151,7 +143,7 @@ addForm file localization =
                 fileForm
 
             JavaScriptLib fileData libData ->
-                libraryForm
+                libraryForm file localization
 
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg

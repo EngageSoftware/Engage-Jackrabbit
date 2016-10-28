@@ -197,6 +197,10 @@
     <Content Include="module.less" />
     <Content Include="web.config" />
     <AdditionalFiles Include="stylecop.json" />
+    <Content Include="Views\Elm\Tests\HtmlTestRunner.elm" />
+    <Content Include="Views\Elm\Tests\JsonTests.elm" />
+    <Content Include="Views\Elm\Tests\NodeTestRunner.elm" />
+    <Content Include="Views\Elm\Tests\Tests.elm" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ReleaseNotes_02.00.00.htm" />

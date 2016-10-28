@@ -76,7 +76,7 @@ update msg model =
             in
                 ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
 
-        UpdateVersionSpecificity specificity ->
+        UpdateSpecificity specificity ->
             let
                 libFile =
                     model.file
@@ -101,13 +101,18 @@ update msg model =
 
                 library =
                     model.file
-                        |> updateLibrary (\libFile -> { libFile | versionSpecificity = newSpecificity })
+                        |> updateLibrary (\libFile -> { libFile | specificity = newSpecificity })
             in
                 ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
 
         CancelChanges ->
             if isNothing (getFile model.file).id then
-                ( model, Cmd.none, ParentMsg.RemoveFile )
+                case model.editing of
+                    False ->
+                        ( model, Cmd.none, ParentMsg.CancelTempForm )
+
+                    True ->
+                        ( model, Cmd.none, ParentMsg.RemoveFile )
             else
                 case model.file of
                     JavaScriptLib _ _ ->
@@ -124,25 +129,17 @@ update msg model =
                     else
                         Put
             in
-                case model.file of
-                    JavaScriptLib fileData libData ->
-                        ( model, createAjaxCmd model verb, ParentMsg.EditLib )
+                case model.editing of
+                    False ->
+                        ( model, createAjaxCmd model verb, ParentMsg.AddTempFile model )
 
-                    _ ->
-                        ( model, createAjaxCmd model verb, ParentMsg.NoOp )
+                    True ->
+                        case model.file of
+                            JavaScriptLib fileData libData ->
+                                ( model, createAjaxCmd model verb, ParentMsg.EditLib )
 
-        SaveTempForm ->
-            let
-                verb =
-                    if isNothing (getFile model.file).id then
-                        Post
-                    else
-                        Put
-            in
-                ( model, createAjaxCmd model verb, ParentMsg.AddTempFile model )
-
-        CancelTempForm ->
-            ( model, Cmd.none, ParentMsg.CancelTempForm )
+                            _ ->
+                                ( model, createAjaxCmd model verb, ParentMsg.NoOp )
 
         DeleteFile ->
             ( model, createAjaxCmd model Delete, ParentMsg.NoOp )

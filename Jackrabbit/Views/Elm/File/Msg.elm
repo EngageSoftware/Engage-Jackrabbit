@@ -10,14 +10,12 @@ type Msg
     | UpdatePriority Int
     | UpdateLibraryName String
     | UpdateVersion String
-    | UpdateVersionSpecificity String
+    | UpdateSpecificity String
     | SaveChanges
     | CancelChanges
     | EditFile
     | DeleteFile
     | RefreshFiles (List JackRabbitFile)
     | Error String
-    | SaveTempForm
-    | CancelTempForm
     | SetFileType String JackRabbitFile
     | SetLibrary JackRabbitFile
