@@ -5,6 +5,7 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, hardcoded)
 import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
+import Autocomplete
 
 
 type JackRabbitFile
@@ -37,18 +38,53 @@ type alias FileData =
     }
 
 
+type alias Autocomplete =
+    { autoState : Autocomplete.State
+    , query : String
+    , libraries : List Library
+    , howManyToShow : Int
+    , showMenu : Bool
+    , selectedLibrary : Maybe Library
+    }
+
+
+type alias Library =
+    { name : String
+    }
+
+
+libraries : List Library
+libraries =
+    [ Library "Knockout"
+    , Library "Example 1"
+    , Library "Test 1"
+    ]
+
+
 type alias Model =
     { file : JackRabbitFile
     , originalFile : JackRabbitFile
     , editing : Bool
     , httpInfo : HttpInfo
     , localization : Dict String String
+    , autocomplete : Autocomplete
     }
 
 
-fromJRFile : JackRabbitFile -> Bool -> HttpInfo -> Dict String String -> Model
-fromJRFile file editing httpInfo localization =
-    Model file file editing httpInfo localization
+initialAutocomplete : Autocomplete
+initialAutocomplete =
+    { autoState = Autocomplete.empty
+    , query = ""
+    , libraries = libraries
+    , howManyToShow = 5
+    , showMenu = False
+    , selectedLibrary = Nothing
+    }
+
+
+fromJRFile : JackRabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> Model
+fromJRFile file editing httpInfo localization autocomplete =
+    Model file file editing httpInfo localization autocomplete
 
 
 init : (FileData -> JackRabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> Model
@@ -65,7 +101,7 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
         jackRabbitFile =
             makeJRFile fileData
     in
-        fromJRFile jackRabbitFile editing httpInfo localization
+        fromJRFile jackRabbitFile editing httpInfo localization initialAutocomplete
 
 
 encodeFile : JackRabbitFile -> Encode.Value

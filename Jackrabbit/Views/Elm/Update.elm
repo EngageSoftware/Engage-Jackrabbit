@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
-import Views.Elm.File.Model as File exposing (listFileDecoder)
+import Views.Elm.File.Model as File exposing (listFileDecoder, initialAutocomplete)
 import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.File.Update as File
@@ -43,7 +43,7 @@ update msg model =
                                 -}
                                 ( fileRows, lastRowId ) =
                                     initialData.files
-                                        |> makeFileRows model.lastRowId httpInfo model.providers localization
+                                        |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete
                             in
                                 Model fileRows
                                     initialData.defaultPathPrefix
@@ -154,7 +154,7 @@ updateFromChild model ( fileRow, _, parentMsg ) =
             let
                 ( fileRows, lastRowId ) =
                     files
-                        |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization
+                        |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete
             in
                 { model | files = fileRows, lastRowId = lastRowId }
 
@@ -193,8 +193,8 @@ updateFile targetRowId msg fileRow =
             ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
 
 
-makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> List File.JackRabbitFile -> ( List FileRow, Int )
-makeFileRows lastRowId httpInfo providers localization files =
+makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> File.Autocomplete -> List File.JackRabbitFile -> ( List FileRow, Int )
+makeFileRows lastRowId httpInfo providers localization autocomplete files =
     let
         nextRowId =
             lastRowId + 1
@@ -210,13 +210,14 @@ makeFileRows lastRowId httpInfo providers localization files =
                             False
                             httpInfo
                             localization
+                            autocomplete
 
                     fileRow =
                         FileRow nextRowId fileModel
 
                     ( otherFileRows, lastRowId ) =
                         otherFiles
-                            |> makeFileRows nextRowId httpInfo providers localization
+                            |> makeFileRows nextRowId httpInfo providers localization File.initialAutocomplete
 
                     sortedFileRows =
                         fileRow

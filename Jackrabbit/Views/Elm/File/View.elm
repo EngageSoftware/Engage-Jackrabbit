@@ -3,12 +3,14 @@ module Views.Elm.File.View exposing (..)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.App as Html
 import Html.Events exposing (..)
 import Json.Decode as Decode
 import String
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
 import Views.Elm.Utility exposing (localizeString, emptyElement)
+import Autocomplete
 
 
 view : Model -> Html Msg
@@ -29,7 +31,7 @@ editLib model =
     if model.editing then
         case model.file of
             JavaScriptLib fileData libFile ->
-                libraryForm model.file model.localization
+                libraryForm model
 
             _ ->
                 emptyElement
@@ -39,7 +41,7 @@ editLib model =
 
 viewAddForm : Model -> Html Msg
 viewAddForm model =
-    addForm model.file model.localization
+    addForm model
 
 
 viewFile : JackRabbitFile -> Dict String String -> Html Msg
@@ -78,11 +80,20 @@ editFile file localization =
             ]
 
 
-libraryForm : JackRabbitFile -> Dict String String -> Html Msg
-libraryForm file localization =
+libraryForm : Model -> Html Msg
+libraryForm model =
     let
+        localization =
+            model.localization
+
+        file =
+            model.file
+
         libraryData =
             getLibrary file
+
+        inputWithAutocomplete =
+            autoCompleteInput model
     in
         div []
             [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
@@ -101,9 +112,133 @@ libraryForm file localization =
             ]
 
 
-addForm : JackRabbitFile -> Dict String String -> Html Msg
-addForm file localization =
+autoCompleteInput : Model -> Html Msg
+autoCompleteInput model =
     let
+        autoComplete =
+            model.autocomplete
+
+        options =
+            { preventDefault = True, stopPropagation = False }
+
+        dec =
+            (Decode.customDecoder keyCode
+                (\code ->
+                    if code == 38 || code == 40 then
+                        Ok NoOp
+                    else if code == 27 then
+                        Ok HandleEscape
+                    else
+                        Err "not handling that key"
+                )
+            )
+
+        --DropDown of autocomplete options?
+        menu =
+            if autoComplete.showMenu then
+                [ viewMenu model ]
+            else
+                []
+
+        query =
+            case autoComplete.selectedLibrary of
+                Just library ->
+                    library.name
+
+                Nothing ->
+                    autoComplete.query
+
+        activeDescendant attributes =
+            case autoComplete.selectedLibrary of
+                Just library ->
+                    (attribute "aria-activedescendant"
+                        library.name
+                    )
+                        :: attributes
+
+                Nothing ->
+                    attributes
+    in
+        div []
+            (List.append
+                [ input
+                    (activeDescendant
+                        [ onInput SetQuery
+                        , onFocus OnFocus
+                        , onWithOptions "keydown" options dec
+                        , value query
+                        , id "library-input"
+                        , class "autocomplete-input"
+                        , autocomplete False
+                        , attribute "aria-owns" "list-of-libraries"
+                        , attribute "aria-expanded" <| String.toLower <| toString autoComplete.showMenu
+                        , attribute "aria-haspopup" <| String.toLower <| toString autoComplete.showMenu
+                        , attribute "role" "combobox"
+                        , attribute "aria-autocomplete" "list"
+                        ]
+                    )
+                    []
+                ]
+                menu
+            )
+
+
+viewMenu : Model -> Html Msg
+viewMenu model =
+    let
+        autocomplete =
+            model.autocomplete
+    in
+        div []
+            [ Html.map SetAutoState
+                (Autocomplete.view
+                    viewConfig
+                    autocomplete.howManyToShow
+                    autocomplete.autoState
+                    (acceptableLibraries
+                        autocomplete.query
+                        autocomplete.libraries
+                    )
+                )
+            ]
+
+
+viewConfig : Autocomplete.ViewConfig Library
+viewConfig =
+    let
+        customizedLi keySelected mouseSelected library =
+            { attributes =
+                [ classList [ ( "autocomplete-item", True ), ( "key-selected", keySelected || mouseSelected ) ]
+                , id library.name
+                ]
+            , children = [ Html.text library.name ]
+            }
+    in
+        Autocomplete.viewConfig
+            { toId = .name
+            , ul = [ class "autocomplete-list" ]
+            , li = customizedLi
+            }
+
+
+acceptableLibraries : String -> List Library -> List Library
+acceptableLibraries query libraries =
+    let
+        lowerQuery =
+            String.toLower query
+    in
+        List.filter (String.contains lowerQuery << String.toLower << .name) libraries
+
+
+addForm : Model -> Html Msg
+addForm model =
+    let
+        file =
+            model.file
+
+        localization =
+            model.localization
+
         fileData =
             getFile file
 
@@ -143,7 +278,7 @@ addForm file localization =
                 fileForm
 
             JavaScriptLib fileData libData ->
-                libraryForm file localization
+                libraryForm model
 
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg

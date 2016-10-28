@@ -2,11 +2,14 @@ module Views.Elm.File.Update exposing (..)
 
 import Maybe.Extra exposing (isNothing)
 import Task
+import Autocomplete
 import Views.Elm.Ajax exposing (..)
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.Utility exposing (localizeString)
+import Dom
+import String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
@@ -174,6 +177,206 @@ update msg model =
                     LibraryData "" "" Exact
             in
                 ( { model | file = JavaScriptLib fileData libData }, Cmd.none, ParentMsg.NoOp )
+
+        SetQuery newQuery ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                showMenu =
+                    not << List.isEmpty <| (acceptableLibraries newQuery autocomplete.libraries)
+
+                updatedAutocomplete =
+                    { autocomplete | query = newQuery, showMenu = showMenu, selectedLibrary = Nothing }
+            in
+                ( { model | autocomplete = updatedAutocomplete }, Cmd.none, ParentMsg.NoOp )
+
+        SetAutoState autoMsg ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                ( newState, maybeMsg ) =
+                    Autocomplete.update updateConfig autoMsg autocomplete.howManyToShow autocomplete.autoState (acceptableLibraries autocomplete.query autocomplete.libraries)
+
+                newAutocomplete =
+                    { autocomplete | autoState = newState }
+            in
+                case maybeMsg of
+                    Nothing ->
+                        ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
+
+                    Just updateMsg ->
+                        update updateMsg { model | autocomplete = newAutocomplete }
+
+        HandleEscape ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                validOptions =
+                    not <| List.isEmpty (acceptableLibraries autocomplete.query autocomplete.libraries)
+
+                handleEscape =
+                    if validOptions then
+                        autocomplete
+                            |> removeSelection
+                            |> resetMenu
+                    else
+                        { autocomplete | query = "" }
+                            |> removeSelection
+                            |> resetMenu
+
+                escapedModel =
+                    case autocomplete.selectedLibrary of
+                        Just library ->
+                            if autocomplete.query == library.name then
+                                autocomplete
+                                    |> resetInput
+                            else
+                                handleEscape
+
+                        Nothing ->
+                            handleEscape
+            in
+                ( { model | autocomplete = escapedModel }, Cmd.none, ParentMsg.NoOp )
+
+        Wrap toTop ->
+            let
+                autocomplete =
+                    model.autocomplete
+            in
+                case autocomplete.selectedLibrary of
+                    Just library ->
+                        update Reset model
+
+                    Nothing ->
+                        if toTop then
+                            let
+                                newAutoComplete =
+                                    { autocomplete
+                                        | autoState = Autocomplete.resetToLastItem updateConfig (acceptableLibraries autocomplete.query autocomplete.libraries) autocomplete.howManyToShow autocomplete.autoState
+                                        , selectedLibrary = List.head <| List.reverse <| List.take autocomplete.howManyToShow <| (acceptableLibraries autocomplete.query autocomplete.libraries)
+                                    }
+                            in
+                                ( { model | autocomplete = newAutoComplete }, Cmd.none, ParentMsg.NoOp )
+                        else
+                            let
+                                newAutoComplete =
+                                    { autocomplete
+                                        | autoState = Autocomplete.resetToFirstItem updateConfig (acceptableLibraries autocomplete.query autocomplete.libraries) autocomplete.howManyToShow autocomplete.autoState
+                                        , selectedLibrary = List.head <| List.take autocomplete.howManyToShow <| (acceptableLibraries autocomplete.query autocomplete.libraries)
+                                    }
+                            in
+                                ( { model | autocomplete = newAutoComplete }, Cmd.none, ParentMsg.NoOp )
+
+        Reset ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                newAutocomplete =
+                    { autocomplete | autoState = Autocomplete.reset updateConfig autocomplete.autoState, selectedLibrary = Nothing }
+            in
+                ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
+
+        SelectLibraryKeyboard id ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                newAutocomplete =
+                    setQuery autocomplete id
+                        |> resetMenu
+            in
+                ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
+
+        SelectLibraryMouse id ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                newAutocomplete =
+                    setQuery autocomplete id
+                        |> resetMenu
+            in
+                ( { model | autocomplete = newAutocomplete }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "library-input"), ParentMsg.NoOp )
+
+        PreviewLibrary id ->
+            let
+                autocomplete =
+                    model.autocomplete
+
+                newAutocomplete =
+                    { autocomplete | selectedLibrary = Just <| getLibraryAtId autocomplete.libraries id }
+            in
+                ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
+
+        OnFocus ->
+            ( model, Cmd.none, ParentMsg.NoOp )
+
+        NoOp ->
+            ( model, Cmd.none, ParentMsg.NoOp )
+
+
+resetInput autocomplete =
+    { autocomplete | query = "" }
+        |> removeSelection
+        |> resetMenu
+
+
+removeSelection autocomplete =
+    { autocomplete | selectedLibrary = Nothing }
+
+
+setQuery autocomplete id =
+    { autocomplete
+        | query = .name <| getLibraryAtId autocomplete.libraries id
+        , selectedLibrary = Just <| getLibraryAtId autocomplete.libraries id
+    }
+
+
+resetMenu autocomplete =
+    { autocomplete
+        | autoState = Autocomplete.empty
+        , showMenu = False
+    }
+
+
+getLibraryAtId libraries id =
+    List.filter (\library -> library.name == id) libraries
+        |> List.head
+        |> Maybe.withDefault (Library "")
+
+
+acceptableLibraries : String -> List Library -> List Library
+acceptableLibraries query libraries =
+    let
+        lowerQuery =
+            String.toLower query
+    in
+        List.filter (String.contains lowerQuery << String.toLower << .name) libraries
+
+
+updateConfig : Autocomplete.UpdateConfig Msg Library
+updateConfig =
+    Autocomplete.updateConfig
+        { toId = .name
+        , onKeyDown =
+            \code maybeId ->
+                if code == 38 || code == 40 then
+                    Maybe.map PreviewLibrary maybeId
+                else if code == 13 then
+                    Maybe.map SelectLibraryKeyboard maybeId
+                else
+                    Just <| Reset
+        , onTooLow = Just <| Wrap False
+        , onTooHigh = Just <| Wrap True
+        , onMouseEnter = \id -> Just <| PreviewLibrary id
+        , onMouseLeave = \_ -> Nothing
+        , onMouseClick = \id -> Just <| SelectLibraryMouse id
+        , separateSelections = False
+        }
 
 
 createAjaxCmd : Model -> HttpVerb -> Cmd Msg
