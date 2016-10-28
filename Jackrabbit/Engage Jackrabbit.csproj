@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\FileController.cs" />
+    <Compile Include="API\SearchController.cs" />
     <Compile Include="API\ServiceRouteMapper.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FeaturesController.cs" />
