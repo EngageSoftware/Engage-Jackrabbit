@@ -97,7 +97,7 @@ libraryForm model =
     in
         div []
             [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
-            , input [ type' "text", onInput UpdateLibraryName, value libraryData.libraryName ] []
+            , autoCompleteInput model
             , label [ class "jackrabbit--prefix" ] [ text "Version" ]
             , input [ type' "text", onInput UpdateVersion, value libraryData.version ] []
             , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
