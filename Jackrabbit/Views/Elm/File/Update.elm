@@ -13,7 +13,12 @@ update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
         EditFile ->
-            ( { model | editing = True }, Cmd.none, ParentMsg.NoOp )
+            case model.file of
+                JavaScriptLib fileData libFile ->
+                    ( { model | editing = True }, Cmd.none, ParentMsg.EditLib )
+
+                _ ->
+                    ( { model | editing = True }, Cmd.none, ParentMsg.NoOp )
 
         UpdatePrefix prefix ->
             let
@@ -104,7 +109,12 @@ update msg model =
             if isNothing (getFile model.file).id then
                 ( model, Cmd.none, ParentMsg.RemoveFile )
             else
-                ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.NoOp )
+                case model.file of
+                    JavaScriptLib _ _ ->
+                        ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.EditLib )
+
+                    _ ->
+                        ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.NoOp )
 
         SaveChanges ->
             let
@@ -114,7 +124,12 @@ update msg model =
                     else
                         Put
             in
-                ( model, createAjaxCmd model verb, ParentMsg.NoOp )
+                case model.file of
+                    JavaScriptLib fileData libData ->
+                        ( model, createAjaxCmd model verb, ParentMsg.EditLib )
+
+                    _ ->
+                        ( model, createAjaxCmd model verb, ParentMsg.NoOp )
 
         SaveTempForm ->
             let

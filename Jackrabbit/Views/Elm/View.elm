@@ -59,7 +59,12 @@ showAddFile : Model -> Maybe FileRow -> Html Msg
 showAddFile model tempFile =
     case tempFile of
         Nothing ->
-            button [ type' "button", onClick AddNewFile ] [ text (localizeString "Add" model.localization) ]
+            case model.editing of
+                False ->
+                    button [ type' "button", onClick AddNewFile ] [ text (localizeString "Add" model.localization) ]
+
+                True ->
+                    emptyElement
 
         Just { rowId, file } ->
             App.map (FileMsg rowId) (File.viewAddForm file)

@@ -34,6 +34,7 @@ type alias Model =
     , httpInfo : HttpInfo
     , localization : Dict String String
     , tempFileRow : Maybe FileRow
+    , editing : Bool
     }
 
 
@@ -65,4 +66,5 @@ initialModel =
         }
     , localization = Dict.empty
     , tempFileRow = Nothing
+    , editing = False
     }

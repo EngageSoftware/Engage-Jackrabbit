@@ -56,6 +56,7 @@ update msg model =
                                     httpInfo
                                     localization
                                     Nothing
+                                    False
             in
                 ( initializedModel, Cmd.none )
 
@@ -170,6 +171,14 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                     model.lastRowId - 1
             in
                 { model | lastRowId = newLastRow, tempFileRow = Nothing }
+
+        ParentMsg.EditLib ->
+            case model.editing of
+                False ->
+                    { model | editing = True }
+
+                True ->
+                    { model | editing = False }
 
 
 updateFile : Int -> File.Msg -> FileRow -> ( FileRow, Cmd Msg, ParentMsg )
