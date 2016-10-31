@@ -49,19 +49,10 @@ type alias Autocomplete =
 
 
 type alias Library =
-    { name : String
-    , libName : String
+    { libName : String
     , version : String
-    , id : Int
+    , name : String
     }
-
-
-libraries : List Library
-libraries =
-    [ Library "Knockout 3.3.0" "Knockout" "3.3.0" 1
-    , Library "Knockout 3.0.0" "Knockout" "3.0.0" 2
-    , Library "Knockout 1.0.0" "Knockout" "1.0.0" 3
-    ]
 
 
 type alias Model =
@@ -78,7 +69,7 @@ initialAutocomplete : Autocomplete
 initialAutocomplete =
     { autoState = Autocomplete.empty
     , query = ""
-    , libraries = libraries
+    , libraries = []
     , howManyToShow = 5
     , showMenu = False
     , selectedLibrary = Nothing
@@ -105,6 +96,27 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
             makeJRFile fileData
     in
         fromJRFile jackRabbitFile editing httpInfo localization initialAutocomplete
+
+
+makeLibrary : String -> String -> Library
+makeLibrary libName version =
+    let
+        name =
+            libName ++ " " ++ version
+    in
+        Library libName version name
+
+
+listLibraryDecoder : Decode.Decoder (List Library)
+listLibraryDecoder =
+    Decode.list libraryDecoder
+
+
+libraryDecoder : Decode.Decoder Library
+libraryDecoder =
+    decode makeLibrary
+        |> required "LibraryName" Decode.string
+        |> required "Version" Decode.string
 
 
 encodeFile : JackRabbitFile -> Encode.Value

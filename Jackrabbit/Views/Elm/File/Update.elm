@@ -153,6 +153,16 @@ update msg model =
         RefreshFiles files ->
             ( model, Cmd.none, ParentMsg.RefreshFiles files )
 
+        RequestLibraries libraries ->
+            let
+                tempAutocomplete =
+                    model.autocomplete
+
+                newAutocomplete =
+                    { tempAutocomplete | libraries = libraries }
+            in
+                ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
+
         SetFileType string file ->
             let
                 fileData =
@@ -192,7 +202,7 @@ update msg model =
                 newModel =
                     updateLibraryName newQuery model
             in
-                ( { newModel | autocomplete = updatedAutocomplete }, Cmd.none, ParentMsg.NoOp )
+                ( { newModel | autocomplete = updatedAutocomplete }, createSearchCmd model Get "search", ParentMsg.NoOp )
 
         SetAutoState autoMsg ->
             let
@@ -401,7 +411,7 @@ getLibraryAtId : List Library -> String -> Library
 getLibraryAtId libraries id =
     List.filter (\library -> library.name == id) libraries
         |> List.head
-        |> Maybe.withDefault (Library "" "" "" 0)
+        |> Maybe.withDefault (Library "" "" "")
 
 
 acceptableLibraries : String -> List Library -> List Library
@@ -434,6 +444,16 @@ updateConfig =
         }
 
 
+createSearchCmd : Model -> HttpVerb -> String -> Cmd Msg
+createSearchCmd model verb requestType =
+    let
+        requestInfo =
+            AjaxRequestInfo verb "" Nothing listLibraryDecoder requestType
+    in
+        sendAjax model.httpInfo requestInfo
+            |> Task.perform Error RequestLibraries
+
+
 createAjaxCmd : Model -> HttpVerb -> String -> Cmd Msg
 createAjaxCmd model verb requestType =
     let
@@ -449,7 +469,7 @@ createAjaxCmd model verb requestType =
                     ""
 
         requestInfo =
-            AjaxRequestInfo verb path (encodeFile model.file) listFileDecoder requestType
+            AjaxRequestInfo verb path (Just (encodeFile model.file)) listFileDecoder requestType
     in
         sendAjax model.httpInfo requestInfo
             |> Task.perform Error RefreshFiles

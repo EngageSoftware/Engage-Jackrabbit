@@ -1,6 +1,6 @@
 module Views.Elm.File.Msg exposing (..)
 
-import Views.Elm.File.Model exposing (FileData, JackRabbitFile)
+import Views.Elm.File.Model exposing (JackRabbitFile, Library)
 import Autocomplete
 
 
@@ -30,3 +30,4 @@ type Msg
     | PreviewLibrary String
     | OnFocus
     | NoOp
+    | RequestLibraries (List Library)

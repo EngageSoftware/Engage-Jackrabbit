@@ -3,7 +3,7 @@ module Views.Elm.Tests.JsonTests exposing (tests)
 import Test exposing (..)
 import Expect exposing (Expectation)
 import Json.Decode as Decode
-import Views.Elm.File.Model exposing (fileDecoder, JackRabbitFile(..), FileData, LibraryData, Specificity(..), encodeFile)
+import Views.Elm.File.Model exposing (fileDecoder, JackRabbitFile(..), FileData, LibraryData, Specificity(..), encodeFile, libraryDecoder, Library)
 
 
 tests : List Test
@@ -76,4 +76,20 @@ tests =
                     --|> Expect.equal (LibraryData "JsonTests" "1.8.3" LatestMajor)
                     Ok _ ->
                         Expect.fail "Incorrect type"
+      {- , test "Can decode list of files" <|
+         \() ->
+             let
+                 json =
+                     """\x0D
+                             {"LibraryName":"knockout","Version":"3.3.0"}
+                         """
+             in
+                 case Decode.decodeString libraryDecoder json of
+                     Err err ->
+                         Expect.fail err
+
+                     Ok library ->
+                         library
+                             |> Expect.equal (Library "knockout" "3.3.0" "knockout 3.3.0")
+      -}
     ]

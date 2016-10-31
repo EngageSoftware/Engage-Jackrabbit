@@ -23,13 +23,13 @@ type alias HttpInfo =
 type alias AjaxRequestInfo response =
     { verb : HttpVerb
     , path : String
-    , data : Encode.Value
+    , data : Maybe Encode.Value
     , responseDecoder : Decode.Decoder response
     , requestType : String
     }
 
 
-makeSendAjaxFunction : HttpInfo -> (HttpVerb -> String -> Encode.Value -> Decode.Decoder a -> String -> Task.Task String a)
+makeSendAjaxFunction : HttpInfo -> (HttpVerb -> String -> Maybe Encode.Value -> Decode.Decoder a -> String -> Task.Task String a)
 makeSendAjaxFunction httpInfo =
     (\verb path data decoder requestType -> sendAjax httpInfo (AjaxRequestInfo verb path data decoder requestType))
 
@@ -40,10 +40,20 @@ sendAjax httpInfo { verb, path, data, responseDecoder, requestType } =
         |> HttpBuilder.withHeaders httpInfo.headers
         |> HttpBuilder.withHeader "Content-Type" "application/json"
         |> HttpBuilder.withHeader "Accept" "application/json"
-        |> HttpBuilder.withJsonBody data
+        |> withJsonBody data
         |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) (HttpBuilder.jsonReader errorResponseDecoder)
         |> Task.mapError (convertErrorToErrorMessage httpInfo.defaultErrorMessage)
         |> Task.map (\response -> response.data)
+
+
+withJsonBody : Maybe Encode.Value -> HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder
+withJsonBody maybeData builder =
+    case maybeData of
+        Just data ->
+            HttpBuilder.withJsonBody data builder
+
+        Nothing ->
+            builder
 
 
 getRequestBuilder : HttpVerb -> (String -> HttpBuilder.RequestBuilder)
