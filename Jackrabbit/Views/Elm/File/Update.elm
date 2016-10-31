@@ -342,7 +342,7 @@ update msg model =
                 ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
 
         OnFocus ->
-            ( model, Cmd.none, ParentMsg.NoOp )
+            ( model, createSearchCmd model Get "search", ParentMsg.NoOp )
 
         NoOp ->
             ( model, Cmd.none, ParentMsg.NoOp )
