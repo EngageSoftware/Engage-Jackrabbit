@@ -50,14 +50,17 @@ type alias Autocomplete =
 
 type alias Library =
     { name : String
+    , libName : String
+    , version : String
+    , id : Int
     }
 
 
 libraries : List Library
 libraries =
-    [ Library "Knockout"
-    , Library "Example 1"
-    , Library "Test 1"
+    [ Library "Knockout 3.3.0" "Knockout" "3.3.0" 1
+    , Library "Knockout 3.0.0" "Knockout" "3.0.0" 2
+    , Library "Knockout 1.0.0" "Knockout" "1.0.0" 3
     ]
 
 

@@ -188,8 +188,11 @@ update msg model =
 
                 updatedAutocomplete =
                     { autocomplete | query = newQuery, showMenu = showMenu, selectedLibrary = Nothing }
+
+                newModel =
+                    updateLibraryName newQuery model
             in
-                ( { model | autocomplete = updatedAutocomplete }, Cmd.none, ParentMsg.NoOp )
+                ( { newModel | autocomplete = updatedAutocomplete }, Cmd.none, ParentMsg.NoOp )
 
         SetAutoState autoMsg ->
             let
@@ -288,8 +291,16 @@ update msg model =
                 newAutocomplete =
                     setQuery autocomplete id
                         |> resetMenu
+
+                libraryToUpdate =
+                    getLibraryAtId autocomplete.libraries id
+
+                newModel =
+                    model
+                        |> updateLibraryName libraryToUpdate.libName
+                        |> updateLibraryVersion libraryToUpdate
             in
-                ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
+                ( { newModel | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
 
         SelectLibraryMouse id ->
             let
@@ -299,16 +310,24 @@ update msg model =
                 newAutocomplete =
                     setQuery autocomplete id
                         |> resetMenu
-            in
-                ( { model | autocomplete = newAutocomplete }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "library-input"), ParentMsg.NoOp )
 
-        PreviewLibrary id ->
+                libraryToUpdate =
+                    getLibraryAtId autocomplete.libraries id
+
+                newModel =
+                    model
+                        |> updateLibraryName libraryToUpdate.libName
+                        |> updateLibraryVersion libraryToUpdate
+            in
+                ( { newModel | autocomplete = newAutocomplete }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "library-input"), ParentMsg.NoOp )
+
+        PreviewLibrary name ->
             let
                 autocomplete =
                     model.autocomplete
 
                 newAutocomplete =
-                    { autocomplete | selectedLibrary = Just <| getLibraryAtId autocomplete.libraries id }
+                    { autocomplete | selectedLibrary = Just <| getLibraryAtId autocomplete.libraries name }
             in
                 ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
 
@@ -319,16 +338,50 @@ update msg model =
             ( model, Cmd.none, ParentMsg.NoOp )
 
 
+updateLibraryName : String -> Model -> Model
+updateLibraryName libraryName model =
+    let
+        libFile =
+            model.file
+                |> getLibrary
+
+        library =
+            model.file
+                |> updateLibrary (\libFile -> { libFile | libraryName = libraryName })
+    in
+        { model | file = library }
+
+
+updateLibraryVersion : Library -> Model -> Model
+updateLibraryVersion libraryByName model =
+    let
+        libFile =
+            model.file
+                |> getLibrary
+
+        version =
+            libraryByName.version
+
+        library =
+            model.file
+                |> updateLibrary (\libFile -> { libFile | version = version })
+    in
+        { model | file = library }
+
+
+resetInput : Autocomplete -> Autocomplete
 resetInput autocomplete =
     { autocomplete | query = "" }
         |> removeSelection
         |> resetMenu
 
 
+removeSelection : Autocomplete -> Autocomplete
 removeSelection autocomplete =
     { autocomplete | selectedLibrary = Nothing }
 
 
+setQuery : Autocomplete -> String -> Autocomplete
 setQuery autocomplete id =
     { autocomplete
         | query = .name <| getLibraryAtId autocomplete.libraries id
@@ -336,6 +389,7 @@ setQuery autocomplete id =
     }
 
 
+resetMenu : Autocomplete -> Autocomplete
 resetMenu autocomplete =
     { autocomplete
         | autoState = Autocomplete.empty
@@ -343,10 +397,11 @@ resetMenu autocomplete =
     }
 
 
+getLibraryAtId : List Library -> String -> Library
 getLibraryAtId libraries id =
     List.filter (\library -> library.name == id) libraries
         |> List.head
-        |> Maybe.withDefault (Library "")
+        |> Maybe.withDefault (Library "" "" "" 0)
 
 
 acceptableLibraries : String -> List Library -> List Library

@@ -166,7 +166,7 @@ autoCompleteInput model =
                         [ onInput SetQuery
                         , onFocus OnFocus
                         , onWithOptions "keydown" options dec
-                        , value query
+                        , value (setValue model query)
                         , id "library-input"
                         , class "autocomplete-input"
                         , autocomplete False
@@ -181,6 +181,25 @@ autoCompleteInput model =
                 ]
                 menu
             )
+
+
+setValue : Model -> String -> String
+setValue model query =
+    let
+        selectedLibrary =
+            model.autocomplete.selectedLibrary
+    in
+        case model.editing of
+            False ->
+                case selectedLibrary of
+                    Just selectedLibrary ->
+                        selectedLibrary.libName
+
+                    Nothing ->
+                        query
+
+            True ->
+                (getLibrary model.file).libraryName
 
 
 viewMenu : Model -> Html Msg
