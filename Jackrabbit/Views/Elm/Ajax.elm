@@ -10,6 +10,7 @@ type HttpVerb
     = Post
     | Put
     | Delete
+    | Get
 
 
 type alias HttpInfo =
@@ -24,17 +25,18 @@ type alias AjaxRequestInfo response =
     , path : String
     , data : Encode.Value
     , responseDecoder : Decode.Decoder response
+    , requestType : String
     }
 
 
-makeSendAjaxFunction : HttpInfo -> (HttpVerb -> String -> Encode.Value -> Decode.Decoder a -> Task.Task String a)
+makeSendAjaxFunction : HttpInfo -> (HttpVerb -> String -> Encode.Value -> Decode.Decoder a -> String -> Task.Task String a)
 makeSendAjaxFunction httpInfo =
-    (\verb path data decoder -> sendAjax httpInfo (AjaxRequestInfo verb path data decoder))
+    (\verb path data decoder requestType -> sendAjax httpInfo (AjaxRequestInfo verb path data decoder requestType))
 
 
 sendAjax : HttpInfo -> AjaxRequestInfo response -> Task.Task String response
-sendAjax httpInfo { verb, path, data, responseDecoder } =
-    (getRequestBuilder verb) (httpInfo.baseUrl ++ "File/" ++ path)
+sendAjax httpInfo { verb, path, data, responseDecoder, requestType } =
+    (getRequestBuilder verb) (httpInfo.baseUrl ++ requestType ++ path)
         |> HttpBuilder.withHeaders httpInfo.headers
         |> HttpBuilder.withHeader "Content-Type" "application/json"
         |> HttpBuilder.withHeader "Accept" "application/json"
@@ -55,6 +57,9 @@ getRequestBuilder verb =
 
         Delete ->
             HttpBuilder.delete
+
+        Get ->
+            HttpBuilder.get
 
 
 convertErrorToErrorMessage : String -> HttpBuilder.Error String -> String

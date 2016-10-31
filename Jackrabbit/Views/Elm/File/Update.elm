@@ -134,18 +134,18 @@ update msg model =
             in
                 case model.editing of
                     False ->
-                        ( model, createAjaxCmd model verb, ParentMsg.AddTempFile model )
+                        ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
 
                     True ->
                         case model.file of
                             JavaScriptLib fileData libData ->
-                                ( model, createAjaxCmd model verb, ParentMsg.EditLib )
+                                ( model, createAjaxCmd model verb "file", ParentMsg.EditLib )
 
                             _ ->
-                                ( model, createAjaxCmd model verb, ParentMsg.NoOp )
+                                ( model, createAjaxCmd model verb "file", ParentMsg.NoOp )
 
         DeleteFile ->
-            ( model, createAjaxCmd model Delete, ParentMsg.NoOp )
+            ( model, createAjaxCmd model Delete "file", ParentMsg.NoOp )
 
         Error errorMessage ->
             ( model, Cmd.none, ParentMsg.Error errorMessage )
@@ -379,8 +379,8 @@ updateConfig =
         }
 
 
-createAjaxCmd : Model -> HttpVerb -> Cmd Msg
-createAjaxCmd model verb =
+createAjaxCmd : Model -> HttpVerb -> String -> Cmd Msg
+createAjaxCmd model verb requestType =
     let
         fileData =
             getFile model.file
@@ -394,7 +394,7 @@ createAjaxCmd model verb =
                     ""
 
         requestInfo =
-            AjaxRequestInfo verb path (encodeFile model.file) listFileDecoder
+            AjaxRequestInfo verb path (encodeFile model.file) listFileDecoder requestType
     in
         sendAjax model.httpInfo requestInfo
             |> Task.perform Error RefreshFiles
