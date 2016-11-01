@@ -75,9 +75,45 @@ editFile file localization =
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] [] ]
             , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value fileData.filePath ] [] ]
-            , td [ class "jackrabbit-file--provider" ] [ input [ type' "text", onInput UpdateProvider, value fileData.provider ] [] ]
+            , showProviderMenu file
             , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] [] ]
             ]
+
+
+showProviderMenu : JackRabbitFile -> Html Msg
+showProviderMenu file =
+    let
+        fileData =
+            getFile file
+    in
+        case fileData.provider of
+            "DnnFormBottomProvider" ->
+                select [ onInput UpdateProvider ]
+                    [ option [] [ text "DnnFormBottomProvider" ]
+                    , option [] [ text "DnnBodyProvider" ]
+                    , option [] [ text "DnnPageHeaderProvider" ]
+                    ]
+
+            "DnnBodyProvider" ->
+                select [ onInput UpdateProvider ]
+                    [ option [] [ text "DnnBodyProvider" ]
+                    , option [] [ text "DnnPageHeaderProvider" ]
+                    , option [] [ text "DnnFormBottomProvider" ]
+                    ]
+
+            "DnnPageHeaderProvider" ->
+                select [ onInput UpdateProvider ]
+                    [ option [] [ text "DnnPageHeaderProvider" ]
+                    , option [] [ text "DnnFormBottomProvider" ]
+                    , option [] [ text "DnnBodyProvider" ]
+                    ]
+
+            _ ->
+                select [ onInput UpdateProvider ]
+                    [ option [] [ text "DnnFormBottomProvider" ]
+                    , option [] [ text "DnnBodyProvider" ]
+                    , option [] [ text "DnnPageHeaderProvider" ]
+                    ]
 
 
 libraryForm : Model -> Html Msg
