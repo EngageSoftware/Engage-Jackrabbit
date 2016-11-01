@@ -12,7 +12,7 @@ namespace Engage.Dnn.Jackrabbit
 {
     public class JackrabbitLibraryInfo
     {
-        public static JackrabbitLibraryInfo Null { get; } = new JackrabbitLibraryInfo("Nope", "DnnFormBottomProvider", -1000000);
+        public static JackrabbitLibraryInfo Null { get; } = new JackrabbitLibraryInfo("Library not found", "DnnFormBottomProvider", -1000000);
 
         /// <summary>Initializes a new instance of the <see cref="JackrabbitLibraryInfo" /> class.</summary>
         /// <param name="filePath">The file path.</param>
