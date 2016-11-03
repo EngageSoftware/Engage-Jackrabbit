@@ -10,6 +10,7 @@ import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.Utility exposing (localizeString)
 import Dom
 import String
+import Regex as Regex
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
@@ -134,12 +135,23 @@ update msg model =
             in
                 case model.editing of
                     False ->
-                        ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                        case model.file of
+                            JavaScriptLib fileData libData ->
+                                if (versionValidation libData.version) then
+                                    ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                                else
+                                    ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
+
+                            _ ->
+                                ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
 
                     True ->
                         case model.file of
                             JavaScriptLib fileData libData ->
-                                ( model, createAjaxCmd model verb "file", ParentMsg.EditLib )
+                                if (versionValidation libData.version) then
+                                    ( model, createAjaxCmd model verb "file", ParentMsg.EditLib )
+                                else
+                                    ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
 
                             _ ->
                                 ( model, createAjaxCmd model verb "file", ParentMsg.NoOp )
@@ -473,3 +485,8 @@ createAjaxCmd model verb requestType =
     in
         sendAjax model.httpInfo requestInfo
             |> Task.perform Error RefreshFiles
+
+
+versionValidation : String -> Bool
+versionValidation version =
+    Regex.contains (Regex.regex "^\\d+\\.\\d+\\.\\d+$") version
