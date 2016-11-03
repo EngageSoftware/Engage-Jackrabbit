@@ -109,7 +109,7 @@ namespace Engage.Dnn.Jackrabbit.Api
                                                      library.LibraryName,
                                                      Version = library.Version.ToString(),
                                                      library.Specificity,
-                                                     PathPrefixName = library.LibraryName,
+                                                     PathPrefixName = "JS Library",
                                                      libraryInfo.FilePath,
                                                      libraryInfo.Provider,
                                                      libraryInfo.Priority,
