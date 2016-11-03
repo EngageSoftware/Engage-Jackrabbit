@@ -2,94 +2,113 @@ module Views.Elm.Tests.JsonTests exposing (tests)
 
 import Test exposing (..)
 import Expect exposing (Expectation)
+import Views.Elm.File.Model exposing (..)
+import Fuzz as Fuzz
+import Json.Encode as Json
 import Json.Decode as Decode
-import Views.Elm.File.Model exposing (fileDecoder, JackRabbitFile(..), FileData, LibraryData, Specificity(..), encodeFile, libraryDecoder, Library)
+import Views.Elm.Tests.TestUtilities exposing (encodeMaybe, versionFuzzer, fileDataFuzzer)
 
 
 tests : List Test
 tests =
-    [ test "can decode JS file" <|
-        \() ->
-            let
-                json =
-                    """\x0D
-                    {"FileType":0,"Id":296,"PathPrefixName":"asdf","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D
-                    """
-            in
-                case Decode.decodeString fileDecoder json of
-                    Err err ->
-                        Expect.fail err
+    [ describe "Decoding Functions"
+        [ fuzz5 Fuzz.int Fuzz.string Fuzz.string Fuzz.string Fuzz.int "can decode Css file to CssFile with correct values" <|
+            \randomId randomPrefix randomPath randomProvider randomPriority ->
+                let
+                    json =
+                        Json.encode 0 (Json.object [ ( "FileType", Json.int 1 ), ( "Id", Json.int randomId ), ( "PathPrefixName", Json.string randomPrefix ), ( "FilePath", Json.string randomPath ), ( "Provider", Json.string randomProvider ), ( "Priority", Json.int randomPriority ) ])
 
-                    Ok _ ->
-                        Expect.pass
-    , test "can decode JS file to JavaScriptFile" <|
-        \() ->
-            let
-                json =
-                    """\x0D\x0D
-                    {"FileType":0,"Id":296,"PathPrefixName":"asdf","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D\x0D
-                    """
-            in
-                case Decode.decodeString fileDecoder json of
-                    Err err ->
-                        Expect.fail err
+                    {- json =
+                       """
+                           {"FileType":0,"Id":296,"PathPrefixName":""" ++ randString ++ ""","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D
+                       """
+                    -}
+                in
+                    case Decode.decodeString fileDecoder json of
+                        Err err ->
+                            Expect.fail err
 
-                    Ok (JavaScriptFile file) ->
-                        Expect.pass
+                        Ok (CssFile file) ->
+                            file
+                                |> Expect.equal (FileData (Just randomId) randomPrefix randomPath randomProvider randomPriority)
 
-                    Ok _ ->
-                        Expect.fail "Incorrect type"
-    , test "can decode JS file to JavaScriptFile with correct values" <|
-        \() ->
-            let
-                json =
-                    """\x0D
-                        {"FileType":0,"Id":296,"PathPrefixName":"asdf","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D
-                    """
-            in
-                case Decode.decodeString fileDecoder json of
-                    Err err ->
-                        Expect.fail err
+                        Ok _ ->
+                            Expect.fail "Incorrect type"
+        , fuzz5 Fuzz.int Fuzz.string Fuzz.string Fuzz.string Fuzz.int "can decode JS file to JavaScriptFile with correct values" <|
+            \randomId randomPrefix randomPath randomProvider randomPriority ->
+                let
+                    json =
+                        Json.encode 0 (Json.object [ ( "FileType", Json.int 0 ), ( "Id", Json.int randomId ), ( "PathPrefixName", Json.string randomPrefix ), ( "FilePath", Json.string randomPath ), ( "Provider", Json.string randomProvider ), ( "Priority", Json.int randomPriority ) ])
 
-                    Ok (JavaScriptFile file) ->
-                        file
-                            |> Expect.equal (FileData (Just 296) "asdf" "sddfddddd.js" "DnnFormBottomProvider" 100)
+                    {- json =
+                       """
+                           {"FileType":0,"Id":296,"PathPrefixName":""" ++ randString ++ ""","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D
+                       """
+                    -}
+                in
+                    case Decode.decodeString fileDecoder json of
+                        Err err ->
+                            Expect.fail err
 
-                    Ok _ ->
-                        Expect.fail "Incorrect type"
-    , test "can decode JavaScriptLibraries with correct fileData" <|
-        \() ->
-            let
-                json =
-                    """\x0D
-                        {"FileType":2,"Id":36,"PathPrefixName":"JS Library","FilePath":"blank.js","Provider":"DnnFormBottomProvider","Priority":156,"LibraryName":"html5shiv","Version":"1.8.1","Specificity":2}
-                    """
-            in
-                case Decode.decodeString fileDecoder json of
-                    Err err ->
-                        Expect.fail err
+                        Ok (JavaScriptFile file) ->
+                            file
+                                |> Expect.equal (FileData (Just randomId) randomPrefix randomPath randomProvider randomPriority)
 
-                    Ok (JavaScriptLib fileData libData) ->
+                        Ok _ ->
+                            Expect.fail "Incorrect type"
+        , fuzz4 fileDataFuzzer Fuzz.string versionFuzzer (Fuzz.intRange 0 3) "can decode JavaScriptLibraries with correct fileData" <|
+            \fileData randomLibrary randomVersion randomSpecificity ->
+                let
+                    json =
+                        Json.encode 0
+                            (Json.object
+                                [ ( "FileType", Json.int 2 )
+                                , ( "Id", encodeMaybe Json.int fileData.id )
+                                , ( "PathPrefixName", Json.string fileData.pathPrefixName )
+                                , ( "FilePath", Json.string fileData.filePath )
+                                , ( "Provider", Json.string fileData.provider )
+                                , ( "Priority", Json.int fileData.priority )
+                                , ( "LibraryName", Json.string randomLibrary )
+                                , ( "Version", Json.string randomVersion )
+                                , ( "Specificity", Json.int randomSpecificity )
+                                ]
+                            )
+
+                    file =
                         fileData
-                            |> Expect.equal (FileData (Just 36) "JS Library" "blank.js" "DnnFormBottomProvider" 156)
 
-                    --|> Expect.equal (LibraryData "JsonTests" "1.8.3" LatestMajor)
-                    Ok _ ->
-                        Expect.fail "Incorrect type"
-      {- , test "Can decode list of files" <|
-         \() ->
-             let
-                 json =
-                     """\x0D
-                             {"LibraryName":"knockout","Version":"3.3.0"}
-                         """
-             in
-                 case Decode.decodeString libraryDecoder json of
-                     Err err ->
-                         Expect.fail err
+                    specificity =
+                        intToSpecTest randomSpecificity
+                in
+                    case Decode.decodeString fileDecoder json of
+                        Err err ->
+                            Expect.fail err
 
-                     Ok library ->
-                         library
-                             |> Expect.equal (Library "knockout" "3.3.0" "knockout 3.3.0")
-      -}
+                        Ok (JavaScriptLib fileData libraryData) ->
+                            ( fileData, libraryData )
+                                |> Expect.equal ( FileData file.id file.pathPrefixName file.filePath file.provider file.priority, LibraryData randomLibrary randomVersion specificity )
+
+                        --|> Expect.equal (LibraryData "JsonTests" "1.8.3" LatestMajor)
+                        Ok _ ->
+                            Expect.fail "Incorrect type"
+        ]
     ]
+
+
+intToSpecTest : Int -> Specificity
+intToSpecTest verInt =
+    case verInt of
+        0 ->
+            Latest
+
+        1 ->
+            LatestMajor
+
+        2 ->
+            LatestMinor
+
+        3 ->
+            Exact
+
+        _ ->
+            Debug.crash "Invalid specificity"

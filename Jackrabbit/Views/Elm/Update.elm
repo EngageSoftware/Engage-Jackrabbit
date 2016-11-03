@@ -1,4 +1,4 @@
-module Views.Elm.Update exposing (update)
+module Views.Elm.Update exposing (update, updateFromChild)
 
 import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
@@ -13,6 +13,7 @@ import List.Extra exposing (..)
 import Maybe.Extra exposing (..)
 import Json.Decode as Decode exposing (decodeValue)
 import Json.Decode.Pipeline exposing (decode, required, hardcoded)
+import Debug as Debug
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -23,7 +24,7 @@ update msg model =
                 initializedModel =
                     case (Decode.decodeValue intialDataDecoder initialDataJson) of
                         Err omg ->
-                            Debug.crash "HALP"
+                            Debug.crash ("HALP " ++ omg)
 
                         Ok initialData ->
                             let
