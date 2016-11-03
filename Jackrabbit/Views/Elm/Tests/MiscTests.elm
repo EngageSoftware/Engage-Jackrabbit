@@ -55,20 +55,5 @@ tests =
                 in
                     getFile jackRabbitFile
                         |> Expect.equal fileData
-        , test "createAjaxCmd" <|
-            \() ->
-                let
-                    model =
-                        initialFileModel
-
-                    {--
-                    newAjaxResponse =
-                        AjaxRequestInfo Get "" (Just (encodeFile model.file)) listFileDecoder "File"
---}
-                    ( updateModel, cmd, parentMsg ) =
-                        update DeleteFile model
-                in
-                    cmd.value
-                        |> Expect.equal Cmd.none
         ]
     ]
