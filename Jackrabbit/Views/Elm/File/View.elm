@@ -174,7 +174,18 @@ autoCompleteInput model =
             if autoComplete.showMenu then
                 [ viewMenu model ]
             else
-                []
+                case autoComplete.query of
+                    "" ->
+                        []
+
+                    _ ->
+                        case autoComplete.selectedLibrary of
+                            Nothing ->
+                                [ div [] [ text "No Results Found" ]
+                                ]
+
+                            _ ->
+                                [ emptyElement ]
 
         query =
             case autoComplete.selectedLibrary of

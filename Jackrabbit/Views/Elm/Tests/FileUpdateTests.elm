@@ -666,7 +666,7 @@ tests =
                         model.autocomplete
 
                     tempAutoWithLibs =
-                        { fileAuto | libraries = basicListOfLibraries, selectedLibrary = (Just (Library "Test1" "1.1.1" "Test1 1.1.1")), query = "Test5 " }
+                        { fileAuto | libraries = basicListOfLibraries, selectedLibrary = (Just (Library "Test1" "1.1.1" "Test1 1.1.1")), query = "Test5" }
 
                     modelWithLibraries =
                         { model | autocomplete = tempAutoWithLibs }
