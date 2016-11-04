@@ -20,10 +20,6 @@
                 document.getElementById(<%:EncodeJavaScriptString(this.FilesEditPanel.ClientID)%>),
                 {
                     files: <%:GenerateScriptJson(this.Model.Files, Model.Libraries) %>,
-                    defaultPathPrefix: <%:EncodeJavaScriptString(Model.DefaultPathPrefix) %>,
-                    defaultProvider: <%:EncodeJavaScriptString(Model.DefaultProvider) %>,
-                    defaultFilePath: <%:EncodeJavaScriptString(Model.DefaultFilePath) %>,
-                    defaultPriority: <%:Model.DefaultPriority %>,
                     httpInfo: {
                         baseUrl: sf.getServiceRoot('Engage/Jackrabbit'),
                         headers: [
@@ -32,7 +28,8 @@
                             [ "RequestVerificationToken", sf.getAntiForgeryValue() ]
                         ]
                     },
-                    localization: <%:EncodeJsonObject(LocalizationUtility.GetAllResources(this.LocalResourceFile))%>
+                    localization: <%:EncodeJsonObject(LocalizationUtility.GetAllResources(this.LocalResourceFile))%>,
+                    pathAliases: <%:GeneratePathAliases(Model.PathAliases) %>
                 });
 
           function onFocus(elementId) {
@@ -63,6 +60,11 @@
     private static IHtmlString GenerateScriptJson(IEnumerable<ViewJackrabbitViewModel.FileViewModel> files, IEnumerable<ViewJackrabbitViewModel.LibraryViewModel> libraries) {
         var newEnumerable = files.Cast<object>().Concat(libraries);
         return EncodeJsonObject(newEnumerable);
+    }
+
+    private static IHtmlString GeneratePathAliases(List<string> pathAliases) {
+        var newString = pathAliases.Cast<object>();
+        return EncodeJsonObject(newString);
     }
 
 </script>

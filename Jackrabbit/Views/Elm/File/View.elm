@@ -385,3 +385,18 @@ getRowClasses file =
         , ( "jackrabbit-file__provider-body", provider == "DnnBodyProvider" )
         , ( "jackrabbit-file__provider-bottom", provider == "DnnFormBottomProvider" )
         ]
+
+
+makeDropDown : List String -> Html Msg
+makeDropDown paths =
+    let
+        options =
+            paths
+                |> List.map makeOption
+    in
+        select [ onInput UpdatePath ] options
+
+
+makeOption : String -> Html Msg
+makeOption string =
+    option [] [ text (string) ]

@@ -34,9 +34,12 @@ update msg model =
                                 localization =
                                     initialData.localization
 
+                                listPathAliases =
+                                    initialData.pathAliases
+
                                 ( fileRows, lastRowId ) =
                                     initialData.files
-                                        |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete
+                                        |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete model.pathAliases
                             in
                                 Model fileRows
                                     ""
@@ -50,6 +53,7 @@ update msg model =
                                     localization
                                     Nothing
                                     False
+                                    listPathAliases
             in
                 ( initializedModel, Cmd.none )
 
@@ -68,6 +72,7 @@ update msg model =
                         False
                         model.httpInfo
                         model.localization
+                        model.pathAliases
 
                 newFileRow =
                     FileRow nextRowId newFile
@@ -147,7 +152,7 @@ updateFromChild model ( fileRow, _, parentMsg ) =
             let
                 ( fileRows, lastRowId ) =
                     files
-                        |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete
+                        |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
             in
                 { model | files = fileRows, lastRowId = lastRowId }
 
@@ -186,8 +191,8 @@ updateFile targetRowId msg fileRow =
             ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
 
 
-makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> File.Autocomplete -> List File.JackRabbitFile -> ( List FileRow, Int )
-makeFileRows lastRowId httpInfo providers localization autocomplete files =
+makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> File.Autocomplete -> List String -> List File.JackRabbitFile -> ( List FileRow, Int )
+makeFileRows lastRowId httpInfo providers localization autocomplete pathList files =
     let
         nextRowId =
             lastRowId + 1
@@ -204,13 +209,14 @@ makeFileRows lastRowId httpInfo providers localization autocomplete files =
                             httpInfo
                             localization
                             autocomplete
+                            pathList
 
                     fileRow =
                         FileRow nextRowId fileModel
 
                     ( otherFileRows, lastRowId ) =
                         otherFiles
-                            |> makeFileRows nextRowId httpInfo providers localization File.initialAutocomplete
+                            |> makeFileRows nextRowId httpInfo providers localization File.initialAutocomplete pathList
 
                     sortedFileRows =
                         fileRow
@@ -231,6 +237,12 @@ intialDataDecoder =
         |> required "files" listFileDecoder
         |> required "httpInfo" httpDecoder
         |> required "localization" decodeLocalization
+        |> required "pathAliases" listPathAliasesDecoder
+
+
+listPathAliasesDecoder : Decode.Decoder (List String)
+listPathAliasesDecoder =
+    Decode.list Decode.string
 
 
 decodeLocalization : Decode.Decoder (Dict String String)

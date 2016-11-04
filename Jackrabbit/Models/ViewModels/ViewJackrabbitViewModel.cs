@@ -12,6 +12,7 @@
 namespace Engage.Dnn.Jackrabbit
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
@@ -30,18 +31,7 @@ namespace Engage.Dnn.Jackrabbit
         public IEnumerable<FileViewModel> Files { get; set; }
 
         public IEnumerable<LibraryViewModel> Libraries { get; set; }
-
-        /// <summary>Gets or sets the default path prefix.</summary>
-        public string DefaultPathPrefix { get; set; }
-
-        /// <summary>Gets or sets the default file path.</summary>
-        public string DefaultFilePath { get; set; }
-
-        /// <summary>Gets or sets the default provider.</summary>
-        public string DefaultProvider { get; set; }
-
-        /// <summary>Gets or sets the default priority.</summary>
-        public int DefaultPriority { get; set; }
+        public List<string> PathAliases { get; set; }
 
         /// <summary>Represents a file included by this module</summary>
         [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "I'm cool with nested classes in view models")]

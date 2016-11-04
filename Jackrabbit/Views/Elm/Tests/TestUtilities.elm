@@ -60,6 +60,12 @@ initialFileModel =
         emptyHttpInfo
         initialLocalization
         initialAutocomplete
+        initialPaths
+
+
+initialPaths : List String
+initialPaths =
+    [ "Path1", "Path2" ]
 
 
 emptyHttpInfo : HttpInfo
@@ -94,3 +100,4 @@ initialLibraryModel =
         emptyHttpInfo
         Dict.empty
         initialAutocomplete
+        initialPaths

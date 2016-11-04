@@ -15,6 +15,7 @@ type alias InitialData =
     { files : List File.JackRabbitFile
     , httpInfo : InitialHttpInfo
     , localization : Dict String String
+    , pathAliases : List String
     }
 
 
@@ -31,6 +32,7 @@ type alias Model =
     , localization : Dict String String
     , tempFileRow : Maybe FileRow
     , editing : Bool
+    , pathAliases : List String
     }
 
 
@@ -63,4 +65,5 @@ initialModel =
     , localization = Dict.empty
     , tempFileRow = Nothing
     , editing = False
+    , pathAliases = []
     }

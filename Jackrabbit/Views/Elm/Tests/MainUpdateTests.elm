@@ -146,6 +146,7 @@ tests =
                                         , ( "Delete.Text", Json.string "Delete" )
                                         ]
                                   )
+                                , ( "pathAliases", Json.list [] )
                                 ]
 
                         model =
@@ -161,7 +162,7 @@ tests =
                             initialFileModel
 
                         appliedFile =
-                            { newFile | localization = newLocalization, file = jackrabbitFile, originalFile = jackrabbitFile }
+                            { newFile | localization = newLocalization, file = jackrabbitFile, originalFile = jackrabbitFile, pathList = [] }
 
                         newFileRow =
                             FileRow 1 appliedFile
@@ -170,7 +171,7 @@ tests =
                             Init json
 
                         expectedModel =
-                            { model | lastRowId = 2, localization = newLocalization, defaultProvider = "DnnFormBottomProvider", defaultFilePath = "", defaultPriority = 100, files = [ newFileRow ] }
+                            { model | lastRowId = 2, localization = newLocalization, defaultProvider = "DnnFormBottomProvider", defaultFilePath = "", pathAliases = [], defaultPriority = 100, files = [ newFileRow ] }
 
                         ( returnedModel, command ) =
                             update message model
@@ -187,7 +188,7 @@ tests =
                             (FileModel.Default (FileModel.FileData (Nothing) "" "" "DnnFormBottomProvider" 100))
 
                         newFileModel =
-                            { initialFileModel | file = defaultFile, originalFile = defaultFile }
+                            { initialFileModel | file = defaultFile, originalFile = defaultFile, pathList = [] }
 
                         expectedModel =
                             { model | tempFileRow = (Just (FileRow 2 newFileModel)), lastRowId = 2 }

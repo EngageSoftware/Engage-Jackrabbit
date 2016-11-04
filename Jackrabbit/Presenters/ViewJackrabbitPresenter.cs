@@ -67,6 +67,7 @@ namespace Engage.Dnn.Jackrabbit
                 this.View.Model.HideView = !this.IsEditable;
                 this.View.Model.Files = this.GetFiles();
                 this.View.Model.Libraries = this.GetLibraries();
+                this.View.Model.PathAliases = this.Return_PathAliases();
             }
             catch (Exception ex)
             {
@@ -74,6 +75,15 @@ namespace Engage.Dnn.Jackrabbit
             }
         }
 
+        private List<string> Return_PathAliases()
+        {
+            List<string> tempList = new List<string>();
+            foreach (ClientDependencyPath path in this.DependencyLoader.Paths)
+            {
+                tempList.Add(path.Name);
+            }
+            return tempList;
+        }
         /// <summary>Gets the files.</summary>
         /// <returns>A sequence of <see cref="ViewJackrabbitViewModel.FileViewModel"/> instances.</returns>
         private IEnumerable<ViewJackrabbitViewModel.FileViewModel> GetFiles()
