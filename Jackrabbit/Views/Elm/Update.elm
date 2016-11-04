@@ -39,10 +39,10 @@ update msg model =
                                         |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete
                             in
                                 Model fileRows
-                                    initialData.defaultPathPrefix
-                                    initialData.defaultFilePath
-                                    initialData.defaultProvider
-                                    initialData.defaultPriority
+                                    ""
+                                    ""
+                                    "DnnFormBottomProvider"
+                                    100
                                     model.providers
                                     lastRowId
                                     Nothing
@@ -229,10 +229,6 @@ intialDataDecoder : Decode.Decoder InitialData
 intialDataDecoder =
     decode InitialData
         |> required "files" listFileDecoder
-        |> required "defaultPathPrefix" Decode.string
-        |> required "defaultFilePath" Decode.string
-        |> required "defaultProvider" Decode.string
-        |> required "defaultPriority" Decode.int
         |> required "httpInfo" httpDecoder
         |> required "localization" decodeLocalization
 

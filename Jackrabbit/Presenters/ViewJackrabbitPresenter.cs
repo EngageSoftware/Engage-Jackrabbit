@@ -67,10 +67,6 @@ namespace Engage.Dnn.Jackrabbit
                 this.View.Model.HideView = !this.IsEditable;
                 this.View.Model.Files = this.GetFiles();
                 this.View.Model.Libraries = this.GetLibraries();
-                this.View.Model.DefaultPathPrefix = string.Empty;
-                this.View.Model.DefaultFilePath = "~/";
-                this.View.Model.DefaultProvider = "DnnFormBottomProvider";
-                this.View.Model.DefaultPriority = (int)FileOrder.Js.DefaultPriority;
             }
             catch (Exception ex)
             {

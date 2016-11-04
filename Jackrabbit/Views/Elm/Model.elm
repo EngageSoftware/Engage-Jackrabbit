@@ -13,10 +13,6 @@ type alias InitialHttpInfo =
 
 type alias InitialData =
     { files : List File.JackRabbitFile
-    , defaultPathPrefix : String
-    , defaultFilePath : String
-    , defaultProvider : String
-    , defaultPriority : Int
     , httpInfo : InitialHttpInfo
     , localization : Dict String String
     }
@@ -49,8 +45,8 @@ initialModel =
     { files = []
     , defaultPathPrefix = ""
     , defaultFilePath = ""
-    , defaultProvider = ""
-    , defaultPriority = 0
+    , defaultProvider = "DnnFormBottomProvider"
+    , defaultPriority = 100
     , providers =
         Dict.fromList
             [ ( "DnnPageHeaderProvider", 1 )

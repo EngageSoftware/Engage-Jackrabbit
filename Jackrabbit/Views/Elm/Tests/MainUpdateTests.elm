@@ -133,10 +133,6 @@ tests =
                                             ]
                                         ]
                                   )
-                                , ( "defaultPathPrefix", Json.string "" )
-                                , ( "defaultProvider", Json.string "DnnFormBottomProvider" )
-                                , ( "defaultFilePath", Json.string "~/" )
-                                , ( "defaultPriority", Json.int 100 )
                                 , ( "httpInfo"
                                   , Json.object
                                         [ ( "baseUrl", Json.string "" )
@@ -174,7 +170,7 @@ tests =
                             Init json
 
                         expectedModel =
-                            { model | lastRowId = 2, localization = newLocalization, defaultProvider = "DnnFormBottomProvider", defaultFilePath = "~/", defaultPriority = 100, files = [ newFileRow ] }
+                            { model | lastRowId = 2, localization = newLocalization, defaultProvider = "DnnFormBottomProvider", defaultFilePath = "", defaultPriority = 100, files = [ newFileRow ] }
 
                         ( returnedModel, command ) =
                             update message model
@@ -188,7 +184,7 @@ tests =
                             initialBaseModel
 
                         defaultFile =
-                            (FileModel.Default (FileModel.FileData (Nothing) "" "" "" 0))
+                            (FileModel.Default (FileModel.FileData (Nothing) "" "" "DnnFormBottomProvider" 100))
 
                         newFileModel =
                             { initialFileModel | file = defaultFile, originalFile = defaultFile }

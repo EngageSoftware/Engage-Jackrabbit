@@ -315,11 +315,7 @@ addForm model =
                 , label [ class "jackrabbit--path" ] [ text "File Path" ]
                 , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
                 , label [ class "jackrabbit--provider" ] [ text "Provider" ]
-                , select [ onInput UpdateProvider ]
-                    [ option [] [ text "DnnFormBottomProvider" ]
-                    , option [] [ text "DnnBodyProvider" ]
-                    , option [] [ text "DnnPageHeaderProvider" ]
-                    ]
+                , showProviderMenu model.file
                 , label [ class "jackrabbit--priority" ] [ text "Priority" ]
                 , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
                 , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
