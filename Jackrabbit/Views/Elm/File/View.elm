@@ -300,7 +300,7 @@ addForm model =
         fileForm =
             div []
                 [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
-                , input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] []
+                , input [ type' "text", autofocus True, id "pathPrefixName-input", onInput UpdatePrefix, value fileData.pathPrefixName ] []
                 , label [ class "jackrabbit--path" ] [ text "File Path" ]
                 , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
                 , label [ class "jackrabbit--provider" ] [ text "Provider" ]

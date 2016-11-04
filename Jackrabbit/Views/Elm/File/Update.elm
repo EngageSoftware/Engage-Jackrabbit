@@ -7,6 +7,7 @@ import Views.Elm.Ajax exposing (..)
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
+import Views.Elm.Ports exposing (focus)
 import Views.Elm.Utility exposing (localizeString)
 import Dom
 import String
@@ -182,10 +183,10 @@ update msg model =
             in
                 case string of
                     "JavaScript" ->
-                        ( { model | file = JavaScriptFile fileData }, Cmd.none, ParentMsg.NoOp )
+                        ( { model | file = JavaScriptFile fileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
 
                     "Css" ->
-                        ( { model | file = CssFile fileData }, Cmd.none, ParentMsg.NoOp )
+                        ( { model | file = CssFile fileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
 
                     _ ->
                         ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )
@@ -198,7 +199,7 @@ update msg model =
                 libData =
                     LibraryData "" "" Exact
             in
-                ( { model | file = JavaScriptLib fileData libData }, Cmd.none, ParentMsg.NoOp )
+                ( { model | file = JavaScriptLib fileData libData }, focus "library-input", ParentMsg.NoOp )
 
         SetQuery newQuery ->
             let
