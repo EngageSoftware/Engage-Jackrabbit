@@ -180,13 +180,16 @@ update msg model =
             let
                 fileData =
                     getFile file
+
+                cssFileData =
+                    { fileData | provider = "DnnPageHeaderProvider" }
             in
                 case string of
                     "JavaScript" ->
                         ( { model | file = JavaScriptFile fileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
 
                     "Css" ->
-                        ( { model | file = CssFile fileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
+                        ( { model | file = CssFile cssFileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
 
                     _ ->
                         ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )

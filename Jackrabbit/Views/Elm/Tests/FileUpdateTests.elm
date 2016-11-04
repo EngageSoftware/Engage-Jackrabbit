@@ -366,31 +366,34 @@ tests =
                                 _ ->
                                     "The fuzzer broke"
 
-                        expectedType =
-                            case number of
-                                0 ->
-                                    JavaScriptFile
-
-                                1 ->
-                                    CssFile
-
-                                _ ->
-                                    Default
-
                         file =
                             model.file
 
                         fileData =
                             getFile file
 
+                        cssFileData =
+                            { fileData | provider = "DnnPageHeaderProvider" }
+
                         message =
                             SetFileType newType file
 
                         ( updatedModel, cmdMsg, parentMsg ) =
                             update message model
+
+                        expectedFile =
+                            case number of
+                                0 ->
+                                    (JavaScriptFile (fileData))
+
+                                1 ->
+                                    (CssFile (cssFileData))
+
+                                _ ->
+                                    (Default (fileData))
                     in
                         updatedModel.file
-                            |> Expect.equal (expectedType (fileData))
+                            |> Expect.equal expectedFile
             , test "Set Type crash" <|
                 \() ->
                     let
