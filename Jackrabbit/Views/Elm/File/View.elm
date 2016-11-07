@@ -16,7 +16,7 @@ import Autocomplete
 view : Model -> Html Msg
 view model =
     if model.editing then
-        emptyElement
+        viewFile model.originalFile model.localization
     else
         viewFile model.file model.localization
 
