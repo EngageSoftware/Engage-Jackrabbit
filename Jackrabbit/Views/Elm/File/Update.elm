@@ -134,28 +134,31 @@ update msg model =
                     else
                         Put
             in
-                case model.editing of
-                    False ->
-                        case model.file of
-                            JavaScriptLib fileData libData ->
-                                if (versionValidation libData.version) then
+                if ((getFile model.file).filePath == "") then
+                    ( model, Cmd.none, ParentMsg.Error "Please enter a File Path" )
+                else
+                    case model.editing of
+                        False ->
+                            case model.file of
+                                JavaScriptLib fileData libData ->
+                                    if (versionValidation libData.version) then
+                                        ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                                    else
+                                        ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
+
+                                _ ->
                                     ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
-                                else
-                                    ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
 
-                            _ ->
-                                ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                        True ->
+                            case model.file of
+                                JavaScriptLib fileData libData ->
+                                    if (versionValidation libData.version) then
+                                        ( model, createAjaxCmd model verb "file", ParentMsg.EditLib )
+                                    else
+                                        ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
 
-                    True ->
-                        case model.file of
-                            JavaScriptLib fileData libData ->
-                                if (versionValidation libData.version) then
-                                    ( model, createAjaxCmd model verb "file", ParentMsg.EditLib )
-                                else
-                                    ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
-
-                            _ ->
-                                ( model, createAjaxCmd model verb "file", ParentMsg.NoOp )
+                                _ ->
+                                    ( model, createAjaxCmd model verb "file", ParentMsg.NoOp )
 
         DeleteFile ->
             ( model, createAjaxCmd model Delete "file", ParentMsg.NoOp )
