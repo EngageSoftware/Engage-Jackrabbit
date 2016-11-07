@@ -69,11 +69,7 @@ view model =
 
 viewFileRow : FileRow -> Html Msg
 viewFileRow { rowId, file } =
-    let
-        fileData =
-            getFile (file.file)
-    in
-        App.map (FileMsg rowId) (File.view file)
+    App.map (FileMsg rowId) (File.view file)
 
 
 addEditForm : FileRow -> Html Msg
