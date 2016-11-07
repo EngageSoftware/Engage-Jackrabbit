@@ -311,7 +311,7 @@ addForm model =
         fileForm =
             div []
                 [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
-                , input [ type' "text", autofocus True, id "pathPrefixName-input", onInput UpdatePrefix, value fileData.pathPrefixName ] []
+                , makeDropDown model.pathList
                 , label [ class "jackrabbit--path" ] [ text "File Path" ]
                 , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
                 , label [ class "jackrabbit--provider" ] [ text "Provider" ]
@@ -390,11 +390,14 @@ getRowClasses file =
 makeDropDown : List String -> Html Msg
 makeDropDown paths =
     let
-        options =
+        generateOptions =
             paths
                 |> List.map makeOption
+
+        options =
+            option [] [ text "No default prefix" ] :: generateOptions
     in
-        select [ onInput UpdatePath ] options
+        select [ onInput UpdatePrefix ] options
 
 
 makeOption : String -> Html Msg
