@@ -9,14 +9,34 @@ import Views.Elm.File.View as File
 import Views.Elm.Msg exposing (..)
 import Dict exposing (Dict)
 import Views.Elm.Utility exposing (emptyElement, localizeString)
+import Views.Elm.File.Model exposing (getFile)
 
 
 view : Model -> Html Msg
 view model =
     let
-        fileRows =
+        itemRows provider =
             model.files
+                |> List.filter (\fileRow -> (getFile fileRow.file.file).provider == provider)
                 |> List.map viewFileRow
+
+        itemSection ( provider, fileRows ) =
+            let
+                labelRow =
+                    tr [ class "jackrabbit--item-section--label" ] [ td [ colspan 5 ] [ text provider ] ]
+            in
+                tbody
+                    [ class ("jackrabbit--item-section jackrabbit--item-section__" ++ provider)
+                    ]
+                    (labelRow :: fileRows)
+
+        itemSections =
+            model.providers
+                |> Dict.keys
+                |> List.sortBy (\provider -> Dict.get provider model.providers |> Maybe.withDefault 0)
+                |> List.map (\provider -> ( provider, itemRows provider ))
+                |> List.filter (\( provider, rows ) -> List.isEmpty rows == False)
+                |> List.map itemSection
 
         editLibForm =
             model.files
@@ -24,6 +44,18 @@ view model =
 
         addFile =
             showAddFile model model.tempFileRow
+
+        tableHeader =
+            thead
+                []
+                [ tr []
+                    [ th [ class "jackrabbit--actions" ] []
+                    , th [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name.Header" model.localization) ]
+                    , th [ class "jackrabbit--path" ] [ text (localizeString "File Path.Header" model.localization) ]
+                    , th [ class "jackrabbit--provider" ] [ text (localizeString "Provider.Header" model.localization) ]
+                    , th [ class "jackrabbit--priority" ] [ text (localizeString "Priority.Header" model.localization) ]
+                    ]
+                ]
     in
         div []
             [ viewErrorMessage model.errorMessage model.localization
@@ -31,26 +63,17 @@ view model =
             , div []
                 editLibForm
             , table [ class "dnnTableDisplay" ]
-                [ caption [] [ text "Header" ]
-                , thead
-                    []
-                    [ tr []
-                        [ th [ class "jackrabbit--actions" ] []
-                        , th [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name.Header" model.localization) ]
-                        , th [ class "jackrabbit--path" ] [ text (localizeString "File Path.Header" model.localization) ]
-                        , th [ class "jackrabbit--provider" ] [ text (localizeString "Provider.Header" model.localization) ]
-                        , th [ class "jackrabbit--priority" ] [ text (localizeString "Priority.Header" model.localization) ]
-                        ]
-                    ]
-                , tbody []
-                    fileRows
-                ]
+                (tableHeader :: itemSections)
             ]
 
 
 viewFileRow : FileRow -> Html Msg
 viewFileRow { rowId, file } =
-    App.map (FileMsg rowId) (File.view file)
+    let
+        fileData =
+            getFile (file.file)
+    in
+        App.map (FileMsg rowId) (File.view file)
 
 
 addEditForm : FileRow -> Html Msg
