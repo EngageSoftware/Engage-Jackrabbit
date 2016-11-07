@@ -7,6 +7,7 @@ import Html.App as App
 import Views.Elm.Model exposing (..)
 import Views.Elm.File.View as File
 import Views.Elm.Msg exposing (..)
+import Dict exposing (Dict)
 import Views.Elm.Utility exposing (emptyElement, localizeString)
 
 
@@ -25,12 +26,14 @@ view model =
             showAddFile model model.tempFileRow
     in
         div []
-            [ viewErrorMessage model.errorMessage
+            [ viewErrorMessage model.errorMessage model.localization
             , addFile
             , div []
                 editLibForm
             , table [ class "dnnTableDisplay" ]
-                [ thead []
+                [ caption [] [ text "Header" ]
+                , thead
+                    []
                     [ tr []
                         [ th [ class "jackrabbit--actions" ] []
                         , th [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name.Header" model.localization) ]
@@ -70,11 +73,11 @@ showAddFile model tempFile =
             App.map (FileMsg rowId) (File.viewAddForm file)
 
 
-viewErrorMessage : Maybe String -> Html Msg
-viewErrorMessage errorMessage =
+viewErrorMessage : Maybe String -> Dict String String -> Html Msg
+viewErrorMessage errorMessage localization =
     case errorMessage of
         Nothing ->
             emptyElement
 
         Just message ->
-            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message, button [ type' "button", onClick DismissError ] [ text "Dismiss Error" ] ]
+            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message, button [ type' "button", onClick DismissError ] [ text (localizeString "Dismiss Error" localization) ] ]

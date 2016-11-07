@@ -75,13 +75,13 @@ editFile file localization =
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] [] ]
             , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value fileData.filePath ] [] ]
-            , showProviderMenu file
+            , showProviderMenu file localization
             , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] [] ]
             ]
 
 
-showProviderMenu : JackRabbitFile -> Html Msg
-showProviderMenu file =
+showProviderMenu : JackRabbitFile -> Dict String String -> Html Msg
+showProviderMenu file localization =
     let
         fileData =
             getFile file
@@ -89,30 +89,30 @@ showProviderMenu file =
         case fileData.provider of
             "DnnFormBottomProvider" ->
                 select [ onInput UpdateProvider ]
-                    [ option [] [ text "DnnFormBottomProvider" ]
-                    , option [] [ text "DnnBodyProvider" ]
-                    , option [] [ text "DnnPageHeaderProvider" ]
+                    [ option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
+                    , option [] [ text (localizeString "DnnBodyProvider" localization) ]
+                    , option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
                     ]
 
             "DnnBodyProvider" ->
                 select [ onInput UpdateProvider ]
-                    [ option [] [ text "DnnBodyProvider" ]
-                    , option [] [ text "DnnPageHeaderProvider" ]
-                    , option [] [ text "DnnFormBottomProvider" ]
+                    [ option [] [ text (localizeString "DnnBodyProvider" localization) ]
+                    , option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
+                    , option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
                     ]
 
             "DnnPageHeaderProvider" ->
                 select [ onInput UpdateProvider ]
-                    [ option [] [ text "DnnPageHeaderProvider" ]
-                    , option [] [ text "DnnFormBottomProvider" ]
-                    , option [] [ text "DnnBodyProvider" ]
+                    [ option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
+                    , option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
+                    , option [] [ text (localizeString "DnnBodyProvider" localization) ]
                     ]
 
             _ ->
                 select [ onInput UpdateProvider ]
-                    [ option [] [ text "DnnFormBottomProvider" ]
-                    , option [] [ text "DnnBodyProvider" ]
-                    , option [] [ text "DnnPageHeaderProvider" ]
+                    [ option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
+                    , option [] [ text (localizeString "DnnBodyProvider" localization) ]
+                    , option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
                     ]
 
 
@@ -132,16 +132,16 @@ libraryForm model =
             autoCompleteInput model
     in
         div []
-            [ label [ class "jackrabbit--prefix" ] [ text "Library Name" ]
+            [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Library Name" localization) ]
             , autoCompleteInput model
-            , label [ class "jackrabbit--prefix" ] [ text "Version" ]
+            , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version" localization) ]
             , input [ type' "text", onInput UpdateVersion, value libraryData.version ] []
-            , label [ class "jackrabbit--prefix" ] [ text "Version Specificity" ]
+            , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version Specificity" localization) ]
             , select [ onInput UpdateSpecificity ]
-                [ option [ value "Latest", selected (libraryData.specificity == Latest) ] [ text "Latest" ]
-                , option [ value "LatestMajor", selected (libraryData.specificity == LatestMajor) ] [ text "Latest Major" ]
-                , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text "Latest Minor" ]
-                , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text "Exact" ]
+                [ option [ value "Latest", selected (libraryData.specificity == Latest) ] [ text (localizeString "Latest" localization) ]
+                , option [ value "LatestMajor", selected (libraryData.specificity == LatestMajor) ] [ text (localizeString "Latest Major" localization) ]
+                , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text (localizeString "Latest Minor" localization) ]
+                , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text (localizeString "Exact" localization) ]
                 ]
             , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
             , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
@@ -181,7 +181,7 @@ autoCompleteInput model =
                     _ ->
                         case autoComplete.selectedLibrary of
                             Nothing ->
-                                [ div [] [ text "No Results Found" ]
+                                [ div [] [ text (localizeString "No Results" model.localization) ]
                                 ]
 
                             _ ->
@@ -310,13 +310,13 @@ addForm model =
 
         fileForm =
             div []
-                [ label [ class "jackrabbit--prefix" ] [ text "Path Prefix Name" ]
+                [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
                 , makeDropDown model.pathList
-                , label [ class "jackrabbit--path" ] [ text "File Path" ]
+                , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
                 , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
-                , label [ class "jackrabbit--provider" ] [ text "Provider" ]
-                , showProviderMenu model.file
-                , label [ class "jackrabbit--priority" ] [ text "Priority" ]
+                , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
+                , showProviderMenu model.file model.localization
+                , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
                 , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
                 , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
                 , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
@@ -327,9 +327,9 @@ addForm model =
                 div []
                     [ label []
                         [ text "Select the File Type:"
-                        , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text "JavaScript" ]
-                        , button [ type' "button", onClick (SetFileType "Css" file) ] [ text "CSS" ]
-                        , button [ type' "button", onClick (SetLibrary file) ] [ text "JS Library" ]
+                        , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text (localizeString "JavaScript" localization) ]
+                        , button [ type' "button", onClick (SetFileType "Css" file) ] [ text (localizeString "Css" localization) ]
+                        , button [ type' "button", onClick (SetLibrary file) ] [ text (localizeString "JSLibrary" localization) ]
                         ]
                     ]
 

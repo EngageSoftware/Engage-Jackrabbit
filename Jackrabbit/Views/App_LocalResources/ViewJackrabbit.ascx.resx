@@ -150,4 +150,61 @@
   <data name="View Mode.Text" xml:space="preserve">
     <value>To edit your Jackrabbit files, please enter Edit Mode.</value>
   </data>
+  <data name="Css.Text" xml:space="preserve">
+    <value>CSS</value>
+  </data>
+  <data name="Dismiss Error.Text" xml:space="preserve">
+    <value>Dismiss Error</value>
+  </data>
+  <data name="DnnBodyProvider.Text" xml:space="preserve">
+    <value>DnnBodyProvider</value>
+  </data>
+  <data name="DnnFormBottomProvider.Text" xml:space="preserve">
+    <value>DnnFormBottomProvider</value>
+  </data>
+  <data name="DnnPageHeaderProvider.Text" xml:space="preserve">
+    <value>DnnPageHeaderProvider</value>
+  </data>
+  <data name="Exact.Text" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="File Path.Text" xml:space="preserve">
+    <value>File Path</value>
+  </data>
+  <data name="JavaScript.Text" xml:space="preserve">
+    <value>JavaScript</value>
+  </data>
+  <data name="JSLibrary.Text" xml:space="preserve">
+    <value>JS Library</value>
+  </data>
+  <data name="Latest Major.Text" xml:space="preserve">
+    <value>Latest Major</value>
+  </data>
+  <data name="Latest Minor.Text" xml:space="preserve">
+    <value>Latest Minor</value>
+  </data>
+  <data name="Latest.Text" xml:space="preserve">
+    <value>Latest</value>
+  </data>
+  <data name="Library Name.Text" xml:space="preserve">
+    <value>Library Name</value>
+  </data>
+  <data name="No Results.Text" xml:space="preserve">
+    <value>No Results Found</value>
+  </data>
+  <data name="Path Prefix Name.Text" xml:space="preserve">
+    <value>Path Prefix Name</value>
+  </data>
+  <data name="Priority.Text" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="Provider.Text" xml:space="preserve">
+    <value>Provider</value>
+  </data>
+  <data name="Specificity.Text" xml:space="preserve">
+    <value>Version Specificity</value>
+  </data>
+  <data name="Version.Text" xml:space="preserve">
+    <value>Version</value>
+  </data>
 </root>
