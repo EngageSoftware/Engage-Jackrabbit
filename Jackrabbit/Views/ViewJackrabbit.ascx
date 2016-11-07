@@ -29,7 +29,7 @@
                         ]
                     },
                     localization: <%:EncodeJsonObject(LocalizationUtility.GetAllResources(this.LocalResourceFile))%>,
-                    pathAliases: <%:GeneratePathAliases(Model.PathAliases) %>
+                    pathAliases: <%:EncodeJsonObject(Model.PathAliases) %>
                 });
 
           function onFocus(elementId) {
@@ -61,10 +61,5 @@
         var newEnumerable = files.Cast<object>().Concat(libraries);
         return EncodeJsonObject(newEnumerable);
     }
-
-    private static IHtmlString GeneratePathAliases(List<string> pathAliases) {
-        var newString = pathAliases.Cast<object>();
-        return EncodeJsonObject(newString);
-    }
-
+    
 </script>
