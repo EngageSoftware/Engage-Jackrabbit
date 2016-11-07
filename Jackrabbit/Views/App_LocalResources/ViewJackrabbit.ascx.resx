@@ -189,6 +189,9 @@
   <data name="Library Name.Text" xml:space="preserve">
     <value>Library Name</value>
   </data>
+  <data name="No default.Text" xml:space="preserve">
+    <value>No Default Prefix</value>
+  </data>
   <data name="No Results.Text" xml:space="preserve">
     <value>No Results Found</value>
   </data>
