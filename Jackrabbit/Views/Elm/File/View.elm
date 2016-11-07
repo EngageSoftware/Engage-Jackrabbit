@@ -16,7 +16,7 @@ import Autocomplete
 view : Model -> Html Msg
 view model =
     if model.editing then
-        editFile model.file model.localization model.providers
+        emptyElement
     else
         viewFile model.file model.localization
 
@@ -29,7 +29,7 @@ editLib model =
                 libraryForm model
 
             _ ->
-                emptyElement
+                editFile model
     else
         emptyElement
 
@@ -57,21 +57,26 @@ viewFile file localization =
             ]
 
 
-editFile : JackRabbitFile -> Dict String String -> List String -> Html Msg
-editFile file localization providers =
+editFile : Model -> Html Msg
+editFile model =
     let
         fileData =
-            getFile file
+            getFile model.file
+
+        localization =
+            model.localization
     in
-        tr [ classList (getRowClasses file) ]
-            [ td [ class "jackrabbit-file--actions" ]
-                [ button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
-                , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
-                ]
-            , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] [] ]
-            , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value fileData.filePath ] [] ]
-            , showProviderMenu file localization providers
-            , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] [] ]
+        div []
+            [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
+            , makeDropDown model.pathList model.file
+            , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
+            , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
+            , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
+            , showProviderMenu model.file model.localization model.providers
+            , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
+            , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
+            , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+            , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
             ]
 
 
