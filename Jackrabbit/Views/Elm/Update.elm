@@ -73,6 +73,7 @@ update msg model =
                         model.httpInfo
                         model.localization
                         model.pathAliases
+                        (Dict.keys model.providers)
 
                 newFileRow =
                     FileRow nextRowId newFile
@@ -210,6 +211,7 @@ makeFileRows lastRowId httpInfo providers localization autocomplete pathList fil
                             localization
                             autocomplete
                             pathList
+                            (Dict.keys providers)
 
                     fileRow =
                         FileRow nextRowId fileModel

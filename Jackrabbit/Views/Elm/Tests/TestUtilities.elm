@@ -61,11 +61,17 @@ initialFileModel =
         initialLocalization
         initialAutocomplete
         initialPaths
+        initialProviders
 
 
 initialPaths : List String
 initialPaths =
     [ "Path1", "Path2" ]
+
+
+initialProviders : List String
+initialProviders =
+    [ "DnnBodyProvider", "DnnFormBottomProvider", "DnnPageHeaderProvider" ]
 
 
 emptyHttpInfo : HttpInfo
@@ -101,3 +107,4 @@ initialLibraryModel =
         Dict.empty
         initialAutocomplete
         initialPaths
+        initialProviders

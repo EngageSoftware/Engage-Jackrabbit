@@ -63,6 +63,7 @@ type alias Model =
     , localization : Dict String String
     , autocomplete : Autocomplete
     , pathList : List String
+    , providers : List String
     }
 
 
@@ -77,13 +78,13 @@ initialAutocomplete =
     }
 
 
-fromJRFile : JackRabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> Model
-fromJRFile file editing httpInfo localization autocomplete pathList =
-    Model file file editing httpInfo localization autocomplete pathList
+fromJRFile : JackRabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Model
+fromJRFile file editing httpInfo localization autocomplete pathList providers =
+    Model file file editing httpInfo localization autocomplete pathList providers
 
 
-init : (FileData -> JackRabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> Model
-init makeJRFile id pathPrefixName filePath provider priority editing httpInfo localization pathList =
+init : (FileData -> JackRabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Model
+init makeJRFile id pathPrefixName filePath provider priority editing httpInfo localization pathList providers =
     let
         fileData =
             FileData
@@ -96,7 +97,7 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
         jackRabbitFile =
             makeJRFile fileData
     in
-        fromJRFile jackRabbitFile editing httpInfo localization initialAutocomplete pathList
+        fromJRFile jackRabbitFile editing httpInfo localization initialAutocomplete pathList providers
 
 
 makeLibrary : String -> String -> Library

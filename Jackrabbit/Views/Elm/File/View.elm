@@ -16,12 +16,7 @@ import Autocomplete
 view : Model -> Html Msg
 view model =
     if model.editing then
-        case model.file of
-            JavaScriptLib fileData libFile ->
-                emptyElement
-
-            _ ->
-                editFile model.file model.localization
+        editFile model.file model.localization model.providers
     else
         viewFile model.file model.localization
 
@@ -62,8 +57,8 @@ viewFile file localization =
             ]
 
 
-editFile : JackRabbitFile -> Dict String String -> Html Msg
-editFile file localization =
+editFile : JackRabbitFile -> Dict String String -> List String -> Html Msg
+editFile file localization providers =
     let
         fileData =
             getFile file
@@ -75,45 +70,22 @@ editFile file localization =
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ input [ type' "text", onInput UpdatePrefix, value fileData.pathPrefixName ] [] ]
             , td [ class "jackrabbit-file--path" ] [ input [ type' "text", onInput UpdatePath, value fileData.filePath ] [] ]
-            , showProviderMenu file localization
+            , showProviderMenu file localization providers
             , td [ class "jackrabbit-file--priority" ] [ input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] [] ]
             ]
 
 
-showProviderMenu : JackRabbitFile -> Dict String String -> Html Msg
-showProviderMenu file localization =
+showProviderMenu : JackRabbitFile -> Dict String String -> List String -> Html Msg
+showProviderMenu file localization providers =
     let
         fileData =
             getFile file
+
+        options =
+            providers
+                |> List.map (\provider -> option [ selected (fileData.provider == provider), value provider ] [ text (localizeString provider localization) ])
     in
-        case fileData.provider of
-            "DnnFormBottomProvider" ->
-                select [ onInput UpdateProvider ]
-                    [ option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
-                    , option [] [ text (localizeString "DnnBodyProvider" localization) ]
-                    , option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
-                    ]
-
-            "DnnBodyProvider" ->
-                select [ onInput UpdateProvider ]
-                    [ option [] [ text (localizeString "DnnBodyProvider" localization) ]
-                    , option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
-                    , option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
-                    ]
-
-            "DnnPageHeaderProvider" ->
-                select [ onInput UpdateProvider ]
-                    [ option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
-                    , option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
-                    , option [] [ text (localizeString "DnnBodyProvider" localization) ]
-                    ]
-
-            _ ->
-                select [ onInput UpdateProvider ]
-                    [ option [] [ text (localizeString "DnnFormBottomProvider" localization) ]
-                    , option [] [ text (localizeString "DnnBodyProvider" localization) ]
-                    , option [] [ text (localizeString "DnnPageHeaderProvider" localization) ]
-                    ]
+        select [ onInput UpdateProvider ] options
 
 
 libraryForm : Model -> Html Msg
@@ -311,11 +283,11 @@ addForm model =
         fileForm =
             div []
                 [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
-                , makeDropDown model.pathList
+                , makeDropDown model.pathList model.file
                 , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
                 , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
                 , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
-                , showProviderMenu model.file model.localization
+                , showProviderMenu model.file model.localization model.providers
                 , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
                 , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
                 , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
@@ -367,6 +339,9 @@ getRowClasses file =
                 JavaScriptFile fileData ->
                     True
 
+                JavaScriptLib fileData libData ->
+                    True
+
                 _ ->
                     False
 
@@ -387,19 +362,22 @@ getRowClasses file =
         ]
 
 
-makeDropDown : List String -> Html Msg
-makeDropDown paths =
+makeDropDown : List String -> JackRabbitFile -> Html Msg
+makeDropDown paths jackrabbitFile =
     let
+        file =
+            getFile jackrabbitFile
+
         generateOptions =
             paths
-                |> List.map makeOption
+                |> List.map (makeOption file.pathPrefixName)
 
         options =
-            option [] [ text "No default prefix" ] :: generateOptions
+            option [ value "" ] [ text "No default prefix" ] :: generateOptions
     in
         select [ onInput UpdatePrefix ] options
 
 
-makeOption : String -> Html Msg
-makeOption string =
-    option [] [ text (string) ]
+makeOption : String -> String -> Html Msg
+makeOption pathPrefixName string =
+    option [ value string, selected (pathPrefixName == string) ] [ text (string) ]
