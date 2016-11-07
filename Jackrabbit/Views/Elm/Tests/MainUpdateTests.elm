@@ -93,7 +93,7 @@ tests =
                             { model | editing = True }
 
                         returnedModel =
-                            updateFromChild model ( fakeFileRow, Cmd.none, ParentMsg.EditLib )
+                            updateFromChild model ( fakeFileRow, Cmd.none, ParentMsg.Editing )
                     in
                         returnedModel
                             |> Expect.equal expectedModel
@@ -110,7 +110,7 @@ tests =
                             { model | editing = True }
 
                         returnedModel =
-                            updateFromChild updatedModel ( fakeFileRow, Cmd.none, ParentMsg.EditLib )
+                            updateFromChild updatedModel ( fakeFileRow, Cmd.none, ParentMsg.Editing )
                     in
                         returnedModel
                             |> Expect.equal expectedModel

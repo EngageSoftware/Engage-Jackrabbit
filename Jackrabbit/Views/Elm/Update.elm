@@ -171,7 +171,7 @@ updateFromChild model ( fileRow, _, parentMsg ) =
             in
                 { model | lastRowId = newLastRow, tempFileRow = Nothing }
 
-        ParentMsg.EditLib ->
+        ParentMsg.Editing ->
             case model.editing of
                 False ->
                     { model | editing = True }

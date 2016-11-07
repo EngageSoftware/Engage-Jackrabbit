@@ -10,4 +10,4 @@ type ParentMsg
     | RemoveFile
     | AddTempFile File.Model
     | CancelTempForm
-    | EditLib
+    | Editing

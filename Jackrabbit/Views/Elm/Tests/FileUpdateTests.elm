@@ -179,26 +179,6 @@ tests =
                     in
                         parentMsg
                             |> Expect.equal ParentMsg.RemoveFile
-            , test "can Noop" <|
-                \() ->
-                    let
-                        model =
-                            initialFileModel
-
-                        editingModel =
-                            { model | editing = True }
-
-                        ( updatedModel, cmdMsg, parentMsg ) =
-                            update CancelChanges editingModel
-
-                        editing =
-                            updatedModel.editing
-
-                        originalFileData =
-                            getFile updatedModel.originalFile
-                    in
-                        ( editing, parentMsg, originalFileData )
-                            |> Expect.equal ( False, ParentMsg.NoOp, (getFile model.file) )
             , test "can Edit Lib" <|
                 \() ->
                     let
@@ -218,7 +198,7 @@ tests =
                             getFile updatedModel.originalFile
                     in
                         ( editing, parentMsg, originalFileData )
-                            |> Expect.equal ( False, ParentMsg.EditLib, (getFile model.file) )
+                            |> Expect.equal ( False, ParentMsg.Editing, (getFile model.file) )
             ]
         , describe "can SaveChanges"
             [ test "can Add TempFile" <|
@@ -247,7 +227,7 @@ tests =
                     in
                         parentMsg
                             |> Expect.equal (ParentMsg.AddTempFile finalModel)
-            , test "can EditLib" <|
+            , test "can Editing" <|
                 \() ->
                     let
                         model =
@@ -272,33 +252,7 @@ tests =
                             update SaveChanges finalModel
                     in
                         parentMsg
-                            |> Expect.equal ParentMsg.EditLib
-            , test "can EditLib w/ NoOp" <|
-                \() ->
-                    let
-                        model =
-                            initialFileModel
-
-                        fileData =
-                            getFile model.file
-
-                        file =
-                            model.file
-
-                        noFileId =
-                            { fileData | id = Nothing }
-
-                        missingjackrabbit =
-                            JavaScriptFile noFileId
-
-                        finalModel =
-                            { model | editing = True }
-
-                        ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveChanges finalModel
-                    in
-                        parentMsg
-                            |> Expect.equal ParentMsg.NoOp
+                            |> Expect.equal ParentMsg.Editing
             ]
         , describe "Delete File"
             [ test "can Delete" <|

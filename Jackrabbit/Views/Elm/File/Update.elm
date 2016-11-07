@@ -18,12 +18,7 @@ update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
         EditFile ->
-            case model.file of
-                JavaScriptLib fileData libFile ->
-                    ( { model | editing = True }, Cmd.none, ParentMsg.EditLib )
-
-                _ ->
-                    ( { model | editing = True }, Cmd.none, ParentMsg.NoOp )
+            ( { model | editing = True }, Cmd.none, ParentMsg.Editing )
 
         UpdatePrefix prefix ->
             let
@@ -119,12 +114,7 @@ update msg model =
                     True ->
                         ( model, Cmd.none, ParentMsg.RemoveFile )
             else
-                case model.file of
-                    JavaScriptLib _ _ ->
-                        ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.EditLib )
-
-                    _ ->
-                        ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.NoOp )
+                ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.Editing )
 
         SaveChanges ->
             let
@@ -153,12 +143,12 @@ update msg model =
                             case model.file of
                                 JavaScriptLib fileData libData ->
                                     if (versionValidation libData.version) then
-                                        ( model, createAjaxCmd model verb "file", ParentMsg.EditLib )
+                                        ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
                                     else
                                         ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
 
                                 _ ->
-                                    ( model, createAjaxCmd model verb "file", ParentMsg.NoOp )
+                                    ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
 
         DeleteFile ->
             ( model, createAjaxCmd model Delete "file", ParentMsg.NoOp )
