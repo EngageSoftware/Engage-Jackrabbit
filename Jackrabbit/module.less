@@ -2,22 +2,15 @@
     .dnnTableDisplay {
         width: 100%;
     }
-        @javascript--background: #3dc;
-        @css--background: #d33;
+
+        .jackrabbit--item-section--label {
+            text-align: center;
+            font-weight: bold;
+        }
+        @javascript--background: lighten(desaturate(#3dc, 10%), 30%);
+        @css--background: lighten(desaturate(#d33, 10%), 30%);
         .jackrabbit-file__type-javascript { background-color: @javascript--background; }
         .jackrabbit-file__type-css { background-color: @css--background; }
-        .jackrabbit-file__provider-head {
-            &.jackrabbit-file__type-javascript { .half-rombes(@javascript--background); }
-            &.jackrabbit-file__type-css { .half-rombes(@css--background); }
-        }
-        .jackrabbit-file__provider-body {
-            &.jackrabbit-file__type-javascript { .stairs(@javascript--background); }
-            &.jackrabbit-file__type-css { .stairs(@css--background); }
-        }
-        .jackrabbit-file__provider-bottom {
-            &.jackrabbit-file__type-javascript { .cicada-stripes(@javascript--background); }
-            &.jackrabbit-file__type-css { .cicada-stripes(@css--background); }
-        }
 
         .jackrabbit-file--actions {
             width: 1%;
@@ -27,33 +20,3 @@
             }
         }
 }
-
-/* stylelint-disable no-unsupported-browser-features */
-// from http://lea.verou.me/css3patterns/#half-rombes
-.half-rombes(@color) {
-    background: @color;
-    background: linear-gradient(115deg, transparent 75%, rgba(255,255,255,0.8) 75%) 0 0,
-                linear-gradient(245deg, transparent 75%, rgba(255,255,255,0.8) 75%) 0 0,
-                linear-gradient(115deg, transparent 75%, rgba(255,255,255,0.8) 75%) 7px -15px,
-                linear-gradient(245deg, transparent 75%, rgba(255,255,255,0.8) 75%) 7px -15px,
-                @color;
-    background-size: 15px 30px;
-}
-// from http://lea.verou.me/css3patterns/#stairs
-.stairs(@color) {
-    background: linear-gradient(63deg, @color 23%, transparent 23%) 7px 0,
-                linear-gradient(63deg, transparent 74%, @color 78%),
-                linear-gradient(63deg, transparent 34%, @color 38%, @color 58%, transparent 62%),
-                lighten(@color, 50%);
-    background-size: 16px 48px;
-}
-// from http://lea.verou.me/css3patterns/#cicada-stripes
-.cicada-stripes(@color) {
-    background-color: @color;
-    background-image: linear-gradient(90deg, rgba(255,255,255,0.07) 50%, transparent 50%),
-                      linear-gradient(90deg, rgba(255,255,255,0.13) 50%, transparent 50%),
-                      linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.17) 50%),
-                      linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.19) 50%);
-    background-size: 13px, 29px, 37px, 53px;
-}
-/* stylelint-enable */
