@@ -186,10 +186,10 @@ update msg model =
             in
                 case string of
                     "JavaScript" ->
-                        ( { model | file = JavaScriptFile fileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
+                        ( { model | file = JavaScriptFile fileData }, Cmd.none, ParentMsg.NoOp )
 
                     "Css" ->
-                        ( { model | file = CssFile cssFileData }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "pathPrefixName-input"), ParentMsg.NoOp )
+                        ( { model | file = CssFile cssFileData }, Cmd.none, ParentMsg.NoOp )
 
                     _ ->
                         ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )
