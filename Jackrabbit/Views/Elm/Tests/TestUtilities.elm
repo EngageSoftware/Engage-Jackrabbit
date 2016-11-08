@@ -62,6 +62,7 @@ initialFileModel =
         initialAutocomplete
         initialPaths
         initialProviders
+        False
 
 
 initialPaths : List String
@@ -72,6 +73,25 @@ initialPaths =
 initialProviders : List String
 initialProviders =
     [ "DnnBodyProvider", "DnnFormBottomProvider", "DnnPageHeaderProvider" ]
+
+
+emptyJavaScriptFile : JackrabbitFile
+emptyJavaScriptFile =
+    JavaScriptFile (FileData Nothing "" "" "DnnFormBottomProvider" 100)
+
+
+emptyFileModel : Model
+emptyFileModel =
+    Model
+        emptyJavaScriptFile
+        emptyJavaScriptFile
+        False
+        emptyHttpInfo
+        initialLocalization
+        initialAutocomplete
+        []
+        initialProviders
+        True
 
 
 emptyHttpInfo : HttpInfo
@@ -108,6 +128,7 @@ initialLibraryModel =
         initialAutocomplete
         initialPaths
         initialProviders
+        False
 
 
 getLibrary file =

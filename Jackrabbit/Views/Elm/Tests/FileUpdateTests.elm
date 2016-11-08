@@ -360,22 +360,11 @@ tests =
                             |> Expect.equal (ParentMsg.RefreshFiles listFiles)
             ]
         , describe "File type tests"
-            [ fuzz (Fuzz.intRange 0 1) "Set File success" <|
-                \number ->
+            [ test "Set File success" <|
+                \() ->
                     let
                         model =
                             initialFileModel
-
-                        newType =
-                            case number of
-                                0 ->
-                                    "JavaScript"
-
-                                1 ->
-                                    "Css"
-
-                                _ ->
-                                    "The fuzzer broke"
 
                         file =
                             model.file
@@ -387,21 +376,13 @@ tests =
                             { fileData | provider = "DnnPageHeaderProvider" }
 
                         message =
-                            SetFileType newType file
+                            SetFileType "Css" file
 
                         ( updatedModel, cmdMsg, parentMsg ) =
                             update message model
 
                         expectedFile =
-                            case number of
-                                0 ->
-                                    (JavaScriptFile (fileData))
-
-                                1 ->
-                                    (CssFile (cssFileData))
-
-                                _ ->
-                                    (Default (fileData))
+                            CssFile (cssFileData)
                     in
                         updatedModel.file
                             |> Expect.equal expectedFile

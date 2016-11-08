@@ -217,14 +217,11 @@ tests =
                         model =
                             initialBaseModel
 
-                        defaultFile =
-                            (FileModel.Default (FileModel.FileData (Nothing) "" "" "DnnFormBottomProvider" 100))
-
                         newFileModel =
-                            { initialFileModel | file = defaultFile, originalFile = defaultFile, pathList = [] }
+                            { initialFileModel | choosingType = True }
 
                         expectedModel =
-                            { model | tempFileRow = (Just (FileRow 2 newFileModel)), lastRowId = 2 }
+                            { model | tempFileRow = (Just (FileRow 2 emptyFileModel)), lastRowId = 2 }
 
                         ( returnedModel, command ) =
                             update AddNewFile model
