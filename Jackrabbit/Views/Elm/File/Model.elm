@@ -132,14 +132,14 @@ encodeFile file =
     in
         if typeId == 2 then
             let
-                libFile =
+                libraryData =
                     getLibrary file
             in
                 Encode.object
                     [ ( "fileType", Encode.int (fileTypeToTypeId file) )
-                    , ( "libraryName", Encode.string libFile.libraryName )
-                    , ( "version", Encode.string libFile.version )
-                    , ( "specificity", Encode.int (specificityToTypeId libFile.specificity) )
+                    , ( "libraryName", Encode.string libraryData.libraryName )
+                    , ( "version", Encode.string libraryData.version )
+                    , ( "specificity", Encode.int (specificityToTypeId libraryData.specificity) )
                     ]
         else
             Encode.object
@@ -249,7 +249,7 @@ fileTypeToTypeId file =
         CssFile fileData ->
             1
 
-        JavaScriptLibrary fileData libFile ->
+        JavaScriptLibrary fileData libraryData ->
             2
 
         Default fileData ->
@@ -265,7 +265,7 @@ getFile file =
         CssFile fileData ->
             fileData
 
-        JavaScriptLibrary fileData libFile ->
+        JavaScriptLibrary fileData libraryData ->
             fileData
 
         Default fileData ->
@@ -275,8 +275,8 @@ getFile file =
 getLibrary : JackRabbitFile -> LibraryData
 getLibrary file =
     case file of
-        JavaScriptLibrary fileData libFile ->
-            libFile
+        JavaScriptLibrary fileData libraryData ->
+            libraryData
 
         _ ->
             Debug.crash "Impossible state achieved"
@@ -291,8 +291,8 @@ updateFile updater file =
         CssFile fileData ->
             CssFile (updater fileData)
 
-        JavaScriptLibrary fileData libFile ->
-            JavaScriptLibrary (updater fileData) libFile
+        JavaScriptLibrary fileData libraryData ->
+            JavaScriptLibrary (updater fileData) libraryData
 
         Default fileData ->
             Default (updater fileData)
@@ -301,8 +301,8 @@ updateFile updater file =
 updateLibrary : (LibraryData -> LibraryData) -> JackRabbitFile -> JackRabbitFile
 updateLibrary updater file =
     case file of
-        JavaScriptLibrary fileData libFile ->
-            JavaScriptLibrary fileData (updater libFile)
+        JavaScriptLibrary fileData libraryData ->
+            JavaScriptLibrary fileData (updater libraryData)
 
         _ ->
             file

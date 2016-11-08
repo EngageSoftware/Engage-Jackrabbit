@@ -54,31 +54,31 @@ update msg model =
 
         UpdateLibraryName libraryName ->
             let
-                libFile =
+                libraryData =
                     model.file
                         |> getLibrary
 
                 library =
                     model.file
-                        |> updateLibrary (\libFile -> { libFile | libraryName = libraryName })
+                        |> updateLibrary (\libraryData -> { libraryData | libraryName = libraryName })
             in
                 ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
 
         UpdateVersion version ->
             let
-                libFile =
+                libraryData =
                     model.file
                         |> getLibrary
 
                 library =
                     model.file
-                        |> updateLibrary (\libFile -> { libFile | version = version })
+                        |> updateLibrary (\libraryData -> { libraryData | version = version })
             in
                 ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
 
         UpdateSpecificity specificity ->
             let
-                libFile =
+                libraryData =
                     model.file
                         |> getLibrary
 
@@ -101,7 +101,7 @@ update msg model =
 
                 library =
                     model.file
-                        |> updateLibrary (\libFile -> { libFile | specificity = newSpecificity })
+                        |> updateLibrary (\libraryData -> { libraryData | specificity = newSpecificity })
             in
                 ( { model | file = library }, Cmd.none, ParentMsg.NoOp )
 
@@ -365,13 +365,13 @@ update msg model =
 updateLibraryName : String -> Model -> Model
 updateLibraryName libraryName model =
     let
-        libFile =
+        libraryData =
             model.file
                 |> getLibrary
 
         library =
             model.file
-                |> updateLibrary (\libFile -> { libFile | libraryName = libraryName })
+                |> updateLibrary (\libraryData -> { libraryData | libraryName = libraryName })
     in
         { model | file = library }
 
@@ -379,7 +379,7 @@ updateLibraryName libraryName model =
 updateLibraryVersion : Library -> Model -> Model
 updateLibraryVersion libraryByName model =
     let
-        libFile =
+        libraryData =
             model.file
                 |> getLibrary
 
@@ -388,7 +388,7 @@ updateLibraryVersion libraryByName model =
 
         library =
             model.file
-                |> updateLibrary (\libFile -> { libFile | version = version })
+                |> updateLibrary (\libraryData -> { libraryData | version = version })
     in
         { model | file = library }
 

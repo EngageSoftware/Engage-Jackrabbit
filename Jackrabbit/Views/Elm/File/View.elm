@@ -25,7 +25,7 @@ editLib : Model -> Html Msg
 editLib model =
     if model.editing then
         case model.file of
-            JavaScriptLibrary fileData libFile ->
+            JavaScriptLibrary fileData libraryData ->
                 libraryForm model
 
             _ ->
