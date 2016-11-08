@@ -267,7 +267,3 @@ httpDecoder =
     decode InitialHttpInfo
         |> required "baseUrl" Decode.string
         |> required "headers" decodeHttpHeaders
-
-
-
---JavaScriptLibrary library file -> file

@@ -10,7 +10,7 @@ import Autocomplete
 
 type JackRabbitFile
     = JavaScriptFile FileData
-    | JavaScriptLib FileData LibraryData
+    | JavaScriptLibrary FileData LibraryData
     | CssFile FileData
     | Default FileData
 
@@ -186,7 +186,7 @@ jackRabbitFileDecoder typeId =
                 |> required "Priority" Decode.int
 
         2 ->
-            decode (\id pathPrefix path provider priority libraryName version specificity -> JavaScriptLib (FileData id pathPrefix path provider priority) (LibraryData libraryName version specificity))
+            decode (\id pathPrefix path provider priority libraryName version specificity -> JavaScriptLibrary (FileData id pathPrefix path provider priority) (LibraryData libraryName version specificity))
                 |> required "Id" (Decode.maybe Decode.int)
                 |> required "PathPrefixName" Decode.string
                 |> required "FilePath" Decode.string
@@ -249,7 +249,7 @@ fileTypeToTypeId file =
         CssFile fileData ->
             1
 
-        JavaScriptLib fileData libFile ->
+        JavaScriptLibrary fileData libFile ->
             2
 
         Default fileData ->
@@ -265,7 +265,7 @@ getFile file =
         CssFile fileData ->
             fileData
 
-        JavaScriptLib fileData libFile ->
+        JavaScriptLibrary fileData libFile ->
             fileData
 
         Default fileData ->
@@ -275,7 +275,7 @@ getFile file =
 getLibrary : JackRabbitFile -> LibraryData
 getLibrary file =
     case file of
-        JavaScriptLib fileData libFile ->
+        JavaScriptLibrary fileData libFile ->
             libFile
 
         _ ->
@@ -291,8 +291,8 @@ updateFile updater file =
         CssFile fileData ->
             CssFile (updater fileData)
 
-        JavaScriptLib fileData libFile ->
-            JavaScriptLib (updater fileData) libFile
+        JavaScriptLibrary fileData libFile ->
+            JavaScriptLibrary (updater fileData) libFile
 
         Default fileData ->
             Default (updater fileData)
@@ -301,8 +301,8 @@ updateFile updater file =
 updateLibrary : (LibraryData -> LibraryData) -> JackRabbitFile -> JackRabbitFile
 updateLibrary updater file =
     case file of
-        JavaScriptLib fileData libFile ->
-            JavaScriptLib fileData (updater libFile)
+        JavaScriptLibrary fileData libFile ->
+            JavaScriptLibrary fileData (updater libFile)
 
         _ ->
             file

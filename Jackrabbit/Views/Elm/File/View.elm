@@ -25,7 +25,7 @@ editLib : Model -> Html Msg
 editLib model =
     if model.editing then
         case model.file of
-            JavaScriptLib fileData libFile ->
+            JavaScriptLibrary fileData libFile ->
                 libraryForm model
 
             _ ->
@@ -316,7 +316,7 @@ addForm model =
             JavaScriptFile fileData ->
                 fileForm
 
-            JavaScriptLib fileData libData ->
+            JavaScriptLibrary fileData libData ->
                 libraryForm model
 
 
@@ -344,7 +344,7 @@ getRowClasses file =
                 JavaScriptFile fileData ->
                     True
 
-                JavaScriptLib fileData libData ->
+                JavaScriptLibrary fileData libData ->
                     True
 
                 _ ->

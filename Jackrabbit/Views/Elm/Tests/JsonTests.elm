@@ -84,7 +84,7 @@ tests =
                         Err err ->
                             Expect.fail err
 
-                        Ok (JavaScriptLib fileData libraryData) ->
+                        Ok (JavaScriptLibrary fileData libraryData) ->
                             ( fileData, libraryData )
                                 |> Expect.equal ( FileData file.id file.pathPrefixName file.filePath file.provider file.priority, LibraryData randomLibrary randomVersion specificity )
 

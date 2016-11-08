@@ -200,7 +200,7 @@ update msg model =
                 libData =
                     LibraryData "" "" Exact
             in
-                ( { model | file = JavaScriptLib fileData libData }, focus "library-input", ParentMsg.NoOp )
+                ( { model | file = JavaScriptLibrary fileData libData }, focus "library-input", ParentMsg.NoOp )
 
         SetQuery newQuery ->
             let

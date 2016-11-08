@@ -274,7 +274,7 @@ tests =
                             { fileData | id = Nothing }
 
                         missingjackrabbit =
-                            JavaScriptLib noFileId libData
+                            JavaScriptLibrary noFileId libData
 
                         finalModel =
                             { model | file = missingjackrabbit }
@@ -300,7 +300,7 @@ tests =
                             { fileData | id = Nothing }
 
                         missingjackrabbit =
-                            JavaScriptLib noFileId
+                            JavaScriptLibrary noFileId
 
                         finalModel =
                             { model | editing = True }
@@ -441,7 +441,7 @@ tests =
                             getFile file
 
                         expectedLibrary =
-                            JavaScriptLib (fileData) (LibraryData "" "" Exact)
+                            JavaScriptLibrary (fileData) (LibraryData "" "" Exact)
 
                         ( updatedModel, cmdMsg, parentMsg ) =
                             update (SetLibrary file) model
