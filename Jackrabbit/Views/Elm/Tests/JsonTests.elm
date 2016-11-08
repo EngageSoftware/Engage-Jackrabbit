@@ -17,12 +17,6 @@ tests =
                 let
                     json =
                         Json.encode 0 (Json.object [ ( "FileType", Json.int 1 ), ( "Id", Json.int randomId ), ( "PathPrefixName", Json.string randomPrefix ), ( "FilePath", Json.string randomPath ), ( "Provider", Json.string randomProvider ), ( "Priority", Json.int randomPriority ) ])
-
-                    {- json =
-                       """
-                           {"FileType":0,"Id":296,"PathPrefixName":""" ++ randString ++ ""","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D
-                       """
-                    -}
                 in
                     case Decode.decodeString fileDecoder json of
                         Err err ->
@@ -39,12 +33,6 @@ tests =
                 let
                     json =
                         Json.encode 0 (Json.object [ ( "FileType", Json.int 0 ), ( "Id", Json.int randomId ), ( "PathPrefixName", Json.string randomPrefix ), ( "FilePath", Json.string randomPath ), ( "Provider", Json.string randomProvider ), ( "Priority", Json.int randomPriority ) ])
-
-                    {- json =
-                       """
-                           {"FileType":0,"Id":296,"PathPrefixName":""" ++ randString ++ ""","FilePath":"sddfddddd.js","Provider":"DnnFormBottomProvider","Priority":100}\x0D
-                       """
-                    -}
                 in
                     case Decode.decodeString fileDecoder json of
                         Err err ->
@@ -88,7 +76,6 @@ tests =
                             ( fileData, libraryData )
                                 |> Expect.equal ( FileData file.id file.pathPrefixName file.filePath file.provider file.priority, LibraryData randomLibrary randomVersion specificity )
 
-                        --|> Expect.equal (LibraryData "JsonTests" "1.8.3" LatestMajor)
                         Ok _ ->
                             Expect.fail "Incorrect type"
         ]

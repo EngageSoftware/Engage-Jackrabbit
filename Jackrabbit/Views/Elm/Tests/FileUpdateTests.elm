@@ -200,7 +200,7 @@ tests =
                         ( editing, parentMsg, originalFileData )
                             |> Expect.equal ( False, ParentMsg.Editing, (getFile model.file) )
             ]
-        , describe "can SaveChanges"
+        , describe "can SaveFileChanges"
             [ test "can Add TempFile" <|
                 \() ->
                     let
@@ -219,14 +219,14 @@ tests =
                         missingjackrabbit =
                             JavaScriptFile noFileId
 
-                        finalModel =
+                        expectedModel =
                             { model | file = missingjackrabbit }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveFileChanges finalModel
+                            update SaveFileChanges expectedModel
                     in
                         parentMsg
-                            |> Expect.equal (ParentMsg.AddTempFile finalModel)
+                            |> Expect.equal (ParentMsg.AddTempFile expectedModel)
             , test "can Editing" <|
                 \() ->
                     let
@@ -276,14 +276,14 @@ tests =
                         missingjackrabbit =
                             JavaScriptLibrary noFileId libData
 
-                        finalModel =
+                        expectedModel =
                             { model | file = missingjackrabbit }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveLibraryChanges finalModel
+                            update SaveLibraryChanges expectedModel
                     in
                         parentMsg
-                            |> Expect.equal (ParentMsg.AddTempFile finalModel)
+                            |> Expect.equal (ParentMsg.AddTempFile expectedModel)
             , test "can Editing" <|
                 \() ->
                     let
@@ -302,11 +302,11 @@ tests =
                         missingjackrabbit =
                             JavaScriptLibrary noFileId
 
-                        finalModel =
+                        expectedModel =
                             { model | editing = True }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveLibraryChanges finalModel
+                            update SaveLibraryChanges expectedModel
                     in
                         parentMsg
                             |> Expect.equal ParentMsg.Editing
