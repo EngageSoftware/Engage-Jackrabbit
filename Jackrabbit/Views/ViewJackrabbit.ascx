@@ -34,7 +34,7 @@
 
           function onFocus(elementId) {
             setTimeout(() => 
-            $('#' + elementId).focus());
+            $('#' + elementId).focus(), [20]);
         }
 
           app.ports.focus.subscribe(onFocus);

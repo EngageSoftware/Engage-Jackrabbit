@@ -18,7 +18,7 @@ update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
         EditFile ->
-            ( { model | editing = True }, Cmd.none, ParentMsg.Editing )
+            ( { model | editing = True }, focus "library-input", ParentMsg.Editing )
 
         UpdatePrefix prefix ->
             let
