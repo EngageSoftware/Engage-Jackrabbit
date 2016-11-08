@@ -178,6 +178,39 @@ tests =
                     in
                         returnedModel
                             |> Expect.equal expectedModel
+            , test "Critical Error" <|
+                \() ->
+                    let
+                        json =
+                            Json.object
+                                [ ( "files"
+                                  , Json.list
+                                        [ Json.object
+                                            [ ( "FileType", Json.int 1 )
+                                            , ( "Id", Json.int 1 )
+                                            , ( "PathPrefixName", Json.string "PathName" )
+                                            , ( "FilePath", Json.string "~/path/here" )
+                                            , ( "Provider", Json.string "DnnFormBottomProvider" )
+                                            , ( "Priority", Json.int 100 )
+                                            ]
+                                        ]
+                                  )
+                                ]
+
+                        model =
+                            initialModel
+
+                        expectedModel =
+                            { model | criticalError = True }
+
+                        message =
+                            Init json
+
+                        ( returnedModel, command ) =
+                            update message model
+                    in
+                        returnedModel
+                            |> Expect.equal expectedModel
             , test "AddNewFile Test" <|
                 \() ->
                     let
