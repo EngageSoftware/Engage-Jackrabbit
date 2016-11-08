@@ -12,7 +12,6 @@ type JackrabbitFile
     = JavaScriptFile FileData
     | JavaScriptLibrary FileData LibraryData
     | CssFile FileData
-    | Default FileData
 
 
 type alias LibraryData =
@@ -64,6 +63,7 @@ type alias Model =
     , autocomplete : Autocomplete
     , pathList : List String
     , providers : List String
+    , choosingType : Bool
     }
 
 
@@ -78,13 +78,13 @@ initialAutocomplete =
     }
 
 
-fromJRFile : JackrabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Model
-fromJRFile file editing httpInfo localization autocomplete pathList providers =
-    Model file file editing httpInfo localization autocomplete pathList providers
+fromJRFile : JackrabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Bool -> Model
+fromJRFile file editing httpInfo localization autocomplete pathList providers choosingType =
+    Model file file editing httpInfo localization autocomplete pathList providers choosingType
 
 
-init : (FileData -> JackrabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Model
-init makeJRFile id pathPrefixName filePath provider priority editing httpInfo localization pathList providers =
+init : (FileData -> JackrabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Bool -> Model
+init makeJRFile id pathPrefixName filePath provider priority editing httpInfo localization pathList providers choosingType =
     let
         fileData =
             FileData
@@ -97,7 +97,7 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
         jackrabbitFile =
             makeJRFile fileData
     in
-        fromJRFile jackrabbitFile editing httpInfo localization initialAutocomplete pathList providers
+        fromJRFile jackrabbitFile editing httpInfo localization initialAutocomplete pathList providers choosingType
 
 
 makeLibrary : String -> String -> Library
@@ -136,9 +136,6 @@ encodeFile file =
             encodeFileData fileData (fileTypeToTypeId file)
 
         JavaScriptFile fileData ->
-            encodeFileData fileData (fileTypeToTypeId file)
-
-        Default fileData ->
             encodeFileData fileData (fileTypeToTypeId file)
 
 
@@ -254,9 +251,6 @@ fileTypeToTypeId file =
         JavaScriptLibrary fileData libraryData ->
             2
 
-        Default fileData ->
-            3
-
 
 getFile : JackrabbitFile -> FileData
 getFile file =
@@ -268,9 +262,6 @@ getFile file =
             fileData
 
         JavaScriptLibrary fileData libraryData ->
-            fileData
-
-        Default fileData ->
             fileData
 
 
@@ -285,9 +276,6 @@ updateFile updater file =
 
         JavaScriptLibrary fileData libraryData ->
             JavaScriptLibrary (updater fileData) libraryData
-
-        Default fileData ->
-            Default (updater fileData)
 
 
 updateLibrary : (LibraryData -> LibraryData) -> JackrabbitFile -> JackrabbitFile

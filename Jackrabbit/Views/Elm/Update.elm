@@ -63,7 +63,7 @@ update msg model =
                     model.lastRowId + 1
 
                 newFile =
-                    File.init File.Default
+                    File.init File.JavaScriptFile
                         Nothing
                         model.defaultPathPrefix
                         model.defaultFilePath
@@ -74,6 +74,7 @@ update msg model =
                         model.localization
                         model.pathAliases
                         (Dict.keys model.providers)
+                        True
 
                 newFileRow =
                     FileRow nextRowId newFile
@@ -212,6 +213,7 @@ makeFileRows lastRowId httpInfo providers localization autocomplete pathList fil
                             autocomplete
                             pathList
                             (Dict.keys providers)
+                            False
 
                     fileRow =
                         FileRow nextRowId fileModel

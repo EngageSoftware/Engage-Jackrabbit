@@ -118,9 +118,6 @@ update msg model =
                         CssFile fileData ->
                             validateFile fileData model.localization
 
-                        Default fileData ->
-                            validateFile fileData model.localization
-
                 verb =
                     if isNothing (getFile model.file).id then
                         Post
@@ -168,10 +165,10 @@ update msg model =
             in
                 case string of
                     "JavaScript" ->
-                        ( { model | file = JavaScriptFile fileData }, Cmd.none, ParentMsg.NoOp )
+                        ( { model | file = JavaScriptFile fileData, choosingType = False }, Cmd.none, ParentMsg.NoOp )
 
                     "Css" ->
-                        ( { model | file = CssFile cssFileData }, Cmd.none, ParentMsg.NoOp )
+                        ( { model | file = CssFile cssFileData, choosingType = False }, Cmd.none, ParentMsg.NoOp )
 
                     _ ->
                         ( model, Cmd.none, ParentMsg.Error (localizeString "Invalid File Type" model.localization) )
@@ -184,7 +181,7 @@ update msg model =
                 libData =
                     LibraryData "" "" Exact
             in
-                ( { model | file = JavaScriptLibrary fileData libData }, focus "library-input", ParentMsg.NoOp )
+                ( { model | file = JavaScriptLibrary fileData libData, choosingType = False }, focus "library-input", ParentMsg.NoOp )
 
         SetQuery newQuery ->
             let
@@ -477,6 +474,5 @@ validateFile : FileData -> Dict String String -> Maybe String
 validateFile fileData localization =
     if String.isEmpty fileData.filePath then
         Just (localizeString "Empty File Path" localization)
-        --TODO: Localize
     else
         Nothing

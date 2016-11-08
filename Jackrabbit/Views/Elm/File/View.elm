@@ -293,25 +293,25 @@ addForm model =
                 , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
                 ]
     in
-        case file of
-            Default fileData ->
-                div []
-                    [ label []
-                        [ text "Select the File Type:"
-                        , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text (localizeString "JavaScript" localization) ]
-                        , button [ type' "button", onClick (SetFileType "Css" file) ] [ text (localizeString "Css" localization) ]
-                        , button [ type' "button", onClick (SetLibrary file) ] [ text (localizeString "JSLibrary" localization) ]
-                        ]
+        if model.choosingType then
+            div []
+                [ label []
+                    [ text "Select the File Type:"
+                    , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text (localizeString "JavaScript" localization) ]
+                    , button [ type' "button", onClick (SetFileType "Css" file) ] [ text (localizeString "Css" localization) ]
+                    , button [ type' "button", onClick (SetLibrary file) ] [ text (localizeString "JSLibrary" localization) ]
                     ]
+                ]
+        else
+            case file of
+                CssFile fileData ->
+                    fileForm
 
-            CssFile fileData ->
-                fileForm
+                JavaScriptFile fileData ->
+                    fileForm
 
-            JavaScriptFile fileData ->
-                fileForm
-
-            JavaScriptLibrary fileData libData ->
-                libraryForm model
+                JavaScriptLibrary fileData libData ->
+                    libraryForm model
 
 
 stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
