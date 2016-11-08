@@ -39,7 +39,7 @@ viewAddForm model =
     addForm model
 
 
-viewFile : JackRabbitFile -> Dict String String -> Html Msg
+viewFile : JackrabbitFile -> Dict String String -> Html Msg
 viewFile file localization =
     let
         fileData =
@@ -80,7 +80,7 @@ editFile model =
             ]
 
 
-showProviderMenu : JackRabbitFile -> Dict String String -> List String -> Html Msg
+showProviderMenu : JackrabbitFile -> Dict String String -> List String -> Html Msg
 showProviderMenu file localization providers =
     let
         fileData =
@@ -329,7 +329,7 @@ stringToIntDecoder tagger default =
         Decode.map (\value -> tagger (stringToInt value)) targetValue
 
 
-getRowClasses : JackRabbitFile -> List ( String, Bool )
+getRowClasses : JackrabbitFile -> List ( String, Bool )
 getRowClasses file =
     let
         oldFile =
@@ -366,7 +366,7 @@ getRowClasses file =
         ]
 
 
-makeDropDown : List String -> JackRabbitFile -> Html Msg
+makeDropDown : List String -> JackrabbitFile -> Html Msg
 makeDropDown paths jackrabbitFile =
     let
         file =

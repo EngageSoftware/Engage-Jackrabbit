@@ -33,6 +33,7 @@ type alias Model =
     , tempFileRow : Maybe FileRow
     , editing : Bool
     , pathAliases : List String
+    , criticalError : Bool
     }
 
 
@@ -66,4 +67,5 @@ initialModel =
     , tempFileRow = Nothing
     , editing = False
     , pathAliases = []
+    , criticalError = False
     }

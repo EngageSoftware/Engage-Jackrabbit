@@ -1,6 +1,6 @@
 module Views.Elm.File.Msg exposing (..)
 
-import Views.Elm.File.Model exposing (JackRabbitFile, Library)
+import Views.Elm.File.Model exposing (JackrabbitFile, Library)
 import Autocomplete
 
 
@@ -17,10 +17,10 @@ type Msg
     | CancelChanges
     | EditFile
     | DeleteFile
-    | RefreshFiles (List JackRabbitFile)
+    | RefreshFiles (List JackrabbitFile)
     | Error String
-    | SetFileType String JackRabbitFile
-    | SetLibrary JackRabbitFile
+    | SetFileType String JackrabbitFile
+    | SetLibrary JackrabbitFile
     | SetAutoState Autocomplete.Msg
     | SetQuery String
     | Wrap Bool

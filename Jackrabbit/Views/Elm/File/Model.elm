@@ -8,7 +8,7 @@ import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 import Autocomplete
 
 
-type JackRabbitFile
+type JackrabbitFile
     = JavaScriptFile FileData
     | JavaScriptLibrary FileData LibraryData
     | CssFile FileData
@@ -56,8 +56,8 @@ type alias Library =
 
 
 type alias Model =
-    { file : JackRabbitFile
-    , originalFile : JackRabbitFile
+    { file : JackrabbitFile
+    , originalFile : JackrabbitFile
     , editing : Bool
     , httpInfo : HttpInfo
     , localization : Dict String String
@@ -78,12 +78,12 @@ initialAutocomplete =
     }
 
 
-fromJRFile : JackRabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Model
+fromJRFile : JackrabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Model
 fromJRFile file editing httpInfo localization autocomplete pathList providers =
     Model file file editing httpInfo localization autocomplete pathList providers
 
 
-init : (FileData -> JackRabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Model
+init : (FileData -> JackrabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Model
 init makeJRFile id pathPrefixName filePath provider priority editing httpInfo localization pathList providers =
     let
         fileData =
@@ -94,10 +94,10 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
                 provider
                 priority
 
-        jackRabbitFile =
+        JackrabbitFile =
             makeJRFile fileData
     in
-        fromJRFile jackRabbitFile editing httpInfo localization initialAutocomplete pathList providers
+        fromJRFile JackrabbitFile editing httpInfo localization initialAutocomplete pathList providers
 
 
 makeLibrary : String -> String -> Library
@@ -121,7 +121,7 @@ libraryDecoder =
         |> required "Version" Decode.string
 
 
-encodeFile : JackRabbitFile -> Encode.Value
+encodeFile : JackrabbitFile -> Encode.Value
 encodeFile file =
     let
         typeId =
@@ -151,23 +151,23 @@ encodeFile file =
                 ]
 
 
-listFileDecoder : Decode.Decoder (List JackRabbitFile)
+listFileDecoder : Decode.Decoder (List JackrabbitFile)
 listFileDecoder =
     Decode.list fileDecoder
 
 
-fileDecoder : Decode.Decoder JackRabbitFile
+fileDecoder : Decode.Decoder JackrabbitFile
 fileDecoder =
     let
         fileTypeDecoder =
             decode identity
                 |> required "FileType" Decode.int
     in
-        fileTypeDecoder `Decode.andThen` jackRabbitFileDecoder
+        fileTypeDecoder `Decode.andThen` jackrabbitFileDecoder
 
 
-jackRabbitFileDecoder : Int -> Decode.Decoder JackRabbitFile
-jackRabbitFileDecoder typeId =
+jackrabbitFileDecoder : Int -> Decode.Decoder JackrabbitFile
+jackrabbitFileDecoder typeId =
     case typeId of
         0 ->
             decode (\id pathPrefix path provider priority -> JavaScriptFile (FileData id pathPrefix path provider priority))
@@ -240,7 +240,7 @@ intToSpecificity versionInt =
             Result.Err ("Invalid version type: " ++ (toString versionInt))
 
 
-fileTypeToTypeId : JackRabbitFile -> Int
+fileTypeToTypeId : JackrabbitFile -> Int
 fileTypeToTypeId file =
     case file of
         JavaScriptFile fileData ->
@@ -256,7 +256,7 @@ fileTypeToTypeId file =
             3
 
 
-getFile : JackRabbitFile -> FileData
+getFile : JackrabbitFile -> FileData
 getFile file =
     case file of
         JavaScriptFile fileData ->
@@ -272,7 +272,7 @@ getFile file =
             fileData
 
 
-getLibrary : JackRabbitFile -> LibraryData
+getLibrary : JackrabbitFile -> LibraryData
 getLibrary file =
     case file of
         JavaScriptLibrary fileData libraryData ->
@@ -282,7 +282,7 @@ getLibrary file =
             Debug.crash "Impossible state achieved"
 
 
-updateFile : (FileData -> FileData) -> JackRabbitFile -> JackRabbitFile
+updateFile : (FileData -> FileData) -> JackrabbitFile -> JackrabbitFile
 updateFile updater file =
     case file of
         JavaScriptFile fileData ->
@@ -298,7 +298,7 @@ updateFile updater file =
             Default (updater fileData)
 
 
-updateLibrary : (LibraryData -> LibraryData) -> JackRabbitFile -> JackRabbitFile
+updateLibrary : (LibraryData -> LibraryData) -> JackrabbitFile -> JackrabbitFile
 updateLibrary updater file =
     case file of
         JavaScriptLibrary fileData libraryData ->

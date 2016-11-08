@@ -42,18 +42,18 @@ tests =
                     file =
                         FileData (Just 1) "pathPrefix" "filePath" "Body" 222
 
-                    jackRabbitFile =
+                    jackrabbitFile =
                         JavaScriptFile file
                 in
-                    fileTypeToTypeId jackRabbitFile
+                    fileTypeToTypeId jackrabbitFile
                         |> Expect.equal 0
         , fuzz fileDataFuzzer "can get a file" <|
             \fileData ->
                 let
-                    jackRabbitFile =
+                    jackrabbitFile =
                         JavaScriptFile fileData
                 in
-                    getFile jackRabbitFile
+                    getFile jackrabbitFile
                         |> Expect.equal fileData
         ]
     ]

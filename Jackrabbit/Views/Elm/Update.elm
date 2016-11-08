@@ -13,7 +13,6 @@ import List.Extra exposing (..)
 import Maybe.Extra exposing (..)
 import Json.Decode as Decode exposing (decodeValue)
 import Json.Decode.Pipeline exposing (decode, required, hardcoded)
-import Debug as Debug
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -24,7 +23,7 @@ update msg model =
                 initializedModel =
                     case (Decode.decodeValue intialDataDecoder initialDataJson) of
                         Err omg ->
-                            Debug.crash ("HALP " ++ omg)
+                            { initialModel | criticalError = True, errorMessage = "There was a problem with our data.  Please try a hard refresh." }
 
                         Ok initialData ->
                             let
@@ -54,6 +53,7 @@ update msg model =
                                     Nothing
                                     False
                                     listPathAliases
+                                    False
             in
                 ( initializedModel, Cmd.none )
 
@@ -192,7 +192,7 @@ updateFile targetRowId msg fileRow =
             ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
 
 
-makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> File.Autocomplete -> List String -> List File.JackRabbitFile -> ( List FileRow, Int )
+makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> File.Autocomplete -> List String -> List File.JackrabbitFile -> ( List FileRow, Int )
 makeFileRows lastRowId httpInfo providers localization autocomplete pathList files =
     let
         nextRowId =
