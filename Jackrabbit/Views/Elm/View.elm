@@ -17,7 +17,7 @@ view model =
     let
         itemRows provider =
             model.files
-                |> List.filter (\fileRow -> (getFile fileRow.file.file).provider == provider)
+                |> List.filter (\fileRow -> (getFile fileRow.file.originalFile).provider == provider)
                 |> List.map viewFileRow
 
         itemSection ( provider, fileRows ) =
