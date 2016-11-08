@@ -57,14 +57,18 @@ view model =
                     ]
                 ]
     in
-        div []
-            [ viewErrorMessage model.errorMessage model.localization
-            , addFile
-            , div []
-                editLibForm
-            , table [ class "dnnTableDisplay" ]
-                (tableHeader :: itemSections)
-            ]
+        if model.criticalError == False then
+            div []
+                [ viewErrorMessage model.errorMessage model.localization
+                , addFile
+                , div []
+                    editLibForm
+                , table [ class "dnnTableDisplay" ]
+                    (tableHeader :: itemSections)
+                ]
+        else
+            div []
+                [ viewErrorMessage model.errorMessage model.localization ]
 
 
 viewFileRow : FileRow -> Html Msg
