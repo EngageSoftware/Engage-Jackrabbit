@@ -87,12 +87,12 @@ initialLocalization =
     Dict.empty
 
 
-basicJackrabbitFile : JackRabbitFile
+basicJackrabbitFile : JackrabbitFile
 basicJackrabbitFile =
     JavaScriptFile (FileData (Just 1) "Test.js" "random/path/stuff" "DnnFormBottomProvider" 100)
 
 
-basicJackrabbitLibrary : JackRabbitFile
+basicJackrabbitLibrary : JackrabbitFile
 basicJackrabbitLibrary =
     JavaScriptLibrary (FileData (Just 1) "jQuery-Migrate" "~/Resources/libraries/JQuery-Migrate/01_02_01/jquery-migrate.js" "DnnFormBottomProvider" 100) (LibraryData "jQuery-Migrate" "1.2.1" LatestMajor)
 

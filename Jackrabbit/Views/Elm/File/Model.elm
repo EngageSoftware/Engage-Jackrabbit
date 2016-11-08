@@ -94,10 +94,10 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
                 provider
                 priority
 
-        JackrabbitFile =
+        jackrabbitFile =
             makeJRFile fileData
     in
-        fromJRFile JackrabbitFile editing httpInfo localization initialAutocomplete pathList providers
+        fromJRFile jackrabbitFile editing httpInfo localization initialAutocomplete pathList providers
 
 
 makeLibrary : String -> String -> Library

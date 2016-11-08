@@ -12,7 +12,7 @@ type alias InitialHttpInfo =
 
 
 type alias InitialData =
-    { files : List File.JackRabbitFile
+    { files : List File.JackrabbitFile
     , httpInfo : InitialHttpInfo
     , localization : Dict String String
     , pathAliases : List String
