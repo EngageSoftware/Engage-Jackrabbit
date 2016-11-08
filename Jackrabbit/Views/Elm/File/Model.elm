@@ -123,32 +123,34 @@ libraryDecoder =
 
 encodeFile : JackrabbitFile -> Encode.Value
 encodeFile file =
-    let
-        typeId =
-            fileTypeToTypeId file
-
-        fileData =
-            getFile file
-    in
-        if typeId == 2 then
-            let
-                libraryData =
-                    getLibrary file
-            in
-                Encode.object
-                    [ ( "fileType", Encode.int (fileTypeToTypeId file) )
-                    , ( "libraryName", Encode.string libraryData.libraryName )
-                    , ( "version", Encode.string libraryData.version )
-                    , ( "specificity", Encode.int (specificityToTypeId libraryData.specificity) )
-                    ]
-        else
+    case file of
+        JavaScriptLibrary fileData libraryData ->
             Encode.object
                 [ ( "fileType", Encode.int (fileTypeToTypeId file) )
-                , ( "pathPrefixName", Encode.string fileData.pathPrefixName )
-                , ( "filePath", Encode.string fileData.filePath )
-                , ( "provider", Encode.string fileData.provider )
-                , ( "priority", Encode.int fileData.priority )
+                , ( "libraryName", Encode.string libraryData.libraryName )
+                , ( "version", Encode.string libraryData.version )
+                , ( "specificity", Encode.int (specificityToTypeId libraryData.specificity) )
                 ]
+
+        CssFile fileData ->
+            encodeFileData fileData (fileTypeToTypeId file)
+
+        JavaScriptFile fileData ->
+            encodeFileData fileData (fileTypeToTypeId file)
+
+        Default fileData ->
+            encodeFileData fileData (fileTypeToTypeId file)
+
+
+encodeFileData : FileData -> Int -> Encode.Value
+encodeFileData fileData fileType =
+    Encode.object
+        [ ( "fileType", Encode.int fileType )
+        , ( "pathPrefixName", Encode.string fileData.pathPrefixName )
+        , ( "filePath", Encode.string fileData.filePath )
+        , ( "provider", Encode.string fileData.provider )
+        , ( "priority", Encode.int fileData.priority )
+        ]
 
 
 listFileDecoder : Decode.Decoder (List JackrabbitFile)
@@ -270,16 +272,6 @@ getFile file =
 
         Default fileData ->
             fileData
-
-
-getLibrary : JackrabbitFile -> LibraryData
-getLibrary file =
-    case file of
-        JavaScriptLibrary fileData libraryData ->
-            libraryData
-
-        _ ->
-            Debug.crash "Impossible state achieved"
 
 
 updateFile : (FileData -> FileData) -> JackrabbitFile -> JackrabbitFile

@@ -108,3 +108,12 @@ initialLibraryModel =
         initialAutocomplete
         initialPaths
         initialProviders
+
+
+getLibrary file =
+    case file of
+        JavaScriptLibrary _ libraryData ->
+            libraryData
+
+        _ ->
+            Debug.crash ("library expected: " ++ (toString file))

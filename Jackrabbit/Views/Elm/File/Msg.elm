@@ -12,8 +12,7 @@ type Msg
     | UpdateLibraryName String
     | UpdateVersion String
     | UpdateSpecificity String
-    | SaveFileChanges
-    | SaveLibraryChanges
+    | SaveChanges
     | CancelChanges
     | EditFile
     | DeleteFile

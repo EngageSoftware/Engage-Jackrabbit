@@ -75,7 +75,7 @@ editFile model =
             , showProviderMenu model.file model.localization model.providers
             , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
             , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-            , button [ type' "button", onClick SaveFileChanges ] [ text (localizeString "Save" localization) ]
+            , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
             , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
             ]
 
@@ -95,34 +95,30 @@ showProviderMenu file localization providers =
 
 libraryForm : Model -> Html Msg
 libraryForm model =
-    let
-        localization =
-            model.localization
+    case model.file of
+        JavaScriptLibrary _ libraryData ->
+            let
+                localization =
+                    model.localization
+            in
+                div []
+                    [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Library Name" localization) ]
+                    , autoCompleteInput model
+                    , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version" localization) ]
+                    , input [ type' "text", onInput UpdateVersion, value libraryData.version ] []
+                    , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version Specificity" localization) ]
+                    , select [ onInput UpdateSpecificity ]
+                        [ option [ value "Latest", selected (libraryData.specificity == Latest) ] [ text (localizeString "Latest" localization) ]
+                        , option [ value "LatestMajor", selected (libraryData.specificity == LatestMajor) ] [ text (localizeString "Latest Major" localization) ]
+                        , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text (localizeString "Latest Minor" localization) ]
+                        , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text (localizeString "Exact" localization) ]
+                        ]
+                    , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+                    , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
+                    ]
 
-        file =
-            model.file
-
-        libraryData =
-            getLibrary file
-
-        inputWithAutocomplete =
-            autoCompleteInput model
-    in
-        div []
-            [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Library Name" localization) ]
-            , autoCompleteInput model
-            , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version" localization) ]
-            , input [ type' "text", onInput UpdateVersion, value libraryData.version ] []
-            , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version Specificity" localization) ]
-            , select [ onInput UpdateSpecificity ]
-                [ option [ value "Latest", selected (libraryData.specificity == Latest) ] [ text (localizeString "Latest" localization) ]
-                , option [ value "LatestMajor", selected (libraryData.specificity == LatestMajor) ] [ text (localizeString "Latest Major" localization) ]
-                , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text (localizeString "Latest Minor" localization) ]
-                , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text (localizeString "Exact" localization) ]
-                ]
-            , button [ type' "button", onClick SaveLibraryChanges ] [ text (localizeString "Save" localization) ]
-            , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
-            ]
+        _ ->
+            emptyElement
 
 
 autoCompleteInput : Model -> Html Msg
@@ -208,21 +204,20 @@ autoCompleteInput model =
 
 setValue : Model -> String -> String
 setValue model query =
-    let
-        selectedLibrary =
-            model.autocomplete.selectedLibrary
-    in
-        case model.editing of
-            False ->
-                case selectedLibrary of
-                    Just selectedLibrary ->
-                        selectedLibrary.libName
+    if model.editing then
+        case model.file of
+            JavaScriptLibrary fileData libraryData ->
+                libraryData.libraryName
 
-                    Nothing ->
-                        query
+            _ ->
+                query
+    else
+        case model.autocomplete.selectedLibrary of
+            Just selectedLibrary ->
+                selectedLibrary.libName
 
-            True ->
-                (getLibrary model.file).libraryName
+            Nothing ->
+                query
 
 
 viewMenu : Model -> Html Msg
@@ -294,7 +289,7 @@ addForm model =
                 , showProviderMenu model.file model.localization model.providers
                 , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
                 , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-                , button [ type' "button", onClick SaveFileChanges ] [ text (localizeString "Save" localization) ]
+                , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
                 , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
                 ]
     in

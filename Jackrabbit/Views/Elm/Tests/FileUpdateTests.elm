@@ -200,7 +200,7 @@ tests =
                         ( editing, parentMsg, originalFileData )
                             |> Expect.equal ( False, ParentMsg.Editing, (getFile model.file) )
             ]
-        , describe "can SaveFileChanges"
+        , describe "can SaveChanges"
             [ test "can Add TempFile" <|
                 \() ->
                     let
@@ -223,7 +223,7 @@ tests =
                             { model | file = missingjackrabbit }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveFileChanges expectedModel
+                            update SaveChanges expectedModel
                     in
                         parentMsg
                             |> Expect.equal (ParentMsg.AddTempFile expectedModel)
@@ -249,12 +249,12 @@ tests =
                             { model | editing = True }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveFileChanges finalModel
+                            update SaveChanges finalModel
                     in
                         parentMsg
                             |> Expect.equal ParentMsg.Editing
             ]
-        , describe "can SaveLibraryChanges"
+        , describe "can SaveChanges"
             [ test "can Add TempFile" <|
                 \() ->
                     let
@@ -280,7 +280,7 @@ tests =
                             { model | file = missingjackrabbit }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveLibraryChanges expectedModel
+                            update SaveChanges expectedModel
                     in
                         parentMsg
                             |> Expect.equal (ParentMsg.AddTempFile expectedModel)
@@ -306,7 +306,7 @@ tests =
                             { model | editing = True }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveLibraryChanges expectedModel
+                            update SaveChanges expectedModel
                     in
                         parentMsg
                             |> Expect.equal ParentMsg.Editing

@@ -54,10 +54,6 @@ update msg model =
 
         UpdateLibraryName libraryName ->
             let
-                libraryData =
-                    model.file
-                        |> getLibrary
-
                 library =
                     model.file
                         |> updateLibrary (\libraryData -> { libraryData | libraryName = libraryName })
@@ -66,10 +62,6 @@ update msg model =
 
         UpdateVersion version ->
             let
-                libraryData =
-                    model.file
-                        |> getLibrary
-
                 library =
                     model.file
                         |> updateLibrary (\libraryData -> { libraryData | version = version })
@@ -78,10 +70,6 @@ update msg model =
 
         UpdateSpecificity specificity ->
             let
-                libraryData =
-                    model.file
-                        |> getLibrary
-
                 newSpecificity =
                     case specificity of
                         "Exact" ->
@@ -116,44 +104,39 @@ update msg model =
             else
                 ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.Editing )
 
-        SaveFileChanges ->
+        SaveChanges ->
             let
+                errorMessage =
+                    case model.file of
+                        JavaScriptLibrary _ libraryData ->
+                            validateLibrary libraryData
+
+                        JavaScriptFile fileData ->
+                            validateFile fileData
+
+                        CssFile fileData ->
+                            validateFile fileData
+
+                        Default fileData ->
+                            validateFile fileData
+
                 verb =
                     if isNothing (getFile model.file).id then
                         Post
                     else
                         Put
             in
-                if ((getFile model.file).filePath == "") then
-                    ( model, Cmd.none, ParentMsg.Error "Please enter a File Path" )
-                else
-                    case model.editing of
-                        False ->
-                            ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                case errorMessage of
+                    Nothing ->
+                        case model.editing of
+                            False ->
+                                ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
 
-                        True ->
-                            ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
+                            True ->
+                                ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
 
-        SaveLibraryChanges ->
-            let
-                verb =
-                    if isNothing (getFile model.file).id then
-                        Post
-                    else
-                        Put
-
-                libData =
-                    getLibrary model.file
-            in
-                if (versionValidation libData.version) then
-                    case model.editing of
-                        False ->
-                            ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
-
-                        True ->
-                            ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
-                else
-                    ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
+                    Just error ->
+                        ( model, Cmd.none, ParentMsg.Error error )
 
         DeleteFile ->
             ( model, createAjaxCmd model Delete "file", ParentMsg.NoOp )
@@ -365,32 +348,24 @@ update msg model =
 updateLibraryName : String -> Model -> Model
 updateLibraryName libraryName model =
     let
-        libraryData =
-            model.file
-                |> getLibrary
-
-        library =
+        updateFile =
             model.file
                 |> updateLibrary (\libraryData -> { libraryData | libraryName = libraryName })
     in
-        { model | file = library }
+        { model | file = updateFile }
 
 
 updateLibraryVersion : Library -> Model -> Model
 updateLibraryVersion libraryByName model =
     let
-        libraryData =
-            model.file
-                |> getLibrary
-
         version =
             libraryByName.version
 
-        library =
+        updateFile =
             model.file
                 |> updateLibrary (\libraryData -> { libraryData | version = version })
     in
-        { model | file = library }
+        { model | file = updateFile }
 
 
 resetInput : Autocomplete -> Autocomplete
@@ -489,6 +464,19 @@ createAjaxCmd model verb requestType =
             |> Task.perform Error RefreshFiles
 
 
-versionValidation : String -> Bool
-versionValidation version =
-    Regex.contains (Regex.regex "^\\d+\\.\\d+\\.\\d+$") version
+validateLibrary : LibraryData -> Maybe String
+validateLibrary libraryData =
+    if Regex.contains (Regex.regex "^\\d+\\.\\d+\\.\\d+$") libraryData.version then
+        Nothing
+    else
+        --TODO: Localize
+        Just "Version format should be #.#.#"
+
+
+validateFile : FileData -> Maybe String
+validateFile fileData =
+    if String.isEmpty fileData.filePath then
+        Just "Please enter a File Path"
+        --TODO: Localize
+    else
+        Nothing
