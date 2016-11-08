@@ -10,6 +10,7 @@ import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.Ports exposing (focus)
 import Views.Elm.Utility exposing (localizeString)
 import Dom
+import Dict exposing (Dict)
 import String
 import Regex as Regex
 
@@ -109,16 +110,16 @@ update msg model =
                 errorMessage =
                     case model.file of
                         JavaScriptLibrary _ libraryData ->
-                            validateLibrary libraryData
+                            validateLibrary libraryData model.localization
 
                         JavaScriptFile fileData ->
-                            validateFile fileData
+                            validateFile fileData model.localization
 
                         CssFile fileData ->
-                            validateFile fileData
+                            validateFile fileData model.localization
 
                         Default fileData ->
-                            validateFile fileData
+                            validateFile fileData model.localization
 
                 verb =
                     if isNothing (getFile model.file).id then
@@ -464,19 +465,18 @@ createAjaxCmd model verb requestType =
             |> Task.perform Error RefreshFiles
 
 
-validateLibrary : LibraryData -> Maybe String
-validateLibrary libraryData =
+validateLibrary : LibraryData -> Dict String String -> Maybe String
+validateLibrary libraryData localization =
     if Regex.contains (Regex.regex "^\\d+\\.\\d+\\.\\d+$") libraryData.version then
         Nothing
     else
-        --TODO: Localize
-        Just "Version format should be #.#.#"
+        Just (localizeString "Version format" localization)
 
 
-validateFile : FileData -> Maybe String
-validateFile fileData =
+validateFile : FileData -> Dict String String -> Maybe String
+validateFile fileData localization =
     if String.isEmpty fileData.filePath then
-        Just "Please enter a File Path"
+        Just (localizeString "Empty File Path" localization)
         --TODO: Localize
     else
         Nothing
