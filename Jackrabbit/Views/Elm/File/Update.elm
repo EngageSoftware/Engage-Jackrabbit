@@ -116,7 +116,7 @@ update msg model =
             else
                 ( { model | editing = False, file = model.originalFile }, Cmd.none, ParentMsg.Editing )
 
-        SaveChanges ->
+        SaveFileChanges ->
             let
                 verb =
                     if isNothing (getFile model.file).id then
@@ -129,26 +129,31 @@ update msg model =
                 else
                     case model.editing of
                         False ->
-                            case model.file of
-                                JavaScriptLib fileData libData ->
-                                    if (versionValidation libData.version) then
-                                        ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
-                                    else
-                                        ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
-
-                                _ ->
-                                    ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                            ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
 
                         True ->
-                            case model.file of
-                                JavaScriptLib fileData libData ->
-                                    if (versionValidation libData.version) then
-                                        ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
-                                    else
-                                        ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
+                            ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
 
-                                _ ->
-                                    ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
+        SaveLibraryChanges ->
+            let
+                verb =
+                    if isNothing (getFile model.file).id then
+                        Post
+                    else
+                        Put
+
+                libData =
+                    getLibrary model.file
+            in
+                if (versionValidation libData.version) then
+                    case model.editing of
+                        False ->
+                            ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+
+                        True ->
+                            ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
+                else
+                    ( model, Cmd.none, ParentMsg.Error "Version format should be #.#.# " )
 
         DeleteFile ->
             ( model, createAjaxCmd model Delete "file", ParentMsg.NoOp )

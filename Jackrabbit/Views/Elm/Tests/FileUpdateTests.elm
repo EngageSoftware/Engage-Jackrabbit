@@ -223,7 +223,64 @@ tests =
                             { model | file = missingjackrabbit }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveChanges finalModel
+                            update SaveFileChanges finalModel
+                    in
+                        parentMsg
+                            |> Expect.equal (ParentMsg.AddTempFile finalModel)
+            , test "can Editing" <|
+                \() ->
+                    let
+                        model =
+                            initialFileModel
+
+                        fileData =
+                            getFile model.file
+
+                        file =
+                            model.file
+
+                        noFileId =
+                            { fileData | id = Nothing }
+
+                        missingjackrabbit =
+                            JavaScriptFile noFileId
+
+                        finalModel =
+                            { model | editing = True }
+
+                        ( updatedModel, cmdMsg, parentMsg ) =
+                            update SaveFileChanges finalModel
+                    in
+                        parentMsg
+                            |> Expect.equal ParentMsg.Editing
+            ]
+        , describe "can SaveLibraryChanges"
+            [ test "can Add TempFile" <|
+                \() ->
+                    let
+                        model =
+                            initialLibraryModel
+
+                        fileData =
+                            getFile model.file
+
+                        file =
+                            model.file
+
+                        libData =
+                            getLibrary model.file
+
+                        noFileId =
+                            { fileData | id = Nothing }
+
+                        missingjackrabbit =
+                            JavaScriptLib noFileId libData
+
+                        finalModel =
+                            { model | file = missingjackrabbit }
+
+                        ( updatedModel, cmdMsg, parentMsg ) =
+                            update SaveLibraryChanges finalModel
                     in
                         parentMsg
                             |> Expect.equal (ParentMsg.AddTempFile finalModel)
@@ -243,13 +300,13 @@ tests =
                             { fileData | id = Nothing }
 
                         missingjackrabbit =
-                            JavaScriptFile noFileId
+                            JavaScriptLib noFileId
 
                         finalModel =
                             { model | editing = True }
 
                         ( updatedModel, cmdMsg, parentMsg ) =
-                            update SaveChanges finalModel
+                            update SaveLibraryChanges finalModel
                     in
                         parentMsg
                             |> Expect.equal ParentMsg.Editing

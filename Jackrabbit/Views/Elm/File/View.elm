@@ -75,7 +75,7 @@ editFile model =
             , showProviderMenu model.file model.localization model.providers
             , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
             , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-            , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+            , button [ type' "button", onClick SaveFileChanges ] [ text (localizeString "Save" localization) ]
             , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
             ]
 
@@ -120,7 +120,7 @@ libraryForm model =
                 , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text (localizeString "Latest Minor" localization) ]
                 , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text (localizeString "Exact" localization) ]
                 ]
-            , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+            , button [ type' "button", onClick SaveLibraryChanges ] [ text (localizeString "Save" localization) ]
             , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
             ]
 
@@ -295,7 +295,7 @@ addForm model =
                 , showProviderMenu model.file model.localization model.providers
                 , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
                 , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-                , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+                , button [ type' "button", onClick SaveFileChanges ] [ text (localizeString "Save" localization) ]
                 , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
                 ]
     in
