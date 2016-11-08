@@ -146,7 +146,6 @@ autoCompleteInput model =
                 )
             )
 
-        --DropDown of autocomplete options?
         menu =
             if autoComplete.showMenu then
                 [ viewMenu model ]
