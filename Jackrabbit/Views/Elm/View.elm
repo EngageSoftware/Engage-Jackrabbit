@@ -68,7 +68,7 @@ view model =
                 ]
         else
             div []
-                [ viewErrorMessage model.errorMessage model.localization ]
+                [ criticalError ]
 
 
 viewFileRow : FileRow -> Html Msg
@@ -94,6 +94,17 @@ showAddFile model tempFile =
 
         Just { rowId, file } ->
             App.map (FileMsg rowId) (File.viewAddForm file)
+
+
+criticalError : Html Msg
+criticalError =
+    div [ class "dnnFormMessage dnnFormValidationSummary" ]
+        [ text "We're sorry, there was an unexpected issue loading Jackrabbit.  Try doing a hard refresh in your browser ( "
+        , kbd [] [ text "Ctrl + F5" ]
+        , text " on Windows, "
+        , kbd [] [ text "⌘ Cmd + ⇧ Shift + R" ]
+        , text " on macOS)."
+        ]
 
 
 viewErrorMessage : Maybe String -> Dict String String -> Html Msg

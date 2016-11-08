@@ -23,7 +23,7 @@ update msg model =
                 initializedModel =
                     case (Decode.decodeValue intialDataDecoder initialDataJson) of
                         Err omg ->
-                            { initialModel | criticalError = True, errorMessage = "There was a problem with our data.  Please try a hard refresh." }
+                            { initialModel | criticalError = True }
 
                         Ok initialData ->
                             let
