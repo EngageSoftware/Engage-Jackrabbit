@@ -86,7 +86,7 @@ update msg model =
         FileMsg rowId msg ->
             let
                 matchingFileRow =
-                    model.files
+                    model.fileRows
                         |> List.Extra.find (findRow rowId)
 
                 fileRow =
@@ -114,7 +114,7 @@ update msg model =
                             if Maybe.Extra.isNothing matchingFileRow then
                                 { model | tempFileRow = Just f }
                             else
-                                { model | files = List.Extra.replaceIf (\fr -> fr.rowId == rowId) f model.files }
+                                { model | fileRows = List.Extra.replaceIf (\fr -> fr.rowId == rowId) f model.fileRows }
 
                 modelWithParentMsgs =
                     fileUpdate
@@ -141,10 +141,10 @@ updateFromChild model ( fileRow, _, parentMsg ) =
         ParentMsg.RemoveFile ->
             let
                 updatedFiles =
-                    model.files
+                    model.fileRows
                         |> List.filter (\s -> s.rowId /= fileRow.rowId)
             in
-                { model | files = updatedFiles }
+                { model | fileRows = updatedFiles }
 
         ParentMsg.Error errorMessage ->
             { model | errorMessage = Just errorMessage }
@@ -155,14 +155,14 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                     files
                         |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
             in
-                { model | files = fileRows, lastRowId = lastRowId }
+                { model | fileRows = fileRows, lastRowId = lastRowId }
 
         ParentMsg.AddTempFile file ->
             let
                 newFileRow =
                     { rowId = model.lastRowId, file = file }
             in
-                { model | files = newFileRow :: model.files, tempFileRow = Nothing }
+                { model | fileRows = newFileRow :: model.fileRows, tempFileRow = Nothing }
 
         ParentMsg.CancelTempForm ->
             let

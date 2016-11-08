@@ -25,7 +25,7 @@ tests =
                             initialBaseModel
 
                         expectedModel =
-                            { model | files = [ (FileRow 1 initialLibraryModel) ] }
+                            { model | fileRows = [ (FileRow 1 initialLibraryModel) ] }
 
                         returnedModel =
                             updateFromChild model ( fakeFileRow, Cmd.none, ParentMsg.RemoveFile )
@@ -56,7 +56,7 @@ tests =
                             FileRow 1 initialFileModel
 
                         expectedModel =
-                            { model | files = fileRow :: model.files }
+                            { model | fileRows = fileRow :: model.fileRows }
 
                         returnedModel =
                             updateFromChild model ( fakeFileRow, Cmd.none, (ParentMsg.AddTempFile initialFileModel) )
@@ -171,7 +171,7 @@ tests =
                             Init json
 
                         expectedModel =
-                            { model | lastRowId = 2, localization = newLocalization, defaultProvider = "DnnFormBottomProvider", defaultFilePath = "", pathAliases = [], defaultPriority = 100, files = [ newFileRow ] }
+                            { model | lastRowId = 2, localization = newLocalization, defaultProvider = "DnnFormBottomProvider", defaultFilePath = "", pathAliases = [], defaultPriority = 100, fileRows = [ newFileRow ] }
 
                         ( returnedModel, command ) =
                             update message model
@@ -231,4 +231,4 @@ fakeListFileRow =
 
 initialBaseModel : Model
 initialBaseModel =
-    { initialModel | lastRowId = 1, files = fakeListFileRow }
+    { initialModel | lastRowId = 1, fileRows = fakeListFileRow }

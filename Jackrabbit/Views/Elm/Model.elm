@@ -20,7 +20,7 @@ type alias InitialData =
 
 
 type alias Model =
-    { files : List FileRow
+    { fileRows : List FileRow
     , defaultPathPrefix : String
     , defaultFilePath : String
     , defaultProvider : String
@@ -44,7 +44,7 @@ type alias FileRow =
 
 initialModel : Model
 initialModel =
-    { files = []
+    { fileRows = []
     , defaultPathPrefix = ""
     , defaultFilePath = ""
     , defaultProvider = "DnnFormBottomProvider"

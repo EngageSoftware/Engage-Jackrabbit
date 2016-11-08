@@ -16,7 +16,7 @@ view : Model -> Html Msg
 view model =
     let
         itemRows provider =
-            model.files
+            model.fileRows
                 |> List.filter (\fileRow -> (getFile fileRow.file.originalFile).provider == provider)
                 |> List.map viewFileRow
 
@@ -39,7 +39,7 @@ view model =
                 |> List.map itemSection
 
         editLibForm =
-            model.files
+            model.fileRows
                 |> List.map addEditForm
 
         addFile =
