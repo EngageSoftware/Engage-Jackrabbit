@@ -206,7 +206,7 @@ makeFileRows lastRowId httpInfo providers localization autocomplete pathList fil
             file :: otherFiles ->
                 let
                     fileModel =
-                        File.fromJRFile file
+                        File.fromJackrabbitFile file
                             False
                             httpInfo
                             localization

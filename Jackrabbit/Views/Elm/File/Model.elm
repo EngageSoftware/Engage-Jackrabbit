@@ -78,13 +78,13 @@ initialAutocomplete =
     }
 
 
-fromJRFile : JackrabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Bool -> Model
-fromJRFile file editing httpInfo localization autocomplete pathList providers choosingType =
+fromJackrabbitFile : JackrabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Bool -> Model
+fromJackrabbitFile file editing httpInfo localization autocomplete pathList providers choosingType =
     Model file file editing httpInfo localization autocomplete pathList providers choosingType
 
 
 init : (FileData -> JackrabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Bool -> Model
-init makeJRFile id pathPrefixName filePath provider priority editing httpInfo localization pathList providers choosingType =
+init makeJackrabbitFile id pathPrefixName filePath provider priority editing httpInfo localization pathList providers choosingType =
     let
         fileData =
             FileData
@@ -95,9 +95,9 @@ init makeJRFile id pathPrefixName filePath provider priority editing httpInfo lo
                 priority
 
         jackrabbitFile =
-            makeJRFile fileData
+            makeJackrabbitFile fileData
     in
-        fromJRFile jackrabbitFile editing httpInfo localization initialAutocomplete pathList providers choosingType
+        fromJackrabbitFile jackrabbitFile editing httpInfo localization initialAutocomplete pathList providers choosingType
 
 
 makeLibrary : String -> String -> Library
