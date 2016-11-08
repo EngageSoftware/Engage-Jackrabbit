@@ -57,7 +57,7 @@ view model =
                     ]
                 ]
     in
-        if model.criticalError == False then
+        if not model.criticalError then
             div []
                 [ viewErrorMessage model.errorMessage model.localization
                 , addFile
@@ -98,11 +98,18 @@ showAddFile model tempFile =
 
 criticalError : Html Msg
 criticalError =
+    --NOTE: This cannot be localized, since the parsing of the initial data (which includes the localization dictionary) failed
     div [ class "dnnFormMessage dnnFormValidationSummary" ]
         [ text "We're sorry, there was an unexpected issue loading Jackrabbit.  Try doing a hard refresh in your browser ( "
-        , kbd [] [ text "Ctrl + F5" ]
+        , kbd [] [ text "Ctrl" ]
+        , text " + "
+        , kbd [] [ text "F5" ]
         , text " on Windows, "
-        , kbd [] [ text "⌘ Cmd + ⇧ Shift + R" ]
+        , kbd [] [ text "⌘ Cmd" ]
+        , text " + "
+        , kbd [] [ text "⇧ Shift" ]
+        , text " + "
+        , kbd [] [ text "R" ]
         , text " on macOS)."
         ]
 
