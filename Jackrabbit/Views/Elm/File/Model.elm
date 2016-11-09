@@ -2,7 +2,7 @@ module Views.Elm.File.Model exposing (..)
 
 import Dict exposing (Dict)
 import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (decode, required, hardcoded)
+import Json.Decode.Pipeline exposing (decode, required, hardcoded, custom)
 import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 import Autocomplete
@@ -169,21 +169,25 @@ jackrabbitFileDecoder : Int -> Decode.Decoder JackrabbitFile
 jackrabbitFileDecoder typeId =
     case typeId of
         0 ->
-            decodeFileData (\fileData -> JavaScriptFile fileData)
+            decode JavaScriptFile
+                |> custom fileDataDecoder
 
         1 ->
-            decodeFileData (\fileData -> CssFile fileData)
+            decode CssFile
+                |> custom fileDataDecoder
 
         2 ->
-            decodeLibrary
+            decode JavaScriptLibrary
+                |> custom fileDataDecoder
+                |> custom libraryDataDecoder
 
         _ ->
             Decode.fail ("Invalid file type: " ++ (toString typeId))
 
 
-decodeFileData : (FileData -> JackrabbitFile) -> Decode.Decoder JackrabbitFile
-decodeFileData t =
-    decode (\id pathPrefix path provider priority -> t (FileData id pathPrefix path provider priority))
+fileDataDecoder : Decode.Decoder FileData
+fileDataDecoder =
+    decode FileData
         |> required "Id" (Decode.maybe Decode.int)
         |> required "PathPrefixName" Decode.string
         |> required "FilePath" Decode.string
@@ -191,14 +195,9 @@ decodeFileData t =
         |> required "Priority" Decode.int
 
 
-decodeLibrary : Decode.Decoder JackrabbitFile
-decodeLibrary =
-    decode (\id pathPrefix path provider priority libraryName version specificity -> JavaScriptLibrary (FileData id pathPrefix path provider priority) (LibraryData libraryName version specificity))
-        |> required "Id" (Decode.maybe Decode.int)
-        |> required "PathPrefixName" Decode.string
-        |> required "FilePath" Decode.string
-        |> required "Provider" Decode.string
-        |> required "Priority" Decode.int
+libraryDataDecoder : Decode.Decoder LibraryData
+libraryDataDecoder =
+    decode LibraryData
         |> required "LibraryName" Decode.string
         |> required "Version" Decode.string
         |> required "Specificity" specificityDecoder
