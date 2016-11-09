@@ -152,11 +152,15 @@ updateFromChild model ( fileRow, _, parentMsg ) =
 
         ParentMsg.RefreshFiles files ->
             let
+                deletedFiles =
+                    model.fileRows
+                        |> List.filter isDeleted
+
                 ( fileRows, lastRowId ) =
                     files
                         |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
             in
-                { model | fileRows = fileRows, lastRowId = lastRowId }
+                { model | fileRows = fileRows ++ deletedFiles, lastRowId = lastRowId }
 
         ParentMsg.AddTempFile file ->
             let
@@ -191,6 +195,14 @@ updateFile targetRowId msg fileRow =
                 File.update msg fileRow.file
         in
             ( FileRow fileRow.rowId updatedRow, Cmd.map (FileMsg fileRow.rowId) cmd, parentMsg )
+
+
+isDeleted : FileRow -> Bool
+isDeleted fileRow =
+    if (fileRow.file.deleted) then
+        True
+    else
+        False
 
 
 makeFileRows : Int -> HttpInfo -> Dict String Int -> Dict String String -> File.Autocomplete -> List String -> List File.JackrabbitFile -> ( List FileRow, Int )

@@ -137,7 +137,7 @@ update msg model =
                         ( model, Cmd.none, ParentMsg.Error error )
 
         DeleteFile ->
-            ( model, createAjaxCmd model Delete "file", ParentMsg.NoOp )
+            ( { model | deleted = True }, createAjaxCmd model Delete "file", ParentMsg.NoOp )
 
         Error errorMessage ->
             ( model, Cmd.none, ParentMsg.Error errorMessage )

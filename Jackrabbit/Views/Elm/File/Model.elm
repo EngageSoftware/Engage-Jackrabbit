@@ -64,6 +64,7 @@ type alias Model =
     , pathList : List String
     , providers : List String
     , choosingType : Bool
+    , deleted : Bool
     }
 
 
@@ -80,7 +81,7 @@ initialAutocomplete =
 
 fromJackrabbitFile : JackrabbitFile -> Bool -> HttpInfo -> Dict String String -> Autocomplete -> List String -> List String -> Bool -> Model
 fromJackrabbitFile file editing httpInfo localization autocomplete pathList providers choosingType =
-    Model file file editing httpInfo localization autocomplete pathList providers choosingType
+    Model file file editing httpInfo localization autocomplete pathList providers choosingType False
 
 
 init : (FileData -> JackrabbitFile) -> Maybe Int -> String -> String -> String -> Int -> Bool -> HttpInfo -> Dict String String -> List String -> List String -> Bool -> Model

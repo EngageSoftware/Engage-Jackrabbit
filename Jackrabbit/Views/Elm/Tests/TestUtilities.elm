@@ -63,6 +63,7 @@ initialFileModel =
         initialPaths
         initialProviders
         False
+        False
 
 
 initialPaths : List String
@@ -92,6 +93,7 @@ emptyFileModel file =
         []
         initialProviders
         True
+        False
 
 
 emptyHttpInfo : HttpInfo
@@ -128,6 +130,7 @@ initialLibraryModel =
         initialAutocomplete
         initialPaths
         initialProviders
+        False
         False
 
 

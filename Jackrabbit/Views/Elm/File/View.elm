@@ -15,10 +15,12 @@ import Autocomplete
 
 view : Model -> Html Msg
 view model =
-    if model.editing then
-        viewFile model.originalFile model.localization
+    if model.deleted then
+        viewDeleted model
+    else if model.editing then
+        viewFile model
     else
-        viewFile model.file model.localization
+        viewFile model
 
 
 editLib : Model -> Html Msg
@@ -39,16 +41,46 @@ viewAddForm model =
     addForm model
 
 
-viewFile : JackrabbitFile -> Dict String String -> Html Msg
-viewFile file localization =
+viewFile : Model -> Html Msg
+viewFile model =
     let
+        file =
+            model.file
+
+        localization =
+            model.localization
+
         fileData =
             getFile file
     in
-        tr [ classList (getRowClasses file) ]
+        tr [ classList (getRowClasses model) ]
             [ td [ class "jackrabbit-file--actions" ]
                 [ button [ type' "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
                 , button [ type' "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
+                ]
+            , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
+            , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
+            , td [ class "jackrabbit-file--provider" ] [ text fileData.provider ]
+            , td [ class "jackrabbit-file--priority" ] [ text (toString fileData.priority) ]
+            ]
+
+
+viewDeleted : Model -> Html Msg
+viewDeleted model =
+    let
+        file =
+            model.file
+
+        localization =
+            model.localization
+
+        fileData =
+            getFile file
+    in
+        tr [ classList (getRowClasses model) ]
+            [ td [ class "jackrabbit-file--actions" ]
+                --TODO Undo Button functionality
+                [ button [ type' "button", onClick NoOp ] [ text (localizeString "Undo" localization) ]
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
@@ -324,40 +356,39 @@ stringToIntDecoder tagger default =
         Decode.map (\value -> tagger (stringToInt value)) targetValue
 
 
-getRowClasses : JackrabbitFile -> List ( String, Bool )
-getRowClasses file =
+getRowClasses : Model -> List ( String, Bool )
+getRowClasses model =
     let
-        oldFile =
+        file =
+            model.file
+
+        fileData =
             getFile file
 
         provider =
-            oldFile.provider
+            fileData.provider
 
-        js =
-            case file of
-                JavaScriptFile fileData ->
-                    True
+        fileType =
+            if model.deleted then
+                "Deleted"
+            else
+                case file of
+                    JavaScriptFile fileData ->
+                        "Javascript"
 
-                JavaScriptLibrary fileData libData ->
-                    True
+                    JavaScriptLibrary fileData libData ->
+                        "Javascript"
 
-                _ ->
-                    False
-
-        css =
-            case file of
-                CssFile fileData ->
-                    True
-
-                _ ->
-                    False
+                    _ ->
+                        "Css"
     in
         [ ( "jackrabbit-file", True )
-        , ( "jackrabbit-file__type-javascript", js )
-        , ( "jackrabbit-file__type-css", css )
+        , ( "jackrabbit-file__type-javascript", fileType == "Javascript" )
+        , ( "jackrabbit-file__type-css", fileType == "Css" )
         , ( "jackrabbit-file__provider-head", provider == "DnnPageHeaderProvider" )
         , ( "jackrabbit-file__provider-body", provider == "DnnBodyProvider" )
         , ( "jackrabbit-file__provider-bottom", provider == "DnnFormBottomProvider" )
+        , ( "jackrabbit-file__deleted", fileType == "Deleted" )
         ]
 
 

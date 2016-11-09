@@ -219,4 +219,7 @@
   <data name="Version Format.Text" xml:space="preserve">
     <value>Version format should be #.#.#</value>
   </data>
+  <data name="Undo.Text" xml:space="preserve">
+    <value>Undo Delete</value>
+  </data>
 </root>
