@@ -225,14 +225,14 @@ makeFileRows lastRowId httpInfo providers localization autocomplete pathList fil
                     sortedFileRows =
                         fileRow
                             :: otherFileRows
-                            |> List.sortWith (compareFileRows providers)
+                            |> List.sortWith compareFileRows
                 in
                     ( sortedFileRows, lastRowId )
 
 
-compareFileRows : Dict String Int -> FileRow -> FileRow -> Basics.Order
-compareFileRows providers first second =
-    File.compareModels providers first.file second.file
+compareFileRows : FileRow -> FileRow -> Basics.Order
+compareFileRows first second =
+    File.compareModels first.file second.file
 
 
 intialDataDecoder : Decode.Decoder InitialData

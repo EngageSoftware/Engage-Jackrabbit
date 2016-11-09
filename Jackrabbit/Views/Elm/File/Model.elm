@@ -288,22 +288,16 @@ updateLibrary updater file =
             file
 
 
-compareModels : Dict String Int -> Model -> Model -> Basics.Order
-compareModels providers first second =
+compareModels : Model -> Model -> Basics.Order
+compareModels first second =
     let
-        firstFile =
-            getFile first.file
-
-        secondFile =
-            getFile second.file
-
         firstOriginalFile =
-            getFile first.originalFile
+            first.originalFile
 
         secondOriginalFile =
-            getFile second.originalFile
+            second.originalFile
     in
-        case compareFiles providers firstFile secondFile of
+        case compareFiles first.file second.file of
             LT ->
                 LT
 
@@ -311,19 +305,25 @@ compareModels providers first second =
                 GT
 
             EQ ->
-                compareFiles providers firstOriginalFile secondOriginalFile
+                compareFiles firstOriginalFile secondOriginalFile
 
 
-compareFiles : Dict String Int -> FileData -> FileData -> Basics.Order
-compareFiles providers first second =
+compareFiles : JackrabbitFile -> JackrabbitFile -> Basics.Order
+compareFiles first second =
     let
-        firstProviderOrder =
-            providers |> Dict.get first.provider |> Maybe.withDefault 0
+        firstTypeId =
+            fileTypeToOrderedNumber first
 
-        secondProviderOrder =
-            providers |> Dict.get second.provider |> Maybe.withDefault 0
+        secondTypeId =
+            fileTypeToOrderedNumber second
+
+        firstFile =
+            getFile first
+
+        secondFile =
+            getFile second
     in
-        case compare firstProviderOrder secondProviderOrder of
+        case compare firstTypeId secondTypeId of
             LT ->
                 LT
 
@@ -331,7 +331,7 @@ compareFiles providers first second =
                 GT
 
             EQ ->
-                case compare first.priority second.priority of
+                case compare firstFile.priority secondFile.priority of
                     LT ->
                         LT
 
@@ -339,4 +339,17 @@ compareFiles providers first second =
                         GT
 
                     EQ ->
-                        compare first.filePath second.filePath
+                        compare firstFile.filePath secondFile.filePath
+
+
+fileTypeToOrderedNumber : JackrabbitFile -> Int
+fileTypeToOrderedNumber file =
+    case file of
+        JavaScriptFile fileData ->
+            1
+
+        CssFile fileData ->
+            0
+
+        JavaScriptLibrary fileData libraryData ->
+            2
