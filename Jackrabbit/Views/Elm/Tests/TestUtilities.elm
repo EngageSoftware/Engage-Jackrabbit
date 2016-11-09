@@ -80,11 +80,11 @@ emptyJavaScriptFile =
     JavaScriptFile (FileData Nothing "" "" "DnnFormBottomProvider" 100)
 
 
-emptyFileModel : Model
-emptyFileModel =
+emptyFileModel : JackrabbitFile -> Model
+emptyFileModel file =
     Model
-        emptyJavaScriptFile
-        emptyJavaScriptFile
+        file
+        file
         False
         emptyHttpInfo
         initialLocalization

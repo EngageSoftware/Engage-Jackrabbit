@@ -6,7 +6,9 @@ import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
 import Views.Elm.File.Update exposing (..)
 import Fuzz as Fuzz
-import Views.Elm.Tests.TestUtilities exposing (initialFileModel, fileDataFuzzer)
+import Views.Elm.Tests.TestUtilities exposing (..)
+import Views.Elm.Update exposing (compareFileRows)
+import Views.Elm.Model exposing (FileRow, initialModel)
 
 
 tests : List Test
@@ -55,5 +57,38 @@ tests =
                 in
                     getFile jackrabbitFile
                         |> Expect.equal fileData
+        , test "Compare models" <|
+            \() ->
+                let
+                    file3 =
+                        FileRow 0 (emptyFileModel (JavaScriptFile (FileData (Just 1) "sharedScripts" "test.js" "DnnPageHeaderProvider" 100)))
+
+                    file4 =
+                        FileRow 1 (emptyFileModel (JavaScriptFile (FileData (Just 2) "sharedScripts" "test1.js" "DnnPageHeaderProvider" 101)))
+
+                    file1 =
+                        FileRow 2 (emptyFileModel (CssFile (FileData (Just 3) "skinPath" "test.css" "DnnPageHeaderProvider" 50)))
+
+                    file2 =
+                        FileRow 3 (emptyFileModel (CssFile (FileData (Just 4) "skinPath" "test1.css" "DnnPageHeaderProvider" 200)))
+
+                    file5 =
+                        FileRow 4 (emptyFileModel (JavaScriptLibrary (FileData (Just 5) "Knockout" "Knockout" "DnnPageHeaderProvider" 232) (LibraryData "" "" Latest)))
+
+                    model =
+                        { initialModel | fileRows = [ file3, file4, file1, file2, file5 ] }
+
+                    expectedModel =
+                        { initialModel | fileRows = [ file1, file2, file3, file4, file5 ] }
+
+                    sortedRows =
+                        model.fileRows
+                            |> List.sortWith compareFileRows
+
+                    comparedModel =
+                        { initialModel | fileRows = sortedRows }
+                in
+                    comparedModel
+                        |> Expect.equal expectedModel
         ]
     ]

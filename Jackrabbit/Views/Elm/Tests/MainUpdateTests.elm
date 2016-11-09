@@ -221,7 +221,7 @@ tests =
                             { initialFileModel | choosingType = True }
 
                         expectedModel =
-                            { model | tempFileRow = (Just (FileRow 2 emptyFileModel)), lastRowId = 2 }
+                            { model | tempFileRow = (Just (FileRow 2 (emptyFileModel emptyJavaScriptFile))), lastRowId = 2 }
 
                         ( returnedModel, command ) =
                             update AddNewFile model

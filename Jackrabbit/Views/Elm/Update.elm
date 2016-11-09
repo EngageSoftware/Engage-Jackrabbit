@@ -1,4 +1,4 @@
-module Views.Elm.Update exposing (update, updateFromChild)
+module Views.Elm.Update exposing (update, updateFromChild, compareFileRows)
 
 import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (HttpInfo)
