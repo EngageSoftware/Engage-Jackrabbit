@@ -210,4 +210,13 @@
   <data name="Version.Text" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="Data Error.Text" xml:space="preserve">
+    <value>There was a problem with our data.  Please try a hard refresh.</value>
+  </data>
+  <data name="Empty File Path.Text" xml:space="preserve">
+    <value>Please enter a File Path</value>
+  </data>
+  <data name="Version Format.Text" xml:space="preserve">
+    <value>Version format should be #.#.#</value>
+  </data>
 </root>
