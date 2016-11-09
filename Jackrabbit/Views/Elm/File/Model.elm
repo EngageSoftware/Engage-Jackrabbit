@@ -169,34 +169,39 @@ jackrabbitFileDecoder : Int -> Decode.Decoder JackrabbitFile
 jackrabbitFileDecoder typeId =
     case typeId of
         0 ->
-            decode (\id pathPrefix path provider priority -> JavaScriptFile (FileData id pathPrefix path provider priority))
-                |> required "Id" (Decode.maybe Decode.int)
-                |> required "PathPrefixName" Decode.string
-                |> required "FilePath" Decode.string
-                |> required "Provider" Decode.string
-                |> required "Priority" Decode.int
+            decodeFileData (\fileData -> JavaScriptFile fileData)
 
         1 ->
-            decode (\id pathPrefix path provider priority -> CssFile (FileData id pathPrefix path provider priority))
-                |> required "Id" (Decode.maybe Decode.int)
-                |> required "PathPrefixName" Decode.string
-                |> required "FilePath" Decode.string
-                |> required "Provider" Decode.string
-                |> required "Priority" Decode.int
+            decodeFileData (\fileData -> CssFile fileData)
 
         2 ->
-            decode (\id pathPrefix path provider priority libraryName version specificity -> JavaScriptLibrary (FileData id pathPrefix path provider priority) (LibraryData libraryName version specificity))
-                |> required "Id" (Decode.maybe Decode.int)
-                |> required "PathPrefixName" Decode.string
-                |> required "FilePath" Decode.string
-                |> required "Provider" Decode.string
-                |> required "Priority" Decode.int
-                |> required "LibraryName" Decode.string
-                |> required "Version" Decode.string
-                |> required "Specificity" specificityDecoder
+            decodeLibrary
 
         _ ->
             Decode.fail ("Invalid file type: " ++ (toString typeId))
+
+
+decodeFileData : (FileData -> JackrabbitFile) -> Decode.Decoder JackrabbitFile
+decodeFileData t =
+    decode (\id pathPrefix path provider priority -> t (FileData id pathPrefix path provider priority))
+        |> required "Id" (Decode.maybe Decode.int)
+        |> required "PathPrefixName" Decode.string
+        |> required "FilePath" Decode.string
+        |> required "Provider" Decode.string
+        |> required "Priority" Decode.int
+
+
+decodeLibrary : Decode.Decoder JackrabbitFile
+decodeLibrary =
+    decode (\id pathPrefix path provider priority libraryName version specificity -> JavaScriptLibrary (FileData id pathPrefix path provider priority) (LibraryData libraryName version specificity))
+        |> required "Id" (Decode.maybe Decode.int)
+        |> required "PathPrefixName" Decode.string
+        |> required "FilePath" Decode.string
+        |> required "Provider" Decode.string
+        |> required "Priority" Decode.int
+        |> required "LibraryName" Decode.string
+        |> required "Version" Decode.string
+        |> required "Specificity" specificityDecoder
 
 
 specificityDecoder : Decode.Decoder Specificity
