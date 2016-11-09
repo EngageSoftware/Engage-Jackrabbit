@@ -17,8 +17,6 @@ view : Model -> Html Msg
 view model =
     if model.deleted then
         viewDeleted model
-    else if model.editing then
-        viewFile model
     else
         viewFile model
 
@@ -45,7 +43,10 @@ viewFile : Model -> Html Msg
 viewFile model =
     let
         file =
-            model.file
+            if model.editing then
+                model.originalFile
+            else
+                model.file
 
         localization =
             model.localization
