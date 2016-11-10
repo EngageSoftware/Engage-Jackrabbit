@@ -136,6 +136,9 @@ update msg model =
                     Just error ->
                         ( model, Cmd.none, ParentMsg.Error error )
 
+        UndoDelete ->
+            ( { model | deleted = False }, createAjaxCmd model Post "file", ParentMsg.NoOp )
+
         DeleteFile ->
             ( { model | deleted = True }, createAjaxCmd model Delete "file", ParentMsg.NoOp )
 

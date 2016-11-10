@@ -15,6 +15,7 @@ type Msg
     | SaveChanges
     | CancelChanges
     | EditFile
+    | UndoDelete
     | DeleteFile
     | RefreshFiles (List JackrabbitFile)
     | Error String

@@ -81,7 +81,7 @@ viewDeleted model =
         tr [ classList (getRowClasses model) ]
             [ td [ class "jackrabbit-file--actions" ]
                 --TODO Undo Button functionality
-                [ button [ type' "button", onClick NoOp ] [ text (localizeString "Undo" localization) ]
+                [ button [ type' "button", onClick UndoDelete ] [ text (localizeString "Undo" localization) ]
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
