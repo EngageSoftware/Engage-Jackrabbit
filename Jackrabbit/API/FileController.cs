@@ -96,26 +96,6 @@ namespace Engage.Dnn.Jackrabbit.Api
             }
         }
 
-        private IEnumerable<object> GetAllItems(int moduleId)
-        {
-            return this.repository.GetFiles(moduleId)
-                                  .Cast<object>()
-                                  .Concat(from library in this.repository.GetLibraries(moduleId)
-                                          let libraryInfo = this.repository.GetLibraryInfo(library)
-                                          select new
-                                                 {
-                                                     library.Id,
-                                                     library.FileType,
-                                                     library.LibraryName,
-                                                     Version = library.Version.ToString(),
-                                                     library.Specificity,
-                                                     PathPrefixName = "JS Library",
-                                                     libraryInfo.FilePath,
-                                                     libraryInfo.Provider,
-                                                     libraryInfo.Priority,
-                                                 });
-        }
-
         [HttpDelete]
         [ValidateAntiForgeryToken]
         public HttpResponseMessage DeleteItem(int id)
@@ -129,6 +109,41 @@ namespace Engage.Dnn.Jackrabbit.Api
             {
                 return this.HandleException(exc);
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public HttpResponseMessage UndeleteItem(int id)
+        {
+            try
+            {
+                this.repository.UndeleteItem(id);
+                return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+            }
+            catch (Exception exc)
+            {
+                return this.HandleException(exc);
+            }
+        }
+
+        private IEnumerable<object> GetAllItems(int moduleId)
+        {
+            return this.repository.GetFiles(moduleId)
+                       .Cast<object>()
+                       .Concat(from library in this.repository.GetLibraries(moduleId)
+                               let libraryInfo = this.repository.GetLibraryInfo(library)
+                               select new
+                                      {
+                                          library.Id,
+                                          library.FileType,
+                                          library.LibraryName,
+                                          Version = library.Version.ToString(),
+                                          library.Specificity,
+                                          PathPrefixName = "JS Library",
+                                          libraryInfo.FilePath,
+                                          libraryInfo.Provider,
+                                          libraryInfo.Priority,
+                                      });
         }
 
         private HttpResponseMessage HandleException(Exception exc)

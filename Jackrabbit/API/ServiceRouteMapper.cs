@@ -26,6 +26,11 @@ namespace Engage.Dnn.Jackrabbit.Api
                 moduleFolderName: "Engage/Jackrabbit",
                 url: "{controller}",
                 namespaces: new[] { "Engage.Dnn.Jackrabbit.Api", });
+            mapRouteManager.MapHttpRoute(
+                routeName: "explicit action",
+                moduleFolderName: "Engage/Jackrabbit",
+                url: "{controller}/{action}",
+                namespaces: new[] { "Engage.Dnn.Jackrabbit.Api", });
         }
     }
 }

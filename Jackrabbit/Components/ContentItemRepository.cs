@@ -69,6 +69,7 @@ namespace Engage.Dnn.Jackrabbit
                    where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
                    let fileType = ParseFileType(ci)
                    where fileType == FileType.CssFile || fileType == FileType.JavaScriptFile
+                   where ci.Metadata["IsDeleted"] != bool.TrueString
                    select new JackrabbitFile(
                        fileType,
                        ci.ContentItemId,
@@ -84,6 +85,7 @@ namespace Engage.Dnn.Jackrabbit
                    where ci.ContentTypeId == this.JackrabbitFileContentType.ContentTypeId
                    let fileType = ParseFileType(ci)
                    where fileType == FileType.JavaScriptLib
+                   where ci.Metadata["IsDeleted"] != bool.TrueString
                    select new JackrabbitLibrary(
                        fileType,
                        ci.ContentItemId,
@@ -139,7 +141,18 @@ namespace Engage.Dnn.Jackrabbit
         /// <param name="fileId">The file's ID.</param>
         public void DeleteItem(int fileId)
         {
-            this.contentController.DeleteContentItem(fileId);
+            var contentItem = this.contentController.GetContentItem(fileId);
+            contentItem.Metadata["IsDeleted"] = bool.TrueString;
+            this.contentController.UpdateContentItem(contentItem);
+        }
+
+        /// <summary>Undeletes the file.</summary>
+        /// <param name="fileId">The file's ID.</param>
+        public void UndeleteItem(int fileId)
+        {
+            var contentItem = this.contentController.GetContentItem(fileId);
+            contentItem.Metadata.Remove("IsDeleted");
+            this.contentController.UpdateContentItem(contentItem);
         }
 
         public JackrabbitLibraryInfo GetLibraryInfo(JackrabbitLibrary library)
@@ -151,7 +164,7 @@ namespace Engage.Dnn.Jackrabbit
                             || (library.Specificity == SpecificVersion.LatestMajor && l.Version.Major == library.Version.Major)
                             || (library.Specificity == SpecificVersion.LatestMinor && l.Version.Major == library.Version.Major && l.Version.Minor == library.Version.Minor)
                             || ((int)library.Specificity == 3 && l.Version == library.Version)
-                            orderby l.Version descending 
+                            orderby l.Version descending
                             select l;
 
             var matchingLibrary = libraries.FirstOrDefault();
@@ -225,5 +238,6 @@ namespace Engage.Dnn.Jackrabbit
 
             return contentType;
         }
+
     }
 }

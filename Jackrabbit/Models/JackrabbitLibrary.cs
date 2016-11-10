@@ -56,6 +56,5 @@ namespace Engage.Dnn.Jackrabbit
 
         ///<summary>Gets the version specificity</summary>
         public SpecificVersion Specificity { get; }
-
     }
 }
