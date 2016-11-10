@@ -45,6 +45,7 @@ namespace Engage.Dnn.Jackrabbit.Api
         }
 
         [HttpPost]
+        [ActionName("default")]
         [ValidateAntiForgeryToken]
         public HttpResponseMessage PostFile(PostFileRequest request)
         {
@@ -72,6 +73,7 @@ namespace Engage.Dnn.Jackrabbit.Api
         }
 
         [HttpPut]
+        [ActionName("default")]
         [ValidateAntiForgeryToken]
         public HttpResponseMessage PutFile(int id, PutFileRequest request)
         {
@@ -97,6 +99,7 @@ namespace Engage.Dnn.Jackrabbit.Api
         }
 
         [HttpDelete]
+        [ActionName("default")]
         [ValidateAntiForgeryToken]
         public HttpResponseMessage DeleteItem(int id)
         {
@@ -111,7 +114,7 @@ namespace Engage.Dnn.Jackrabbit.Api
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [ValidateAntiForgeryToken]
         public HttpResponseMessage UndeleteItem(int id)
         {
@@ -149,13 +152,12 @@ namespace Engage.Dnn.Jackrabbit.Api
         private HttpResponseMessage HandleException(Exception exc)
         {
             Exceptions.LogException(exc);
-            return this.Request.CreateResponse(
-                HttpStatusCode.InternalServerError, 
-                new
-                {
-                    errorMessage = LocalizeString("Unexpected Error"),
-                    exception = this.CreateExceptionResponse(exc),
-                });
+            var errorResponse = new
+                                {
+                                    errorMessage = LocalizeString("Unexpected Error"),
+                                    exception = this.CreateExceptionResponse(exc),
+                                };
+            return this.Request.CreateResponse(HttpStatusCode.InternalServerError, errorResponse);
         }
 
         private object CreateExceptionResponse(Exception exc)

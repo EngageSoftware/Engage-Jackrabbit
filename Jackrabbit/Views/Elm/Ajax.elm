@@ -13,6 +13,11 @@ type HttpVerb
     | Get
 
 
+type RequestType
+    = File
+    | Search
+
+
 type alias HttpInfo =
     { baseUrl : String
     , headers : List ( String, String )
@@ -25,25 +30,37 @@ type alias AjaxRequestInfo response =
     , path : String
     , data : Maybe Encode.Value
     , responseDecoder : Decode.Decoder response
-    , requestType : String
+    , requestType : RequestType
     }
 
 
-makeSendAjaxFunction : HttpInfo -> (HttpVerb -> String -> Maybe Encode.Value -> Decode.Decoder a -> String -> Task.Task String a)
+makeSendAjaxFunction : HttpInfo -> (HttpVerb -> String -> Maybe Encode.Value -> Decode.Decoder a -> RequestType -> Task.Task String a)
 makeSendAjaxFunction httpInfo =
     (\verb path data decoder requestType -> sendAjax httpInfo (AjaxRequestInfo verb path data decoder requestType))
 
 
 sendAjax : HttpInfo -> AjaxRequestInfo response -> Task.Task String response
 sendAjax httpInfo { verb, path, data, responseDecoder, requestType } =
-    (getRequestBuilder verb) (httpInfo.baseUrl ++ requestType ++ path)
-        |> HttpBuilder.withHeaders httpInfo.headers
-        |> HttpBuilder.withHeader "Content-Type" "application/json"
-        |> HttpBuilder.withHeader "Accept" "application/json"
-        |> withJsonBody data
-        |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) (HttpBuilder.jsonReader errorResponseDecoder)
-        |> Task.mapError (convertErrorToErrorMessage httpInfo.defaultErrorMessage)
-        |> Task.map (\response -> response.data)
+    let
+        requestTypePath =
+            case requestType of
+                File ->
+                    "file"
+
+                Search ->
+                    "search"
+
+        fullPath =
+            requestTypePath ++ "/" ++ path
+    in
+        (getRequestBuilder verb) (httpInfo.baseUrl ++ fullPath)
+            |> HttpBuilder.withHeaders httpInfo.headers
+            |> HttpBuilder.withHeader "Content-Type" "application/json"
+            |> HttpBuilder.withHeader "Accept" "application/json"
+            |> withJsonBody data
+            |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) (HttpBuilder.jsonReader errorResponseDecoder)
+            |> Task.mapError (convertErrorToErrorMessage httpInfo.defaultErrorMessage)
+            |> Task.map (\response -> response.data)
 
 
 withJsonBody : Maybe Encode.Value -> HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder

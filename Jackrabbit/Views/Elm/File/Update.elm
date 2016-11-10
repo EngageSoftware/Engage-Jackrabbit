@@ -128,19 +128,19 @@ update msg model =
                     Nothing ->
                         case model.editing of
                             False ->
-                                ( model, createAjaxCmd model verb "file", ParentMsg.AddTempFile model )
+                                ( model, createFileAjaxCmd model verb, ParentMsg.AddTempFile model )
 
                             True ->
-                                ( model, createAjaxCmd model verb "file", ParentMsg.Editing )
+                                ( model, createFileAjaxCmd model verb, ParentMsg.Editing )
 
                     Just error ->
                         ( model, Cmd.none, ParentMsg.Error error )
 
         UndoDelete ->
-            ( { model | deleted = False }, createAjaxCmd model Post "file", ParentMsg.NoOp )
+            ( { model | deleted = False }, createUndeleteAjaxCmd model, ParentMsg.NoOp )
 
         DeleteFile ->
-            ( { model | deleted = True }, createAjaxCmd model Delete "file", ParentMsg.NoOp )
+            ( { model | deleted = True }, createFileAjaxCmd model Delete, ParentMsg.NoOp )
 
         Error errorMessage ->
             ( model, Cmd.none, ParentMsg.Error errorMessage )
@@ -200,7 +200,7 @@ update msg model =
                 newModel =
                     updateLibraryName newQuery model
             in
-                ( { newModel | autocomplete = updatedAutocomplete }, createSearchCmd model Get "search", ParentMsg.NoOp )
+                ( { newModel | autocomplete = updatedAutocomplete }, createSearchAjaxCmd model, ParentMsg.NoOp )
 
         SetAutoState autoMsg ->
             let
@@ -340,7 +340,7 @@ update msg model =
                 ( { model | autocomplete = newAutocomplete }, Cmd.none, ParentMsg.NoOp )
 
         OnFocus ->
-            ( model, createSearchCmd model Get "search", ParentMsg.NoOp )
+            ( model, createSearchAjaxCmd model, ParentMsg.NoOp )
 
         NoOp ->
             ( model, Cmd.none, ParentMsg.NoOp )
@@ -434,18 +434,42 @@ updateConfig =
         }
 
 
-createSearchCmd : Model -> HttpVerb -> String -> Cmd Msg
-createSearchCmd model verb requestType =
+createSearchAjaxCmd : Model -> Cmd Msg
+createSearchAjaxCmd model =
     let
         requestInfo =
-            AjaxRequestInfo verb "" Nothing listLibraryDecoder requestType
+            AjaxRequestInfo Get "" Nothing listLibraryDecoder Search
     in
         sendAjax model.httpInfo requestInfo
             |> Task.perform Error RequestLibraries
 
 
-createAjaxCmd : Model -> HttpVerb -> String -> Cmd Msg
-createAjaxCmd model verb requestType =
+createUndeleteAjaxCmd : Model -> Cmd Msg
+createUndeleteAjaxCmd model =
+    let
+        fileData =
+            getFile model.file
+
+        path =
+            case fileData.id of
+                Just id ->
+                    Just ("/undeleteItem?id=" ++ (toString id))
+
+                Nothing ->
+                    Nothing
+
+        requestInfo =
+            path
+                |> Maybe.map (\p -> AjaxRequestInfo Put p Nothing listFileDecoder File)
+    in
+        requestInfo
+            |> Maybe.map (sendAjax model.httpInfo)
+            |> Maybe.map (Task.perform Error RefreshFiles)
+            |> Maybe.withDefault Cmd.none
+
+
+createFileAjaxCmd : Model -> HttpVerb -> Cmd Msg
+createFileAjaxCmd model verb =
     let
         fileData =
             getFile model.file
@@ -459,7 +483,7 @@ createAjaxCmd model verb requestType =
                     ""
 
         requestInfo =
-            AjaxRequestInfo verb path (Just (encodeFile model.file)) listFileDecoder requestType
+            AjaxRequestInfo verb path (Just (encodeFile model.file)) listFileDecoder File
     in
         sendAjax model.httpInfo requestInfo
             |> Task.perform Error RefreshFiles

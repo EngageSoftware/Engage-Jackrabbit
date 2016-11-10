@@ -22,14 +22,15 @@ namespace Engage.Dnn.Jackrabbit.Api
         public void RegisterRoutes(IMapRoute mapRouteManager)
         {
             mapRouteManager.MapHttpRoute(
+                routeName: "file controller ☹",
+                moduleFolderName: "Engage/Jackrabbit",
+                url: "file/{action}",
+                namespaces: new[] { "Engage.Dnn.Jackrabbit.Api", },
+                defaults: new { controller = "file", action = "default", });
+            mapRouteManager.MapHttpRoute(
                 routeName: "default",
                 moduleFolderName: "Engage/Jackrabbit",
-                url: "{controller}",
-                namespaces: new[] { "Engage.Dnn.Jackrabbit.Api", });
-            mapRouteManager.MapHttpRoute(
-                routeName: "explicit action",
-                moduleFolderName: "Engage/Jackrabbit",
-                url: "{controller}/{action}",
+                url: "{controller}/",
                 namespaces: new[] { "Engage.Dnn.Jackrabbit.Api", });
         }
     }
