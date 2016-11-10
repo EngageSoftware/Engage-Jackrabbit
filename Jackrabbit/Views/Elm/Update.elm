@@ -159,8 +159,13 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                 ( fileRows, lastRowId ) =
                     files
                         |> makeFileRows model.lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
+
+                sortedFileRows =
+                    fileRows
+                        ++ deletedFiles
+                        |> List.sortWith compareFileRows
             in
-                { model | fileRows = fileRows ++ deletedFiles, lastRowId = lastRowId }
+                { model | fileRows = sortedFileRows, lastRowId = lastRowId }
 
         ParentMsg.AddTempFile file ->
             let
