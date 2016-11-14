@@ -174,15 +174,25 @@ namespace Engage.Dnn.Jackrabbit
             }
 
             var path = GetLibraryPath(matchingLibrary);
+            var localPath = GetLibraryPath(matchingLibrary, true);
             var provider = ScriptLocationToProviderName[matchingLibrary.PreferredScriptLocation];
             var priority = matchingLibrary.PackageID + (int)FileOrder.Js.DefaultPriority;
 
-            return new JackrabbitLibraryInfo(path, provider, priority);
+            return new JackrabbitLibraryInfo(path, localPath, provider, priority);
         }
 
         private static string GetLibraryPath(JavaScriptLibrary library)
         {
-            if (Host.CdnEnabled)
+            return GetLibraryPath(library, false);
+        }
+
+        /// <summary>Gets the library path.</summary>
+        /// <param name="library">The library.</param>
+        /// <param name="bypassCdn">if set to <c>true</c> always retrieve the local path, otherwise retrieve the CDN path if enabled.</param>
+        /// <returns>The path to the library</returns>
+        private static string GetLibraryPath(JavaScriptLibrary library, bool bypassCdn)
+        {
+            if (!bypassCdn && Host.CdnEnabled)
             {
                 var customUrl = HostController.Instance.GetString("CustomCDN_" + library.LibraryName);
                 if (!string.IsNullOrEmpty(customUrl))

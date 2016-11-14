@@ -12,9 +12,11 @@ namespace Engage.Dnn.Jackrabbit.Api
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Web.Hosting;
     using System.Web.Http;
 
     using DotNetNuke.Security;
@@ -53,17 +55,21 @@ namespace Engage.Dnn.Jackrabbit.Api
             {
                 if (request.FileType == FileType.JavaScriptLib)
                 {
-                    this.repository.AddLibrary(
-                           this.ActiveModule.ModuleID,
-                           new JackrabbitLibrary(request.FileType, request.LibraryName, Version.Parse(request.Version), request.Specificity));
-                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                    var library = new JackrabbitLibrary(request.FileType, request.LibraryName, Version.Parse(request.Version), request.Specificity);
+                    this.repository.AddLibrary(this.ActiveModule.ModuleID, library);
+
+                    var libraryPath = this.repository.GetLibraryInfo(library).LocalFilePath;
+
+                    return this.Request.CreateResponse(
+                                   HttpStatusCode.OK,
+                                   new { items = this.GetAllItems(this.ActiveModule.ModuleID), suggestions = FindCssFiles(libraryPath), });
                 }
                 else
                 {
                     this.repository.AddFile(
                             this.ActiveModule.ModuleID,
                             new JackrabbitFile(request.FileType, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
-                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, new { items = this.GetAllItems(this.ActiveModule.ModuleID) });
                 }
             }
             catch (Exception exc)
@@ -83,13 +89,13 @@ namespace Engage.Dnn.Jackrabbit.Api
                 {
                     this.repository.UpdateLibrary(
                             new JackrabbitLibrary(request.FileType, request.LibraryName, request.Version, request.Specificity));
-                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, new { items = this.GetAllItems(this.ActiveModule.ModuleID), });
                 }
                 else
                 {
                     this.repository.UpdateFile(
                             new JackrabbitFile(request.FileType, id, request.PathPrefixName, request.FilePath, request.Provider, request.Priority));
-                    return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                    return this.Request.CreateResponse(HttpStatusCode.OK, new { items = this.GetAllItems(this.ActiveModule.ModuleID), });
                 }
             }
             catch (Exception exc)
@@ -106,7 +112,7 @@ namespace Engage.Dnn.Jackrabbit.Api
             try
             {
                 this.repository.DeleteItem(id);
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                return this.Request.CreateResponse(HttpStatusCode.OK, new { items = this.GetAllItems(this.ActiveModule.ModuleID), });
             }
             catch (Exception exc)
             {
@@ -121,12 +127,26 @@ namespace Engage.Dnn.Jackrabbit.Api
             try
             {
                 this.repository.UndeleteItem(id);
-                return this.Request.CreateResponse(HttpStatusCode.OK, this.GetAllItems(this.ActiveModule.ModuleID));
+                return this.Request.CreateResponse(HttpStatusCode.OK, new { items = this.GetAllItems(this.ActiveModule.ModuleID), });
             }
             catch (Exception exc)
             {
                 return this.HandleException(exc);
             }
+        }
+
+        private static IEnumerable<string> FindCssFiles(string filePath)
+        {
+            var physicalFilePath = HostingEnvironment.MapPath(filePath);
+            var physicalLibraryPath = Path.GetDirectoryName(physicalFilePath);
+            var libraryDirectory = new DirectoryInfo(physicalLibraryPath);
+            return from file in libraryDirectory.EnumerateFiles("*.css", SearchOption.AllDirectories)
+                   select file.FullName.Substring(libraryDirectory.FullName.Length);
+        }
+
+        private static string LocalizeString(string key)
+        {
+            return Localization.GetString(key, "~/DesktopModules/Engage/Jackrabbit/API/App_LocalResources/SharedResources");
         }
 
         private IEnumerable<object> GetAllItems(int moduleId)
@@ -173,11 +193,6 @@ namespace Engage.Dnn.Jackrabbit.Api
                         stackTrace = exc.StackTrace,
                         innerException = this.CreateExceptionResponse(exc.InnerException),
                    };
-        }
-
-        private static string LocalizeString(string key)
-        {
-            return Localization.GetString(key, "~/DesktopModules/Engage/Jackrabbit/API/App_LocalResources/SharedResources");
         }
     }
 }

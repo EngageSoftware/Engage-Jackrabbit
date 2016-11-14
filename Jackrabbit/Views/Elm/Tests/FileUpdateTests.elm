@@ -350,14 +350,17 @@ tests =
                         listFiles =
                             []
 
+                        suggestions =
+                            Just []
+
                         refreshFiles =
-                            Views.Elm.File.Msg.RefreshFiles listFiles
+                            Views.Elm.File.Msg.RefreshFiles ( listFiles, suggestions )
 
                         ( updatedModel, cmdMsg, parentMsg ) =
                             update refreshFiles model
                     in
                         parentMsg
-                            |> Expect.equal (ParentMsg.RefreshFiles listFiles)
+                            |> Expect.equal (ParentMsg.RefreshFiles listFiles suggestions)
             ]
         , describe "File type tests"
             [ test "Set File success" <|

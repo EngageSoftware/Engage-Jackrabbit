@@ -13,6 +13,8 @@ import Dom
 import Dict exposing (Dict)
 import String
 import Regex as Regex
+import Json.Decode as Decode exposing (..)
+import Json.Decode.Pipeline exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
@@ -145,8 +147,8 @@ update msg model =
         Error errorMessage ->
             ( model, Cmd.none, ParentMsg.Error errorMessage )
 
-        RefreshFiles files ->
-            ( model, Cmd.none, ParentMsg.RefreshFiles files )
+        RefreshFiles ( files, suggestions ) ->
+            ( model, Cmd.none, ParentMsg.RefreshFiles files suggestions )
 
         RequestLibraries libraries ->
             let
@@ -460,7 +462,7 @@ createUndeleteAjaxCmd model =
 
         requestInfo =
             path
-                |> Maybe.map (\p -> AjaxRequestInfo Put p Nothing listFileDecoder File)
+                |> Maybe.map (\p -> AjaxRequestInfo Put p Nothing listFileDecoderandSuggestedFiles File)
     in
         requestInfo
             |> Maybe.map (sendAjax model.httpInfo)
@@ -483,7 +485,7 @@ createFileAjaxCmd model verb =
                     ""
 
         requestInfo =
-            AjaxRequestInfo verb path (Just (encodeFile model.file)) listFileDecoder File
+            AjaxRequestInfo verb path (Just (encodeFile model.file)) listFileDecoderandSuggestedFiles File
     in
         sendAjax model.httpInfo requestInfo
             |> Task.perform Error RefreshFiles
@@ -503,3 +505,10 @@ validateFile fileData localization =
         Just (localizeString "Empty File Path" localization)
     else
         Nothing
+
+
+listFileDecoderandSuggestedFiles : Decode.Decoder ( List JackrabbitFile, Maybe (List String) )
+listFileDecoderandSuggestedFiles =
+    decode (,)
+        |> required "items" listFileDecoder
+        |> optional "suggestions" (Decode.maybe (Decode.list Decode.string)) Nothing

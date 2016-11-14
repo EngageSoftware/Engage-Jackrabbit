@@ -12,21 +12,26 @@ namespace Engage.Dnn.Jackrabbit
 {
     public class JackrabbitLibraryInfo
     {
-        public static JackrabbitLibraryInfo Null { get; } = new JackrabbitLibraryInfo("Library not found", "DnnFormBottomProvider", -1000000);
-
         /// <summary>Initializes a new instance of the <see cref="JackrabbitLibraryInfo" /> class.</summary>
         /// <param name="filePath">The file path.</param>
+        /// <param name="localFilePath">The local file path.</param>
         /// <param name="provider">The provider.</param>
         /// <param name="priority">The priority.</param>
-        public JackrabbitLibraryInfo(string filePath, string provider, int priority)
+        public JackrabbitLibraryInfo(string filePath, string localFilePath, string provider, int priority)
         {
             this.FilePath = filePath;
+            this.LocalFilePath = localFilePath;
             this.Priority = priority;
             this.Provider = provider;
         }
 
+        public static JackrabbitLibraryInfo Null { get; } = new JackrabbitLibraryInfo("Library not found", null, "DnnFormBottomProvider", -1000000);
+
         /// <summary>Gets the path to the file.</summary>
         public string FilePath { get; }
+
+        /// <summary>Gets the path to the file on the file system.</summary>
+        public string LocalFilePath { get; }
 
         /// <summary>Gets the priority of the file.</summary>
         public int Priority { get; }

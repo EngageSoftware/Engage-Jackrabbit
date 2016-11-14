@@ -13,6 +13,8 @@ namespace Engage.Dnn.Jackrabbit
 {
     using System.Collections.Generic;
 
+    using DotNetNuke.Framework.JavaScriptLibraries;
+
     /// <summary>Represents the ability to get data</summary>
     public interface IRepository
     {

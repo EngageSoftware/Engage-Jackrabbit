@@ -54,6 +54,7 @@ update msg model =
                                     False
                                     listPathAliases
                                     False
+                                    []
             in
                 ( initializedModel, Cmd.none )
 
@@ -150,7 +151,7 @@ updateFromChild model ( fileRow, _, parentMsg ) =
         ParentMsg.Error errorMessage ->
             { model | errorMessage = Just errorMessage }
 
-        ParentMsg.RefreshFiles files ->
+        ParentMsg.RefreshFiles files suggestions ->
             let
                 deletedFiles =
                     model.fileRows
@@ -164,8 +165,15 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                     fileRows
                         ++ deletedFiles
                         |> List.sortWith compareFileRows
+
+                suggestedFiles =
+                    suggestions
+                        |> Maybe.withDefault []
             in
-                { model | fileRows = sortedFileRows, lastRowId = lastRowId }
+                { model
+                    | fileRows = sortedFileRows
+                    , lastRowId = lastRowId
+                }
 
         ParentMsg.AddTempFile file ->
             let
