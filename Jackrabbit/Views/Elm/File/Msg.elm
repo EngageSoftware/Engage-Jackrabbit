@@ -17,7 +17,7 @@ type Msg
     | EditFile
     | UndoDelete
     | DeleteFile
-    | RefreshFiles ( List JackrabbitFile, Maybe (List String) )
+    | RefreshFiles ( List JackrabbitFile, List String )
     | Error String
     | SetFileType String JackrabbitFile
     | SetLibrary JackrabbitFile

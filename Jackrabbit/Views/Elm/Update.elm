@@ -165,14 +165,11 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                     fileRows
                         ++ deletedFiles
                         |> List.sortWith compareFileRows
-
-                suggestedFiles =
-                    suggestions
-                        |> Maybe.withDefault []
             in
                 { model
                     | fileRows = sortedFileRows
                     , lastRowId = lastRowId
+                    , suggestedFiles = suggestions
                 }
 
         ParentMsg.AddTempFile file ->
