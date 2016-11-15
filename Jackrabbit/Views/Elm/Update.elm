@@ -196,19 +196,31 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                         ++ deletedFiles
                         |> List.sortWith compareFileRows
 
-                suggestedFiles =
-                    suggestions
-                        |> List.map (makeSuggestedFile model)
+                finalModel =
+                    case suggestions of
+                        Just suggestions ->
+                            let
+                                suggestedFiles =
+                                    suggestions
+                                        |> List.map (makeSuggestedFile model)
 
-                ( suggestedFileRows, finalRowId ) =
-                    suggestedFiles
-                        |> makeFileRows lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
+                                ( suggestedFileRows, finalRowId ) =
+                                    suggestedFiles
+                                        |> makeFileRows lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
+                            in
+                                { model
+                                    | fileRows = sortedFileRows
+                                    , lastRowId = finalRowId
+                                    , suggestedFiles = suggestedFileRows
+                                }
+
+                        Nothing ->
+                            { model
+                                | fileRows = sortedFileRows
+                                , lastRowId = lastRowId
+                            }
             in
-                { model
-                    | fileRows = sortedFileRows
-                    , lastRowId = finalRowId
-                    , suggestedFiles = suggestedFileRows
-                }
+                finalModel
 
         ParentMsg.AddTempFile file ->
             let

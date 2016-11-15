@@ -513,8 +513,8 @@ validateFile fileData localization =
         Nothing
 
 
-listFileDecoderandSuggestedFiles : Decode.Decoder ( List JackrabbitFile, List String )
+listFileDecoderandSuggestedFiles : Decode.Decoder ( List JackrabbitFile, Maybe (List String) )
 listFileDecoderandSuggestedFiles =
     decode (,)
         |> required "items" listFileDecoder
-        |> required "suggestions" (Decode.list Decode.string)
+        |> optional "suggestions" (Decode.maybe (Decode.list Decode.string)) Nothing
