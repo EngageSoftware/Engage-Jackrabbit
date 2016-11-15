@@ -18,6 +18,13 @@ localizeString key localization =
         |> Maybe.withDefault ""
 
 
+localizeStringWithDefault : String -> Dict String String -> String
+localizeStringWithDefault key localization =
+    localization
+        |> Dict.get key
+        |> Maybe.withDefault key
+
+
 createLocalizationDict : Encode.Value -> Dict String String
 createLocalizationDict dictJson =
     Decode.decodeValue (Decode.dict Decode.string) dictJson

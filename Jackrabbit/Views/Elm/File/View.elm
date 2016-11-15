@@ -59,9 +59,9 @@ viewFile model =
                 [ button [ type' "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
                 , button [ type' "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
                 ]
-            , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
+            , td [ class "jackrabbit-file--prefix" ] [ text (localizeStringWithDefault fileData.pathPrefixName localization) ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
-            , td [ class "jackrabbit-file--provider" ] [ text fileData.provider ]
+            , td [ class "jackrabbit-file--provider" ] [ text (localizeString fileData.provider localization) ]
             , td [ class "jackrabbit-file--priority" ] [ text (toString fileData.priority) ]
             ]
 
@@ -85,7 +85,7 @@ viewDeleted model =
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
-            , td [ class "jackrabbit-file--provider" ] [ text fileData.provider ]
+            , td [ class "jackrabbit-file--provider" ] [ text (localizeString fileData.provider localization) ]
             , td [ class "jackrabbit-file--priority" ] [ text (toString fileData.priority) ]
             ]
 

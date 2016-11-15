@@ -157,13 +157,13 @@
     <value>Dismiss Error</value>
   </data>
   <data name="DnnBodyProvider.Text" xml:space="preserve">
-    <value>DnnBodyProvider</value>
+    <value>&lt;body&gt;</value>
   </data>
   <data name="DnnFormBottomProvider.Text" xml:space="preserve">
-    <value>DnnFormBottomProvider</value>
+    <value>&lt;/form&gt;</value>
   </data>
   <data name="DnnPageHeaderProvider.Text" xml:space="preserve">
-    <value>DnnPageHeaderProvider</value>
+    <value>&lt;head&gt;</value>
   </data>
   <data name="Exact.Text" xml:space="preserve">
     <value>Exact</value>
@@ -230,5 +230,8 @@
   </data>
   <data name="Suggested Files.Text" xml:space="preserve">
     <value>Some of your libraries have attatched Css files, would you like to load them?</value>
+  </data>
+  <data name="JS Library.Text" xml:space="preserve">
+    <value>JS Library</value>
   </data>
 </root>
