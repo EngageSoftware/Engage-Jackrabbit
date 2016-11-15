@@ -24,7 +24,7 @@ view model =
         itemSection ( provider, fileRows ) =
             let
                 labelRow =
-                    tr [ class "jackrabbit--item-section--label" ] [ td [ colspan 5 ] [ text provider ] ]
+                    tr [ class "jackrabbit--item-section--label" ] [ td [ colspan 5 ] [ text (localizeString provider model.localization) ] ]
             in
                 tbody
                     [ class ("jackrabbit--item-section jackrabbit--item-section__" ++ provider)
