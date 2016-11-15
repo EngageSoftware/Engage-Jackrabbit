@@ -234,4 +234,16 @@
   <data name="JS Library.Text" xml:space="preserve">
     <value>JS Library</value>
   </data>
+  <data name="No default prefix.Text" xml:space="preserve">
+    <value>No default prefix</value>
+  </data>
+  <data name="Select the file type:.Text" xml:space="preserve">
+    <value>Select the file type</value>
+  </data>
+  <data name="sharedscripts.Text" xml:space="preserve">
+    <value>sharedscripts</value>
+  </data>
+  <data name="skinpath.Text" xml:space="preserve">
+    <value>skinpath</value>
+  </data>
 </root>

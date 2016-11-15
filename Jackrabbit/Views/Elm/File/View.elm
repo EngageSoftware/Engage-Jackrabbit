@@ -83,7 +83,7 @@ viewDeleted model =
                 --TODO Undo Button functionality
                 [ button [ type' "button", onClick UndoDelete ] [ text (localizeString "Undo" localization) ]
                 ]
-            , td [ class "jackrabbit-file--prefix" ] [ text fileData.pathPrefixName ]
+            , td [ class "jackrabbit-file--prefix" ] [ text (localizeStringWithDefault fileData.pathPrefixName localization) ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
             , td [ class "jackrabbit-file--provider" ] [ text (localizeString fileData.provider localization) ]
             , td [ class "jackrabbit-file--priority" ] [ text (toString fileData.priority) ]
@@ -101,7 +101,7 @@ editFile model =
     in
         div []
             [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
-            , makeDropDown model.pathList model.file
+            , makeDropDown model.pathList model.file localization
             , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
             , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
             , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
@@ -334,7 +334,7 @@ addForm model =
         fileForm =
             div []
                 [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
-                , makeDropDown model.pathList model.file
+                , makeDropDown model.pathList model.file localization
                 , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
                 , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
                 , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
@@ -348,7 +348,7 @@ addForm model =
         if model.choosingType then
             div []
                 [ label []
-                    [ text "Select the File Type:"
+                    [ text (localizeString "Select the File Type:" localization)
                     , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text (localizeString "JavaScript" localization) ]
                     , button [ type' "button", onClick (SetFileType "Css" file) ] [ text (localizeString "Css" localization) ]
                     , button [ type' "button", onClick (SetLibrary file) ] [ text (localizeString "JSLibrary" localization) ]
@@ -412,22 +412,22 @@ getRowClasses model =
         ]
 
 
-makeDropDown : List String -> JackrabbitFile -> Html Msg
-makeDropDown paths jackrabbitFile =
+makeDropDown : List String -> JackrabbitFile -> Dict String String -> Html Msg
+makeDropDown paths jackrabbitFile localization =
     let
         file =
             getFile jackrabbitFile
 
         generateOptions =
             paths
-                |> List.map (makeOption file.pathPrefixName)
+                |> List.map (makeOption file.pathPrefixName localization)
 
         options =
-            option [ value "" ] [ text "No default prefix" ] :: generateOptions
+            option [ value "" ] [ text (localizeString "No default prefix" localization) ] :: generateOptions
     in
         select [ onInput UpdatePrefix ] options
 
 
-makeOption : String -> String -> Html Msg
-makeOption pathPrefixName string =
-    option [ value string, selected (pathPrefixName == string) ] [ text (string) ]
+makeOption : String -> Dict String String -> String -> Html Msg
+makeOption pathPrefixName localization string =
+    option [ value string, selected (pathPrefixName == string) ] [ text (localizeStringWithDefault string localization) ]
