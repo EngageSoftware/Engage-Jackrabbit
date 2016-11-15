@@ -106,7 +106,7 @@ namespace Engage.Dnn.Jackrabbit
 
         public void AddLibrary(int moduleId, JackrabbitLibrary library)
         {
-            var contentItem = new ContentItem { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId,};
+            var contentItem = new ContentItem { ContentTypeId = this.JackrabbitFileContentType.ContentTypeId, ModuleID = moduleId, };
             FillContentItem(library, contentItem);
             this.contentController.AddContentItem(contentItem);
         }
