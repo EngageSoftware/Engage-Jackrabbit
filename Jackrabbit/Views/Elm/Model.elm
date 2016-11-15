@@ -34,7 +34,7 @@ type alias Model =
     , editing : Bool
     , pathAliases : List String
     , criticalError : Bool
-    , suggestedFiles : List String
+    , suggestedFiles : List FileRow
     }
 
 

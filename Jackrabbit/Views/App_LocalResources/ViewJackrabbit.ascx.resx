@@ -222,4 +222,13 @@
   <data name="Undo.Text" xml:space="preserve">
     <value>Undo Delete</value>
   </data>
+  <data name="Dismiss All.Text" xml:space="preserve">
+    <value>Dismiss All</value>
+  </data>
+  <data name="Dismiss.Text" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
+  <data name="Suggested Files.Text" xml:space="preserve">
+    <value>Some of your libraries have attatched Css files, would you like to load them?</value>
+  </data>
 </root>

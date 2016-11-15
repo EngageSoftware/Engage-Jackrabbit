@@ -11,3 +11,5 @@ type ParentMsg
     | AddTempFile File.Model
     | CancelTempForm
     | Editing
+    | RemoveSuggestion
+    | AddSuggestion

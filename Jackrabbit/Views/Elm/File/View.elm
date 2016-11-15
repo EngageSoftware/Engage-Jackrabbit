@@ -154,6 +154,25 @@ libraryForm model =
             emptyElement
 
 
+suggestedFileView : Model -> Html Msg
+suggestedFileView model =
+    let
+        fileData =
+            getFile model.file
+
+        filePath =
+            fileData.filePath
+
+        localization =
+            model.localization
+    in
+        div []
+            [ button [ type' "button", onClick AddSuggestedFile ] [ text (localizeString "Add" localization) ]
+            , button [ type' "button", onClick DismissSuggestedFile ] [ text (localizeString "Dismiss" localization) ]
+            , text filePath
+            ]
+
+
 autoCompleteInput : Model -> Html Msg
 autoCompleteInput model =
     let

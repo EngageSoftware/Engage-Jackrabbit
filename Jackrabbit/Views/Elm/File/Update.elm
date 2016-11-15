@@ -23,6 +23,12 @@ update msg model =
         EditFile ->
             ( { model | editing = True }, focus "library-input", ParentMsg.Editing )
 
+        AddSuggestedFile ->
+            ( model, createFileAjaxCmd model Post, ParentMsg.AddSuggestion )
+
+        DismissSuggestedFile ->
+            ( model, Cmd.none, ParentMsg.RemoveSuggestion )
+
         UpdatePrefix prefix ->
             let
                 newFile =

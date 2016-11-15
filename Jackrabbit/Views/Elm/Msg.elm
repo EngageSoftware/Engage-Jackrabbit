@@ -9,3 +9,4 @@ type Msg
     | AddNewFile
     | FileMsg Int File.Msg
     | DismissError
+    | DismissAll

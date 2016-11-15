@@ -6,6 +6,7 @@ import Html.Events exposing (..)
 import Html.App as App
 import Views.Elm.Model exposing (..)
 import Views.Elm.File.View as File
+import Views.Elm.File.Model as File
 import Views.Elm.Msg exposing (..)
 import Dict exposing (Dict)
 import Views.Elm.Utility exposing (emptyElement, localizeString)
@@ -45,6 +46,9 @@ view model =
         addFile =
             showAddFile model model.tempFileRow
 
+        suggestedFiles =
+            showSuggestions model
+
         tableHeader =
             thead
                 []
@@ -60,6 +64,7 @@ view model =
         if not model.criticalError then
             div []
                 [ viewErrorMessage model.errorMessage model.localization
+                , suggestedFiles
                 , addFile
                 , div []
                     editLibForm
@@ -112,6 +117,30 @@ criticalError =
         , kbd [] [ text "R" ]
         , text " on macOS)."
         ]
+
+
+showSuggestions : Model -> Html Msg
+showSuggestions model =
+    let
+        files =
+            model.suggestedFiles
+                |> List.map (suggestedFilesRow model)
+    in
+        case model.suggestedFiles of
+            [] ->
+                emptyElement
+
+            _ ->
+                div []
+                    [ text (localizeString "Suggested Files" model.localization)
+                    , button [ type' "button", onClick DismissAll ] [ text (localizeString "Dismiss All" model.localization) ]
+                    , div [] files
+                    ]
+
+
+suggestedFilesRow : Model -> FileRow -> Html Msg
+suggestedFilesRow model { rowId, file } =
+    App.map (FileMsg rowId) (File.suggestedFileView file)
 
 
 viewErrorMessage : Maybe String -> Dict String String -> Html Msg

@@ -1,13 +1,13 @@
 module Views.Elm.Update exposing (update, updateFromChild, compareFileRows)
 
 import Dict exposing (Dict)
-import Views.Elm.Ajax exposing (HttpInfo)
+import Views.Elm.Ajax exposing (..)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
 import Views.Elm.File.Model as File exposing (listFileDecoder, initialAutocomplete)
 import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
-import Views.Elm.File.Update as File
+import Views.Elm.File.Update as File exposing (createFileAjaxCmd)
 import Views.Elm.Utility exposing (createLocalizationDict, localizeString)
 import List.Extra exposing (..)
 import Maybe.Extra exposing (..)
@@ -91,8 +91,12 @@ update msg model =
                     model.fileRows
                         |> List.Extra.find (findRow rowId)
 
+                matchingSuggestedFile =
+                    model.suggestedFiles
+                        |> List.Extra.find (findRow rowId)
+
                 fileRow =
-                    Maybe.oneOf [ matchingFileRow, model.tempFileRow ]
+                    Maybe.oneOf [ matchingFileRow, model.tempFileRow, matchingSuggestedFile ]
 
                 fileUpdate =
                     fileRow
@@ -114,7 +118,10 @@ update msg model =
 
                         Just f ->
                             if Maybe.Extra.isNothing matchingFileRow then
-                                { model | tempFileRow = Just f }
+                                if Maybe.Extra.isNothing matchingSuggestedFile then
+                                    { model | tempFileRow = Just f }
+                                else
+                                    { model | fileRows = model.fileRows ++ [ f ] }
                             else
                                 { model | fileRows = List.Extra.replaceIf (\fr -> fr.rowId == rowId) f model.fileRows }
 
@@ -124,6 +131,9 @@ update msg model =
                         |> Maybe.withDefault model
             in
                 ( modelWithParentMsgs, cmd )
+
+        DismissAll ->
+            ( { model | suggestedFiles = [] }, Cmd.none )
 
 
 findRow : Int -> FileRow -> Bool
@@ -139,6 +149,26 @@ updateFromChild model ( fileRow, _, parentMsg ) =
     case parentMsg of
         ParentMsg.NoOp ->
             model
+
+        ParentMsg.AddSuggestion ->
+            let
+                newSuggestions =
+                    model.suggestedFiles
+                        |> List.filter (\s -> s.rowId /= fileRow.rowId)
+            in
+                { model | suggestedFiles = newSuggestions }
+
+        ParentMsg.RemoveSuggestion ->
+            let
+                newSuggestions =
+                    model.suggestedFiles
+                        |> List.filter (\s -> s.rowId /= fileRow.rowId)
+
+                updatedFiles =
+                    model.fileRows
+                        |> List.filter (\s -> s.rowId /= fileRow.rowId)
+            in
+                { model | suggestedFiles = newSuggestions, fileRows = updatedFiles }
 
         ParentMsg.RemoveFile ->
             let
@@ -165,11 +195,19 @@ updateFromChild model ( fileRow, _, parentMsg ) =
                     fileRows
                         ++ deletedFiles
                         |> List.sortWith compareFileRows
+
+                suggestedFiles =
+                    suggestions
+                        |> List.map (makeSuggestedFile model)
+
+                ( suggestedFileRows, finalRowId ) =
+                    suggestedFiles
+                        |> makeFileRows lastRowId model.httpInfo model.providers model.localization File.initialAutocomplete model.pathAliases
             in
                 { model
                     | fileRows = sortedFileRows
-                    , lastRowId = lastRowId
-                    , suggestedFiles = suggestions
+                    , lastRowId = finalRowId
+                    , suggestedFiles = suggestedFileRows
                 }
 
         ParentMsg.AddTempFile file ->
@@ -193,6 +231,19 @@ updateFromChild model ( fileRow, _, parentMsg ) =
 
                 True ->
                     { model | editing = False }
+
+
+makeSuggestedFile : Model -> String -> File.JackrabbitFile
+makeSuggestedFile model suggestedFile =
+    (File.CssFile
+        (File.FileData
+            Nothing
+            model.defaultPathPrefix
+            suggestedFile
+            "DnnPageHeaderProvider"
+            model.defaultPriority
+        )
+    )
 
 
 updateFile : Int -> File.Msg -> FileRow -> ( FileRow, Cmd Msg, ParentMsg )
