@@ -9,7 +9,7 @@ import Json.Decode as Decode
 import String
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
-import Views.Elm.Utility exposing (localizeString, emptyElement)
+import Views.Elm.Utility exposing (localizeString, emptyElement, localizeStringWithDefault)
 import Autocomplete
 
 
