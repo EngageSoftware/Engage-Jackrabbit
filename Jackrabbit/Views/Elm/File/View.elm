@@ -119,11 +119,31 @@ showProviderMenu file localization providers =
         fileData =
             getFile file
 
-        options =
+        sortedProviders =
             providers
+                |> List.sortBy orderProvider
+
+        options =
+            sortedProviders
                 |> List.map (\provider -> option [ selected (fileData.provider == provider), value provider ] [ text (localizeString provider localization) ])
     in
         select [ onInput UpdateProvider ] options
+
+
+orderProvider : String -> Int
+orderProvider provider =
+    case provider of
+        "DnnPageHeaderProvider" ->
+            1
+
+        "DnnBodyProvider" ->
+            2
+
+        "DnnFormBottomProvider" ->
+            3
+
+        _ ->
+            0
 
 
 libraryForm : Model -> Html Msg
