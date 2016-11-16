@@ -79,6 +79,46 @@ tests =
 
                         Ok _ ->
                             Expect.fail "Incorrect type"
+        , test "can decode initialModel with suggestedFiles" <|
+            \() ->
+                let
+                    json =
+                        Json.object
+                            [ ( "items"
+                              , Json.list
+                                    [ Json.object
+                                        [ ( "FileType", Json.int 1 )
+                                        , ( "Id", Json.int 1 )
+                                        , ( "PathPrefixName", Json.string "PathName" )
+                                        , ( "FilePath", Json.string "~/path/here" )
+                                        , ( "Provider", Json.string "DnnFormBottomProvider" )
+                                        , ( "Priority", Json.int 100 )
+                                        ]
+                                    ]
+                              )
+                            , ( "suggestions"
+                              , Json.list
+                                    [ (Json.string "Test.css")
+                                    , (Json.string "Test2.css")
+                                    ]
+                              )
+                            ]
+
+                    expectedStrings =
+                        [ "Test.css", "Test2.css" ]
+                in
+                    case Decode.decodeValue listFileDecoderandSuggestedFiles json of
+                        Err err ->
+                            Expect.fail err
+
+                        Ok ( jackrabbitFiles, strings ) ->
+                            case strings of
+                                Just strings ->
+                                    strings
+                                        |> Expect.equal expectedStrings
+
+                                Nothing ->
+                                    Expect.fail "Failed to get Suggested Files"
         ]
     ]
 
