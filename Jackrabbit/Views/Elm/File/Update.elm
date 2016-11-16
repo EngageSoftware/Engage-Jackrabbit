@@ -13,8 +13,7 @@ import Dom
 import Dict exposing (Dict)
 import String
 import Regex as Regex
-import Json.Decode as Decode exposing (..)
-import Json.Decode.Pipeline exposing (..)
+import Views.Elm.Decoders exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
@@ -511,10 +510,3 @@ validateFile fileData localization =
         Just (localizeString "Empty File Path" localization)
     else
         Nothing
-
-
-listFileDecoderandSuggestedFiles : Decode.Decoder ( List JackrabbitFile, Maybe (List String) )
-listFileDecoderandSuggestedFiles =
-    decode (,)
-        |> required "items" listFileDecoder
-        |> optional "suggestions" (Decode.maybe (Decode.list Decode.string)) Nothing

@@ -114,6 +114,34 @@ tests =
                     in
                         returnedModel
                             |> Expect.equal expectedModel
+            , test "Test Add Suggested Files" <|
+                \() ->
+                    let
+                        model =
+                            initialBaseModel
+
+                        expectedModel =
+                            { model | suggestedFiles = [] }
+
+                        returnedModel =
+                            updateFromChild model ( fakeFileRow, Cmd.none, ParentMsg.AddSuggestion )
+                    in
+                        returnedModel
+                            |> Expect.equal expectedModel
+            , test "Test Remove Suggestion" <|
+                \() ->
+                    let
+                        model =
+                            initialBaseModel
+
+                        expectedModel =
+                            { model | suggestedFiles = [], fileRows = [ (FileRow 1 initialLibraryModel) ] }
+
+                        returnedModel =
+                            updateFromChild model ( fakeFileRow, Cmd.none, ParentMsg.RemoveSuggestion )
+                    in
+                        returnedModel
+                            |> Expect.equal expectedModel
             ]
         , describe "Update Functions"
             [ test "Init Model Json" <|
@@ -242,6 +270,20 @@ tests =
                     in
                         returnedModel
                             |> Expect.equal errorModel
+            , test "Dismiss All" <|
+                \() ->
+                    let
+                        model =
+                            initialBaseModel
+
+                        expectedModel =
+                            { model | suggestedFiles = [] }
+
+                        ( returnedModel, command ) =
+                            update DismissAll model
+                    in
+                        returnedModel
+                            |> Expect.equal expectedModel
             ]
         ]
     ]

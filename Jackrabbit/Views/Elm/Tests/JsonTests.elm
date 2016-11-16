@@ -7,6 +7,7 @@ import Fuzz as Fuzz
 import Json.Encode as Json
 import Json.Decode as Decode
 import Views.Elm.Tests.TestUtilities exposing (encodeMaybe, versionFuzzer, fileDataFuzzer)
+import Views.Elm.Decoders exposing (..)
 
 
 tests : List Test

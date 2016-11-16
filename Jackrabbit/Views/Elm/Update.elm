@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 import Views.Elm.Ajax exposing (..)
 import Views.Elm.Model exposing (..)
 import Views.Elm.Msg exposing (..)
-import Views.Elm.File.Model as File exposing (listFileDecoder, initialAutocomplete)
+import Views.Elm.File.Model as File exposing (initialAutocomplete)
 import Views.Elm.File.Msg as File
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
 import Views.Elm.File.Update as File exposing (createFileAjaxCmd)
@@ -12,7 +12,7 @@ import Views.Elm.Utility exposing (createLocalizationDict, localizeString)
 import List.Extra exposing (..)
 import Maybe.Extra exposing (..)
 import Json.Decode as Decode exposing (decodeValue)
-import Json.Decode.Pipeline exposing (decode, required, hardcoded)
+import Views.Elm.Decoders exposing (initialDataDecoder)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -21,7 +21,7 @@ update msg model =
         Init initialDataJson ->
             let
                 initializedModel =
-                    case (Decode.decodeValue intialDataDecoder initialDataJson) of
+                    case (Decode.decodeValue initialDataDecoder initialDataJson) of
                         Err omg ->
                             { initialModel | criticalError = True }
 
@@ -318,39 +318,3 @@ makeFileRows lastRowId httpInfo providers localization autocomplete pathList fil
 compareFileRows : FileRow -> FileRow -> Basics.Order
 compareFileRows first second =
     File.compareModels first.file second.file
-
-
-intialDataDecoder : Decode.Decoder InitialData
-intialDataDecoder =
-    decode InitialData
-        |> required "files" listFileDecoder
-        |> required "httpInfo" httpDecoder
-        |> required "localization" decodeLocalization
-        |> required "pathAliases" listPathAliasesDecoder
-
-
-listPathAliasesDecoder : Decode.Decoder (List String)
-listPathAliasesDecoder =
-    Decode.list Decode.string
-
-
-decodeLocalization : Decode.Decoder (Dict String String)
-decodeLocalization =
-    Decode.dict Decode.string
-
-
-decodeHttpHeaders : Decode.Decoder (List ( String, String ))
-decodeHttpHeaders =
-    Decode.list stringTupleDecoder
-
-
-stringTupleDecoder : Decode.Decoder ( String, String )
-stringTupleDecoder =
-    Decode.tuple2 (,) Decode.string Decode.string
-
-
-httpDecoder : Decode.Decoder InitialHttpInfo
-httpDecoder =
-    decode InitialHttpInfo
-        |> required "baseUrl" Decode.string
-        |> required "headers" decodeHttpHeaders

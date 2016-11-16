@@ -110,18 +110,6 @@ makeLibrary libName version =
         Library libName version name
 
 
-listLibraryDecoder : Decode.Decoder (List Library)
-listLibraryDecoder =
-    Decode.list libraryDecoder
-
-
-libraryDecoder : Decode.Decoder Library
-libraryDecoder =
-    decode makeLibrary
-        |> required "LibraryName" Decode.string
-        |> required "Version" Decode.string
-
-
 encodeFile : JackrabbitFile -> Encode.Value
 encodeFile file =
     case file of
@@ -149,64 +137,6 @@ encodeFileData fileData fileType =
         , ( "provider", Encode.string fileData.provider )
         , ( "priority", Encode.int fileData.priority )
         ]
-
-
-listFileDecoder : Decode.Decoder (List JackrabbitFile)
-listFileDecoder =
-    Decode.list fileDecoder
-
-
-fileDecoder : Decode.Decoder JackrabbitFile
-fileDecoder =
-    let
-        fileTypeDecoder =
-            decode identity
-                |> required "FileType" Decode.int
-    in
-        fileTypeDecoder `Decode.andThen` jackrabbitFileDecoder
-
-
-jackrabbitFileDecoder : Int -> Decode.Decoder JackrabbitFile
-jackrabbitFileDecoder typeId =
-    case typeId of
-        0 ->
-            decode JavaScriptFile
-                |> custom fileDataDecoder
-
-        1 ->
-            decode CssFile
-                |> custom fileDataDecoder
-
-        2 ->
-            decode JavaScriptLibrary
-                |> custom fileDataDecoder
-                |> custom libraryDataDecoder
-
-        _ ->
-            Decode.fail ("Invalid file type: " ++ (toString typeId))
-
-
-fileDataDecoder : Decode.Decoder FileData
-fileDataDecoder =
-    decode FileData
-        |> required "Id" (Decode.maybe Decode.int)
-        |> required "PathPrefixName" Decode.string
-        |> required "FilePath" Decode.string
-        |> required "Provider" Decode.string
-        |> required "Priority" Decode.int
-
-
-libraryDataDecoder : Decode.Decoder LibraryData
-libraryDataDecoder =
-    decode LibraryData
-        |> required "LibraryName" Decode.string
-        |> required "Version" Decode.string
-        |> required "Specificity" specificityDecoder
-
-
-specificityDecoder : Decode.Decoder Specificity
-specificityDecoder =
-    Decode.customDecoder Decode.int intToSpecificity
 
 
 specificityToTypeId : Specificity -> Int
