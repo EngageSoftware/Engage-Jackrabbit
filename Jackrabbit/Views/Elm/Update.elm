@@ -38,7 +38,7 @@ update msg model =
 
                                 ( fileRows, lastRowId ) =
                                     initialData.files
-                                        |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete model.pathAliases
+                                        |> makeFileRows model.lastRowId httpInfo model.providers localization File.initialAutocomplete listPathAliases
                             in
                                 Model fileRows
                                     ""
