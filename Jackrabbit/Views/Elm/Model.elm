@@ -35,6 +35,7 @@ type alias Model =
     , pathAliases : List String
     , criticalError : Bool
     , suggestedFiles : List FileRow
+    , tempLibraryName : String
     }
 
 
@@ -70,4 +71,5 @@ initialModel =
     , pathAliases = []
     , criticalError = False
     , suggestedFiles = []
+    , tempLibraryName = ""
     }

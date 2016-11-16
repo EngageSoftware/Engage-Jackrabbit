@@ -55,6 +55,7 @@ update msg model =
                                     listPathAliases
                                     False
                                     []
+                                    ""
             in
                 ( initializedModel, Cmd.none )
 
@@ -226,8 +227,16 @@ updateFromChild model ( fileRow, _, parentMsg ) =
             let
                 newFileRow =
                     { rowId = model.lastRowId, file = file }
+
+                tempLibName =
+                    case file.file of
+                        File.JavaScriptLibrary filedata libdata ->
+                            libdata.libraryName
+
+                        _ ->
+                            ""
             in
-                { model | fileRows = newFileRow :: model.fileRows, tempFileRow = Nothing }
+                { model | fileRows = newFileRow :: model.fileRows, tempFileRow = Nothing, tempLibraryName = tempLibName }
 
         ParentMsg.CancelTempForm ->
             let

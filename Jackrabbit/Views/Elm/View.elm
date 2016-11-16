@@ -11,6 +11,7 @@ import Views.Elm.Msg exposing (..)
 import Dict exposing (Dict)
 import Views.Elm.Utility exposing (emptyElement, localizeString)
 import Views.Elm.File.Model exposing (getFile)
+import String as String exposing (toUpper)
 
 
 view : Model -> Html Msg
@@ -125,6 +126,9 @@ showSuggestions model =
         files =
             model.suggestedFiles
                 |> List.map (suggestedFilesRow model)
+
+        capitalizedTempLibName =
+            String.toUpper model.tempLibraryName
     in
         case model.suggestedFiles of
             [] ->
@@ -132,7 +136,7 @@ showSuggestions model =
 
             _ ->
                 div []
-                    [ text (localizeString "Suggested Files" model.localization)
+                    [ text ((localizeString "Your Library" model.localization) ++ capitalizedTempLibName ++ (localizeString "Suggestions" model.localization))
                     , button [ type' "button", onClick DismissAll ] [ text (localizeString "Dismiss All" model.localization) ]
                     , div [] files
                     ]

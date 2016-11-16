@@ -228,8 +228,8 @@
   <data name="Dismiss.Text" xml:space="preserve">
     <value>Dismiss</value>
   </data>
-  <data name="Suggested Files.Text" xml:space="preserve">
-    <value>Some of your libraries have attatched Css files, would you like to load them?</value>
+  <data name="Your Library.Text" xml:space="preserve">
+    <value>You loaded </value>
   </data>
   <data name="JS Library.Text" xml:space="preserve">
     <value>JS Library</value>
@@ -245,5 +245,8 @@
   </data>
   <data name="skinpath.Text" xml:space="preserve">
     <value>skinpath</value>
+  </data>
+  <data name="Suggestions.Text" xml:space="preserve">
+    <value>, and this library has attatched Css files.  Would you like to load them?</value>
   </data>
 </root>

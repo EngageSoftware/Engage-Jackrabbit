@@ -169,8 +169,25 @@ suggestedFileView model =
         div []
             [ button [ type' "button", onClick AddSuggestedFile ] [ text (localizeString "Add" localization) ]
             , button [ type' "button", onClick DismissSuggestedFile ] [ text (localizeString "Dismiss" localization) ]
-            , text filePath
+            , text (fileDisplay filePath)
             ]
+
+
+fileDisplay : String -> String
+fileDisplay filePath =
+    let
+        pathList =
+            List.reverse (String.split "\\" filePath)
+
+        file =
+            case List.head pathList of
+                Nothing ->
+                    filePath
+
+                Just string ->
+                    string
+    in
+        file
 
 
 autoCompleteInput : Model -> Html Msg

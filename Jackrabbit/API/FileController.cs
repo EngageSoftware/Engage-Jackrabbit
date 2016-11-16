@@ -140,8 +140,7 @@ namespace Engage.Dnn.Jackrabbit.Api
             var physicalFilePath = HostingEnvironment.MapPath(filePath);
             var physicalLibraryPath = Path.GetDirectoryName(physicalFilePath);
             var libraryDirectory = new DirectoryInfo(physicalLibraryPath);
-            return from file in libraryDirectory.EnumerateFiles("*.css", SearchOption.AllDirectories)
-                   select file.FullName.Substring(libraryDirectory.FullName.Length);
+            return from file in libraryDirectory.EnumerateFiles("*.css", SearchOption.AllDirectories) select file.FullName;
         }
 
         private static string LocalizeString(string key)
