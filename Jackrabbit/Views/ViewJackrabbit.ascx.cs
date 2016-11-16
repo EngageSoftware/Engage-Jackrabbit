@@ -33,6 +33,8 @@ namespace Engage.Dnn.Jackrabbit
                                                                                                             {
                                                                                                                 { FileType.JavaScriptFile, ClientResourceManager.RegisterScript },
                                                                                                                 { FileType.CssFile, ClientResourceManager.RegisterStyleSheet },
+                                                                                                                { FileType.JavaScriptLib, ClientResourceManager.RegisterScript },
+
                                                                                                             };
 
         /// <summary>Raises the <see cref="Control.Load" /> event.</summary>
@@ -94,6 +96,10 @@ namespace Engage.Dnn.Jackrabbit
             foreach (var file in this.Model.Files)
             {
                 FileRegistrations[file.FileType](this.Page, file.FullFilePath, file.Priority, file.Provider);
+            }
+            foreach (var library in this.Model.Libraries)
+            {
+                FileRegistrations[library.FileType](this.Page, library.FilePath, library.Priority, library.Provider);
             }
         }
 
