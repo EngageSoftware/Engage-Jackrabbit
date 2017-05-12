@@ -1,8 +1,6 @@
 module Views.Elm.File.Model exposing (..)
 
 import Dict exposing (Dict)
-import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (decode, required, hardcoded, custom)
 import Json.Encode as Encode
 import Views.Elm.Ajax exposing (HttpVerb, HttpInfo)
 import Autocomplete
