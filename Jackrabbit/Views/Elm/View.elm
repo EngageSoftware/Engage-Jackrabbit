@@ -93,7 +93,7 @@ showAddFile model tempFile =
         Nothing ->
             case model.editing of
                 False ->
-                    button [ type' "button", onClick AddNewFile ] [ text (localizeString "Add" model.localization) ]
+                    button [ type_ "button", onClick AddNewFile ] [ text (localizeString "Add" model.localization) ]
 
                 True ->
                     emptyElement
@@ -137,7 +137,7 @@ showSuggestions model =
             _ ->
                 div []
                     [ text ((localizeString "Your Library" model.localization) ++ capitalizedTempLibName ++ (localizeString "Suggestions" model.localization))
-                    , button [ type' "button", onClick DismissAll ] [ text (localizeString "Dismiss All" model.localization) ]
+                    , button [ type_ "button", onClick DismissAll ] [ text (localizeString "Dismiss All" model.localization) ]
                     , div [] files
                     ]
 
@@ -154,4 +154,4 @@ viewErrorMessage errorMessage localization =
             emptyElement
 
         Just message ->
-            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message, button [ type' "button", onClick DismissError ] [ text (localizeString "Dismiss Error" localization) ] ]
+            div [ class "dnnFormMessage dnnFormValidationSummary" ] [ text message, button [ type_ "button", onClick DismissError ] [ text (localizeString "Dismiss Error" localization) ] ]

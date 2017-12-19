@@ -67,7 +67,7 @@ fileDecoder =
             decode identity
                 |> required "FileType" Decode.int
     in
-        fileTypeDecoder `Decode.andThen` jackrabbitFileDecoder
+        fileTypeDecoder |> Decode.andThen jackrabbitFileDecoder
 
 
 jackrabbitFileDecoder : Int -> Decode.Decoder JackrabbitFile

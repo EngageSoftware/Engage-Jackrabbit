@@ -56,8 +56,8 @@ viewFile model =
     in
         tr [ classList (getRowClasses model) ]
             [ td [ class "jackrabbit-file--actions" ]
-                [ button [ type' "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
-                , button [ type' "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
+                [ button [ type_ "button", onClick EditFile ] [ text (localizeString "Edit" localization) ]
+                , button [ type_ "button", onClick DeleteFile ] [ text (localizeString "Delete" localization) ]
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ text (localizeStringWithDefault fileData.pathPrefixName localization) ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
@@ -81,7 +81,7 @@ viewDeleted model =
         tr [ classList (getRowClasses model) ]
             [ td [ class "jackrabbit-file--actions" ]
                 --TODO Undo Button functionality
-                [ button [ type' "button", onClick UndoDelete ] [ text (localizeString "Undo" localization) ]
+                [ button [ type_ "button", onClick UndoDelete ] [ text (localizeString "Undo" localization) ]
                 ]
             , td [ class "jackrabbit-file--prefix" ] [ text (localizeStringWithDefault fileData.pathPrefixName localization) ]
             , td [ class "jackrabbit-file--path" ] [ text fileData.filePath ]
@@ -103,13 +103,13 @@ editFile model =
             [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
             , makeDropDown model.pathList model.file localization
             , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
-            , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
+            , input [ type_ "text", onInput UpdatePath, value fileData.filePath ] []
             , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
             , showProviderMenu model.file model.localization model.providers
             , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
-            , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-            , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
-            , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
+            , input [ type_ "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
+            , button [ type_ "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+            , button [ type_ "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
             ]
 
 
@@ -158,7 +158,7 @@ libraryForm model =
                     [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Library Name" localization) ]
                     , autoCompleteInput model
                     , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version" localization) ]
-                    , input [ type' "text", onInput UpdateVersion, value libraryData.version ] []
+                    , input [ type_ "text", onInput UpdateVersion, value libraryData.version ] []
                     , label [ class "jackrabbit--prefix" ] [ text (localizeString "Version Specificity" localization) ]
                     , select [ onInput UpdateSpecificity ]
                         [ option [ value "Latest", selected (libraryData.specificity == Latest) ] [ text (localizeString "Latest" localization) ]
@@ -166,8 +166,8 @@ libraryForm model =
                         , option [ value "LatestMinor", selected (libraryData.specificity == LatestMinor) ] [ text (localizeString "Latest Minor" localization) ]
                         , option [ value "Exact", selected (libraryData.specificity == Exact) ] [ text (localizeString "Exact" localization) ]
                         ]
-                    , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
-                    , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
+                    , button [ type_ "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+                    , button [ type_ "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
                     ]
 
         _ ->
@@ -187,8 +187,8 @@ suggestedFileView model =
             model.localization
     in
         div []
-            [ button [ type' "button", onClick AddSuggestedFile ] [ text (localizeString "Add" localization) ]
-            , button [ type' "button", onClick DismissSuggestedFile ] [ text (localizeString "Dismiss" localization) ]
+            [ button [ type_ "button", onClick AddSuggestedFile ] [ text (localizeString "Add" localization) ]
+            , button [ type_ "button", onClick DismissSuggestedFile ] [ text (localizeString "Dismiss" localization) ]
             , text (fileDisplay filePath)
             ]
 
@@ -373,22 +373,22 @@ addForm model =
                 [ label [ class "jackrabbit--prefix" ] [ text (localizeString "Path Prefix Name" localization) ]
                 , makeDropDown model.pathList model.file localization
                 , label [ class "jackrabbit--path" ] [ text (localizeString "File Path" localization) ]
-                , input [ type' "text", onInput UpdatePath, value fileData.filePath ] []
+                , input [ type_ "text", onInput UpdatePath, value fileData.filePath ] []
                 , label [ class "jackrabbit--provider" ] [ text (localizeString "Provider" localization) ]
                 , showProviderMenu model.file model.localization model.providers
                 , label [ class "jackrabbit--priority" ] [ text (localizeString "Priority" localization) ]
-                , input [ type' "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
-                , button [ type' "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
-                , button [ type' "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
+                , input [ type_ "text", on "input" (stringToIntDecoder UpdatePriority fileData.priority), value (toString fileData.priority) ] []
+                , button [ type_ "button", onClick SaveChanges ] [ text (localizeString "Save" localization) ]
+                , button [ type_ "button", onClick CancelChanges ] [ text (localizeString "Cancel" localization) ]
                 ]
     in
         if model.choosingType then
             div []
                 [ label []
                     [ text (localizeString "Select the File Type:" localization)
-                    , button [ type' "button", onClick (SetFileType "JavaScript" file) ] [ text (localizeString "JavaScript" localization) ]
-                    , button [ type' "button", onClick (SetFileType "Css" file) ] [ text (localizeString "Css" localization) ]
-                    , button [ type' "button", onClick (SetLibrary file) ] [ text (localizeString "JSLibrary" localization) ]
+                    , button [ type_ "button", onClick (SetFileType "JavaScript" file) ] [ text (localizeString "JavaScript" localization) ]
+                    , button [ type_ "button", onClick (SetFileType "Css" file) ] [ text (localizeString "Css" localization) ]
+                    , button [ type_ "button", onClick (SetLibrary file) ] [ text (localizeString "JSLibrary" localization) ]
                     ]
                 ]
         else
