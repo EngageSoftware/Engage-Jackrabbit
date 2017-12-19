@@ -16,7 +16,7 @@
             'use strict';
 
             var sf = $.ServicesFramework(<%:ModuleContext.ModuleId%>);
-            var app = Elm.Views.Main.embed(
+            Elm.Views.Main.embed(
                 document.getElementById(<%:EncodeJavaScriptString(this.FilesEditPanel.ClientID)%>),
                 {
                     files: <%:GenerateScriptJson(this.Model.Files, Model.Libraries) %>,
@@ -31,14 +31,6 @@
                     localization: <%:EncodeJsonObject(LocalizationUtility.GetAllResources(this.LocalResourceFile))%>,
                     pathAliases: <%:EncodeJsonObject(Model.PathAliases) %>
                 });
-
-          function onFocus(elementId) {
-            setTimeout(() => 
-            $('#' + elementId).focus(), [20]);
-        }
-
-          app.ports.focus.subscribe(onFocus);
-
           });
     </script>
 </asp:PlaceHolder>
@@ -61,5 +53,5 @@
         var newEnumerable = files.Cast<object>().Concat(libraries);
         return EncodeJsonObject(newEnumerable);
     }
-    
+
 </script>

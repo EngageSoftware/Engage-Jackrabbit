@@ -153,25 +153,6 @@ specificityToTypeId specificity =
             3
 
 
-intToSpecificity : Int -> Result String Specificity
-intToSpecificity versionInt =
-    case versionInt of
-        0 ->
-            Result.Ok Latest
-
-        1 ->
-            Result.Ok LatestMajor
-
-        2 ->
-            Result.Ok LatestMinor
-
-        3 ->
-            Result.Ok Exact
-
-        _ ->
-            Result.Err ("Invalid version type: " ++ (toString versionInt))
-
-
 fileTypeToTypeId : JackrabbitFile -> Int
 fileTypeToTypeId file =
     case file of

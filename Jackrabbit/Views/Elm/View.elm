@@ -3,7 +3,6 @@ module Views.Elm.View exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Html.App as App
 import Views.Elm.Model exposing (..)
 import Views.Elm.File.View as File
 import Views.Elm.File.Model as File
@@ -79,12 +78,12 @@ view model =
 
 viewFileRow : FileRow -> Html Msg
 viewFileRow { rowId, file } =
-    App.map (FileMsg rowId) (File.view file)
+    Html.map (FileMsg rowId) (File.view file)
 
 
 addEditForm : FileRow -> Html Msg
 addEditForm { rowId, file } =
-    App.map (FileMsg rowId) (File.editLib file)
+    Html.map (FileMsg rowId) (File.editLib file)
 
 
 showAddFile : Model -> Maybe FileRow -> Html Msg
@@ -99,7 +98,7 @@ showAddFile model tempFile =
                     emptyElement
 
         Just { rowId, file } ->
-            App.map (FileMsg rowId) (File.viewAddForm file)
+            Html.map (FileMsg rowId) (File.viewAddForm file)
 
 
 criticalError : Html Msg
@@ -144,7 +143,7 @@ showSuggestions model =
 
 suggestedFilesRow : Model -> FileRow -> Html Msg
 suggestedFilesRow model { rowId, file } =
-    App.map (FileMsg rowId) (File.suggestedFileView file)
+    Html.map (FileMsg rowId) (File.suggestedFileView file)
 
 
 viewErrorMessage : Maybe String -> Dict String String -> Html Msg

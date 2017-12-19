@@ -3,9 +3,8 @@ module Views.Elm.File.View exposing (..)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.App as Html
 import Html.Events exposing (..)
-import Json.Decode as Decode
+import Json.Decode as Json
 import String
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
@@ -220,16 +219,16 @@ autoCompleteInput model =
             { preventDefault = True, stopPropagation = False }
 
         dec =
-            (Decode.customDecoder keyCode
-                (\code ->
-                    if code == 38 || code == 40 then
-                        Ok NoOp
-                    else if code == 27 then
-                        Ok HandleEscape
-                    else
-                        Err "not handling that key"
-                )
-            )
+            keyCode
+                |> Json.andThen
+                    (\code ->
+                        if code == 38 || code == 40 then
+                            Json.succeed NoOp
+                        else if code == 27 then
+                            Json.succeed HandleEscape
+                        else
+                            Json.fail "not handling that key"
+                    )
 
         menu =
             if autoComplete.showMenu then
@@ -403,14 +402,14 @@ addForm model =
                     libraryForm model
 
 
-stringToIntDecoder : (Int -> Msg) -> Int -> Decode.Decoder Msg
+stringToIntDecoder : (Int -> Msg) -> Int -> Json.Decoder Msg
 stringToIntDecoder tagger default =
     let
         stringToInt value =
             String.toInt value
                 |> Result.withDefault default
     in
-        Decode.map (\value -> tagger (stringToInt value)) targetValue
+        Json.map (\value -> tagger (stringToInt value)) targetValue
 
 
 getRowClasses : Model -> List ( String, Bool )

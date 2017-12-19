@@ -1,5 +1,6 @@
 module Views.Elm.Ajax exposing (..)
 
+import Http
 import HttpBuilder
 import Json.Decode as Decode exposing (..)
 import Json.Encode as Encode
@@ -58,12 +59,12 @@ sendAjax httpInfo { verb, path, data, responseDecoder, requestType } =
             |> HttpBuilder.withHeader "Content-Type" "application/json"
             |> HttpBuilder.withHeader "Accept" "application/json"
             |> withJsonBody data
-            |> HttpBuilder.send (HttpBuilder.jsonReader responseDecoder) (HttpBuilder.jsonReader errorResponseDecoder)
+            |> HttpBuilder.withExpect (Http.expectJson responseDecoder)
+            |> HttpBuilder.toTask
             |> Task.mapError (convertErrorToErrorMessage httpInfo.defaultErrorMessage)
-            |> Task.map (\response -> response.data)
 
 
-withJsonBody : Maybe Encode.Value -> HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder
+withJsonBody : Maybe Encode.Value -> HttpBuilder.RequestBuilder response -> HttpBuilder.RequestBuilder response
 withJsonBody maybeData builder =
     case maybeData of
         Just data ->
@@ -73,7 +74,7 @@ withJsonBody maybeData builder =
             builder
 
 
-getRequestBuilder : HttpVerb -> (String -> HttpBuilder.RequestBuilder)
+getRequestBuilder : HttpVerb -> (String -> HttpBuilder.RequestBuilder ())
 getRequestBuilder verb =
     case verb of
         Post ->
@@ -89,11 +90,11 @@ getRequestBuilder verb =
             HttpBuilder.get
 
 
-convertErrorToErrorMessage : String -> HttpBuilder.Error String -> String
+convertErrorToErrorMessage : String -> Http.Error -> String
 convertErrorToErrorMessage defaultErrorMessage error =
     case error of
-        HttpBuilder.BadResponse response ->
-            response.data
+        Http.BadStatus response ->
+            response.body
 
         _ ->
             defaultErrorMessage

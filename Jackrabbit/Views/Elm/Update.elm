@@ -97,7 +97,9 @@ update msg model =
                         |> List.Extra.find (findRow rowId)
 
                 fileRow =
-                    Maybe.oneOf [ matchingFileRow, model.tempFileRow, matchingSuggestedFile ]
+                    matchingFileRow
+                        |> Maybe.Extra.orElse model.tempFileRow
+                        |> Maybe.Extra.orElse matchingSuggestedFile
 
                 fileUpdate =
                     fileRow

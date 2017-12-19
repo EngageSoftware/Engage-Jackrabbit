@@ -7,12 +7,12 @@ import Views.Elm.Ajax exposing (..)
 import Views.Elm.File.Model exposing (..)
 import Views.Elm.File.Msg exposing (..)
 import Views.Elm.File.ParentMsg as ParentMsg exposing (ParentMsg)
-import Views.Elm.Ports exposing (focus)
 import Views.Elm.Utility exposing (localizeString)
 import Dom
 import Dict exposing (Dict)
 import String
 import Regex as Regex
+import Result.Extra
 import Views.Elm.Decoders exposing (..)
 
 
@@ -20,7 +20,7 @@ update : Msg -> Model -> ( Model, Cmd Msg, ParentMsg )
 update msg model =
     case msg of
         EditFile ->
-            ( { model | editing = True }, focus "library-input", ParentMsg.Editing )
+            ( { model | editing = True }, focusLibraryInput, ParentMsg.Editing )
 
         AddSuggestedFile ->
             ( model, createFileAjaxCmd model Post, ParentMsg.AddSuggestion )
@@ -191,7 +191,7 @@ update msg model =
                 libData =
                     LibraryData "" "" Exact
             in
-                ( { model | file = JavaScriptLibrary fileData libData, choosingType = False }, focus "library-input", ParentMsg.NoOp )
+                ( { model | file = JavaScriptLibrary fileData libData, choosingType = False }, focusLibraryInput, ParentMsg.NoOp )
 
         SetQuery newQuery ->
             let
@@ -334,7 +334,7 @@ update msg model =
                         |> updateLibraryName libraryToUpdate.libName
                         |> updateLibraryVersion libraryToUpdate
             in
-                ( { newModel | autocomplete = newAutocomplete }, Task.perform (\err -> NoOp) (\_ -> NoOp) (Dom.focus "library-input"), ParentMsg.NoOp )
+                ( { newModel | autocomplete = newAutocomplete }, focusLibraryInput, ParentMsg.NoOp )
 
         PreviewLibrary name ->
             let
@@ -448,7 +448,7 @@ createSearchAjaxCmd model =
             AjaxRequestInfo Get "" Nothing listLibraryDecoder Search
     in
         sendAjax model.httpInfo requestInfo
-            |> Task.perform Error RequestLibraries
+            |> Task.attempt (Result.Extra.unpack Error RequestLibraries)
 
 
 createUndeleteAjaxCmd : Model -> Cmd Msg
@@ -471,7 +471,7 @@ createUndeleteAjaxCmd model =
     in
         requestInfo
             |> Maybe.map (sendAjax model.httpInfo)
-            |> Maybe.map (Task.perform Error RefreshFiles)
+            |> Maybe.map (Task.attempt (Result.Extra.unpack Error RefreshFiles))
             |> Maybe.withDefault Cmd.none
 
 
@@ -493,7 +493,7 @@ createFileAjaxCmd model verb =
             AjaxRequestInfo verb path (Just (encodeFile model.file)) listFileDecoderandSuggestedFiles File
     in
         sendAjax model.httpInfo requestInfo
-            |> Task.perform Error RefreshFiles
+            |> Task.attempt (Result.Extra.unpack Error RefreshFiles)
 
 
 validateLibrary : LibraryData -> Dict String String -> Maybe String
@@ -510,3 +510,8 @@ validateFile fileData localization =
         Just (localizeString "Empty File Path" localization)
     else
         Nothing
+
+
+focusLibraryInput : Cmd Msg
+focusLibraryInput =
+    Task.attempt (\_ -> NoOp) (Dom.focus "library-input")

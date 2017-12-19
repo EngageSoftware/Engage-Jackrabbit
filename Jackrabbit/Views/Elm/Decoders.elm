@@ -1,13 +1,13 @@
 module Views.Elm.Decoders exposing (..)
 
 import Dict exposing (..)
-import Json.Decode as Decode exposing (..)
+import Json.Decode as Json exposing (..)
 import Json.Decode.Pipeline exposing (decode, required, hardcoded, custom, optional)
 import Views.Elm.Model exposing (..)
 import Views.Elm.File.Model as File exposing (..)
 
 
-initialDataDecoder : Decode.Decoder InitialData
+initialDataDecoder : Json.Decoder InitialData
 initialDataDecoder =
     decode InitialData
         |> required "files" listFileDecoder
@@ -16,61 +16,63 @@ initialDataDecoder =
         |> required "pathAliases" listPathAliasesDecoder
 
 
-listPathAliasesDecoder : Decode.Decoder (List String)
+listPathAliasesDecoder : Json.Decoder (List String)
 listPathAliasesDecoder =
-    Decode.list Decode.string
+    Json.list Json.string
 
 
-decodeLocalization : Decode.Decoder (Dict String String)
+decodeLocalization : Json.Decoder (Dict String String)
 decodeLocalization =
-    Decode.dict Decode.string
+    Json.dict Json.string
 
 
-decodeHttpHeaders : Decode.Decoder (List ( String, String ))
+decodeHttpHeaders : Json.Decoder (List ( String, String ))
 decodeHttpHeaders =
-    Decode.list stringTupleDecoder
+    Json.list stringTupleDecoder
 
 
-stringTupleDecoder : Decode.Decoder ( String, String )
+stringTupleDecoder : Json.Decoder ( String, String )
 stringTupleDecoder =
-    Decode.tuple2 (,) Decode.string Decode.string
+    Json.map2 (,)
+        (Json.index 0 Json.string)
+        (Json.index 1 Json.string)
 
 
-httpDecoder : Decode.Decoder InitialHttpInfo
+httpDecoder : Json.Decoder InitialHttpInfo
 httpDecoder =
     decode InitialHttpInfo
-        |> required "baseUrl" Decode.string
+        |> required "baseUrl" Json.string
         |> required "headers" decodeHttpHeaders
 
 
-listLibraryDecoder : Decode.Decoder (List Library)
+listLibraryDecoder : Json.Decoder (List Library)
 listLibraryDecoder =
-    Decode.list libraryDecoder
+    Json.list libraryDecoder
 
 
-libraryDecoder : Decode.Decoder Library
+libraryDecoder : Json.Decoder Library
 libraryDecoder =
     decode makeLibrary
-        |> required "LibraryName" Decode.string
-        |> required "Version" Decode.string
+        |> required "LibraryName" Json.string
+        |> required "Version" Json.string
 
 
-listFileDecoder : Decode.Decoder (List JackrabbitFile)
+listFileDecoder : Json.Decoder (List JackrabbitFile)
 listFileDecoder =
-    Decode.list fileDecoder
+    Json.list fileDecoder
 
 
-fileDecoder : Decode.Decoder JackrabbitFile
+fileDecoder : Json.Decoder JackrabbitFile
 fileDecoder =
     let
         fileTypeDecoder =
             decode identity
-                |> required "FileType" Decode.int
+                |> required "FileType" Json.int
     in
-        fileTypeDecoder |> Decode.andThen jackrabbitFileDecoder
+        fileTypeDecoder |> Json.andThen jackrabbitFileDecoder
 
 
-jackrabbitFileDecoder : Int -> Decode.Decoder JackrabbitFile
+jackrabbitFileDecoder : Int -> Json.Decoder JackrabbitFile
 jackrabbitFileDecoder typeId =
     case typeId of
         0 ->
@@ -87,34 +89,54 @@ jackrabbitFileDecoder typeId =
                 |> custom libraryDataDecoder
 
         _ ->
-            Decode.fail ("Invalid file type: " ++ (toString typeId))
+            Json.fail ("Invalid file type: " ++ (toString typeId))
 
 
-fileDataDecoder : Decode.Decoder FileData
+fileDataDecoder : Json.Decoder FileData
 fileDataDecoder =
     decode FileData
-        |> required "Id" (Decode.maybe Decode.int)
-        |> required "PathPrefixName" Decode.string
-        |> required "FilePath" Decode.string
-        |> required "Provider" Decode.string
-        |> required "Priority" Decode.int
+        |> required "Id" (Json.maybe Json.int)
+        |> required "PathPrefixName" Json.string
+        |> required "FilePath" Json.string
+        |> required "Provider" Json.string
+        |> required "Priority" Json.int
 
 
-libraryDataDecoder : Decode.Decoder LibraryData
+libraryDataDecoder : Json.Decoder LibraryData
 libraryDataDecoder =
     decode LibraryData
-        |> required "LibraryName" Decode.string
-        |> required "Version" Decode.string
+        |> required "LibraryName" Json.string
+        |> required "Version" Json.string
         |> required "Specificity" specificityDecoder
 
 
-specificityDecoder : Decode.Decoder Specificity
+specificityDecoder : Json.Decoder Specificity
 specificityDecoder =
-    Decode.customDecoder Decode.int intToSpecificity
+    Json.int
+        |> Json.andThen intToSpecificity
 
 
-listFileDecoderandSuggestedFiles : Decode.Decoder ( List JackrabbitFile, Maybe (List String) )
+intToSpecificity : Int -> Json.Decoder Specificity
+intToSpecificity versionInt =
+    case versionInt of
+        0 ->
+            Json.succeed Latest
+
+        1 ->
+            Json.succeed LatestMajor
+
+        2 ->
+            Json.succeed LatestMinor
+
+        3 ->
+            Json.succeed Exact
+
+        _ ->
+            Json.fail ("Invalid version type: " ++ toString versionInt)
+
+
+listFileDecoderandSuggestedFiles : Json.Decoder ( List JackrabbitFile, Maybe (List String) )
 listFileDecoderandSuggestedFiles =
     decode (,)
         |> required "items" listFileDecoder
-        |> optional "suggestions" (Decode.maybe (Decode.list Decode.string)) Nothing
+        |> optional "suggestions" (Json.maybe (Json.list Json.string)) Nothing
